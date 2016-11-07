@@ -1,4 +1,4 @@
-[![Runbot Status](http://runbot.adhoc.com.ar/runbot/badge/flat/31/9.0.svg)](http://runbot.adhoc.com.ar/runbot/repo/github-com-ingadhoc-argentina-sale-31)
+[![Runbot Status](http://runbot.adhoc.com.ar/runbot/badge/flat/32/9.0.svg)](http://runbot.adhoc.com.ar/runbot/repo/github-com-ingadhoc-argentina-sale-32)
 [![Build Status](https://travis-ci.org/ingadhoc/argentina-sale.svg?branch=9.0)](https://travis-ci.org/ingadhoc/argentina-sale)
 [![Coverage Status](https://coveralls.io/repos/ingadhoc/argentina-sale/badge.png?branch=9.0)](https://coveralls.io/r/ingadhoc/argentina-sale?branch=9.0)
 [![Code Climate](https://codeclimate.com/github/ingadhoc/argentina-sale/badges/gpa.svg)](https://codeclimate.com/github/ingadhoc/argentina-sale)
