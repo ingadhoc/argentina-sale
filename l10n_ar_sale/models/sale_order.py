@@ -38,14 +38,14 @@ class SaleOrder(models.Model):
         vat_discriminated = True
         company_vat_type = self.company_id.sale_allow_vat_no_discrimination
         if company_vat_type:
-            letters = self.env['afip.document_letter']
-            if self.company_id.partner_id.afip_responsability_type_id:
-                letter_ids = self.env[
-                    'account.invoice'].get_valid_document_letters(
-                    self.partner_id.id, 'sale', self.company_id.id)
-                if letter_ids:
-                    letters = letters.browse(letter_ids)
-                    vat_discriminated = not letters[0].taxes_included
+            # letters = self.env['account.document.letter']
+            # if self.company_id.partner_id.afip_responsability_type_id:
+            letters = self.env[
+                'account.journal']._get_journal_letter(
+                    'sale', self.company_id, self.partner_id)
+            if letters:
+                # letters = letters.browse(letter_ids)
+                vat_discriminated = not letters[0].taxes_included
             # if no responsability or no letters
             if not letters and company_vat_type == 'no_discriminate_default':
                 vat_discriminated = False
@@ -59,7 +59,7 @@ class SaleOrder(models.Model):
         los impuestos
         """
         for order in self:
-            taxes_included = not self.vat_discriminated
+            taxes_included = not order.vat_discriminated
             if not taxes_included:
                 report_amount_tax = order.amount_tax
                 report_amount_untaxed = order.amount_untaxed
