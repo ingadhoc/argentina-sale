@@ -4,7 +4,7 @@
 
     
     <record id="sale_price_unit_with_tax" model="res.groups">
-        <field name="name">Sale Unit Price w/ Taxes</field>
+        <field name="name">Sale Unit Prices w/ Taxes</field>
         <field name="category_id" ref="base.module_category_hidden"/>
     </record>
 
