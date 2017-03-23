@@ -1,0 +1,107 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * l10n_ar_sale
+# 
+# Translators:
+# Andres L <aleibrecht@gmail.com>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-07 19:26+0000\n"
+"PO-Revision-Date: 2017-03-07 19:26+0000\n"
+"Last-Translator: Andres L <aleibrecht@gmail.com>, 2017\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line_report_price_subtotal
+msgid "Amount"
+msgstr "Subtotal"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,help:l10n_ar_sale.field_res_company_sale_allow_vat_no_discrimination
+msgid ""
+"Definie behaviour on sales orders and quoatations reports. Discrimination or not will depend in partner and company responsability and AFIP letters setup:\n"
+"* If False, then VAT will be discriminated like always in odoo\n"
+"* If No Discriminate Default, if no match found it won't discriminate by default\n"
+"* If Discriminate Default, if no match found it would discriminate by default"
+msgstr ""
+"Definir comportamiento en informes de ordenes de venta y presupuestos. La discriminación o no dependerá del partner y de la Responsabilidad de la Compañía y la configuración de las Letras de AFIP.\n"
+"* Si Falso, entonces el IVA será discrimiando como Odoo siempre lo hace.\n"
+"* Si No Discrimina por Defecto, si no se encuentra coincidencia no discriminará por defecto.\n"
+"* Si Discrimina por Defecto, si no se encuentra coincidencia discriminará por defecto."
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line_report_price_net
+msgid "Net Amount"
+msgstr "Importe Neto"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line_price_unit_with_tax
+msgid "Price Unit Price"
+msgstr "Precio Unitario"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_company_sale_allow_vat_no_discrimination
+msgid "Sale Allow VAT no discrimination?"
+msgstr "Permitir no discriminar IVA en ventas?"
+
+#. module: l10n_ar_sale
+#: model:res.groups,name:l10n_ar_sale.sale_price_unit_with_tax
+msgid "Sale Unit Prices w/ Taxes"
+msgstr "Precio Unitario con Impuestos"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_sale_order
+msgid "Sales Order"
+msgstr "Orden de Ventas"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea de orden de ventas"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_report_amount_tax
+msgid "Tax"
+msgstr "Impuesto"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line_report_tax_id
+msgid "Taxes"
+msgstr "Impuestos"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line_report_price_unit
+msgid "Unit Price"
+msgstr "Precio Unitario"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_report_amount_untaxed
+msgid "Untaxed Amount"
+msgstr "Subtotal s/ Impuestos"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_vat_discriminated
+msgid "Vat discriminated"
+msgstr "IVA Discriminado"
+
+#. module: l10n_ar_sale
+#: selection:res.company,sale_allow_vat_no_discrimination:0
+msgid "Yes, Discrimnate Default"
+msgstr "Si, Discriminar por defecto"
+
+#. module: l10n_ar_sale
+#: selection:res.company,sale_allow_vat_no_discrimination:0
+msgid "Yes, No Discriminate Default"
+msgstr "Si, No discriminar por defecto"
