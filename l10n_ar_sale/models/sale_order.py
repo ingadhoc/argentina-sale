@@ -42,7 +42,8 @@ class SaleOrder(models.Model):
             # if self.company_id.partner_id.afip_responsability_type_id:
             letters = self.env[
                 'account.journal']._get_journal_letter(
-                    'sale', self.company_id, self.partner_id)
+                    'sale', self.company_id,
+                    self.partner_id.commercial_partner_id)
             if letters:
                 # letters = letters.browse(letter_ids)
                 vat_discriminated = not letters[0].taxes_included
