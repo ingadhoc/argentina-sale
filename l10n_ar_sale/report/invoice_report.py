@@ -3,7 +3,7 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import models, fields
+from openerp import models
 
 
 class account_invoice_report(models.Model):
