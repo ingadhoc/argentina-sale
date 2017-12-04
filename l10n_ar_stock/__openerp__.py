@@ -9,6 +9,7 @@
     'license': 'AGPL-3',
     'depends': [
         'stock_voucher',  # por la clase receiptbooks y demas
+        'delivery',
         'l10n_ar_account',
         'l10n_ar_afipws',
         # TODO sacar esta dependencia moviendo el campo de arba cit a otro mod.
@@ -17,10 +18,12 @@
     'external_dependencies': {
     },
     'data': [
+        'wizards/arba_cot_wizard_view.xml',
         'views/stock_picking_view.xml',
         'views/stock_book_view.xml',
         'views/product_template_view.xml',
         'views/product_uom_view.xml',
+        'data/ir_sequence_data.xml',
         # 'security/invoice_sale_security.xml',
         # 'views/sale_view.xml',
         # 'views/res_company_view.xml',

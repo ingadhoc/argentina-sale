@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from openerp import models, fields, api, _
+import datetime
 # import openerp.tools as tools
 try:
     from pyafipws.iibb import IIBB
 except ImportError:
     IIBB = None
 from openerp.exceptions import UserError
-import tempfile
+# import tempfile
+import os
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -20,35 +22,45 @@ class StockPicking(models.Model):
         readonly=True
     )
 
-    # def get_arba_data(self, partner, date):
     @api.multi
     def get_arba_file_data(
             self, datetime_out, tipo_recorrido, carrier_partner,
-            patente_vehiculo=False, patente_acomplado=False,
-            prod_no_term_dev='0', importe=0.0):
-        # TODO parsear datetime_out y validar fecha >= hoy-1 y menor= a hoy mas 30
-        HORA_SALIDA_TRANSPORTE = datetime_out
-        FECHA_SALIDA_TRANSPORTE = datetime_out
+            patente_vehiculo, patente_acomplado, prod_no_term_dev, importe):
+        """
+        NOTA: esta implementado como para soportar seleccionar varios remitos
+        y mandarlos juntos pero por ahora no le estamos dando uso.
+        Tener en cuenta que si se numera con más de un remito nosotros mandamos
+        solo el primero ya que para cada remito reportado se debe indicar
+        los productos y ese dato no lo tenemos (solo sabemos cuantas hojas
+        consume)
+        """
 
-        companies = self.mapped('company_id')
-        if len(companies) > 1:
+        FECHA_SALIDA_TRANSPORTE = datetime_out.strftime('%Y%m%d')
+        HORA_SALIDA_TRANSPORTE = datetime_out.strftime('%H%M')
+
+        company = self.mapped('company_id')
+        if len(company) > 1:
             raise UserError(_(
                 'Los remitos seleccionados deben pertenecer a la misma '
                 'compañía'))
-        cuit = companies.cuit_required()
+        cuit = company.cuit_required()
 
         # ej. nombre archivo TB_30111111118_003002_20060716_000183.txt
         # TODO ver de donde obtener estos datos
         nro_planta = '000'
-        nro_puerta = '002'
-        nro_secuencial = '000183'
+        nro_puerta = '000'
+        nro_secuencial = self.env['ir.sequence'].with_context(
+            force_company=company.id).next_by_code('arba.cot.file')
+        if not nro_secuencial:
+            raise UserError(_(
+                'No sequence found for COT files (code = "arba.cot.file") on '
+                'company "%s') % (company.name))
 
-        filename = "TB_%s_%s_%s_%s_%s.txt" % (
+        filename = "TB_%s_%s%s_%s_%s.txt" % (
             cuit,
             nro_planta,
             nro_puerta,
-            fields.Date.today(),
-            # self.date,
+            datetime.date.today().strftime('%Y%m%d'),
             nro_secuencial)
 
         # 01 - HEADER: TIPO_REGISTRO & CUIT_EMPRESA
@@ -56,18 +68,28 @@ class StockPicking(models.Model):
 
         # 04 - FOOTER (Pie): TIPO_REGISTRO: 04 & CANTIDAD_TOTAL_REMITOS
         # TODO que tome 10 caracteres
-        FOOTER = ["04", '1']
-        '\n'.join([])
+        FOOTER = ["04", str(len(self))]
 
         # TODO, si interesa se puede repetir esto para cada uno
-        REMITOS = []
+        REMITOS_PRODUCTOS = []
+
         # recorremos cada voucher number de cada remito
-        for voucher in self.mapped('voucher_ids'):
-            rec = voucher.picking_id
+        # for voucher in self.mapped('voucher_ids'):
+        #     rec = voucher.picking_id
+        for rec in self:
+            if not rec.voucher_ids:
+                raise UserError(_('No se asignó número de remito'))
+            voucher = rec.voucher_ids[0]
             dest_partner = rec.partner_id
             source_partner = rec.picking_type_id.warehouse_id.partner_id or\
                 rec.company_id.partner_id
             commercial_partner = dest_partner.commercial_partner_id
+
+            if not source_partner.state_id.code or \
+                    not dest_partner.state_id.code:
+                raise UserError(_(
+                    'Las provincias de origen y destino son obligatorias y '
+                    'deben tener un código válido'))
 
             if not rec.document_type_id:
                 raise UserError(_(
@@ -84,7 +106,9 @@ class StockPicking(models.Model):
             # TODO ver de hacer uno por número de remito?
             PREFIJO, NUMERO = validator.validate_value(
                 voucher.name, return_parts=True)
-            TIPO = letter.name.rjust(2, ' ')
+
+            # rellenar y truncar a 2
+            TIPO = '{:>2.2}'.format(letter.name)
 
             # si nro doc y tipo en ‘DNI’, ‘LC’, ‘LE’, ‘PAS’, ‘CI’ y doc
             doc_categ_id = commercial_partner.main_id_category_id
@@ -96,17 +120,20 @@ class StockPicking(models.Model):
                 dest_tipo_doc = ''
                 dest_doc = ''
 
-            dest_tipo_doc = dest_tipo_doc.rjust(3, " ")
-            dest_doc = dest_doc.rjust(11, " ")
+            dest_tipo_doc = dest_tipo_doc
+            dest_doc = dest_doc
 
-            dest_cons_final = commercial_partner.afip_responsability_type_id \
-                == "5" and '1' or '0'
+            dest_cons_final = commercial_partner.\
+                afip_responsability_type_id.id == "5" and '1' or '0'
 
-            dest_cuit = commercial_partner.cuit.rjust(11, ' ')
+            dest_cuit = commercial_partner.cuit
 
-            REMITOS.append([
+            REMITOS_PRODUCTOS.append([
                 "02",  # TIPO_REGISTRO
-                self.date_done,  # FECHA_EMISION
+
+                # FECHA_EMISION
+                # fields.Date.from_string(self.date_done).strftime('%Y%m%d').
+                datetime.date.today().strftime('%Y%m%d'),
 
                 # CODIGO_UNICO formato (CODIGO_DGI, TIPO, PREFIJO, NUMERO)
                 # ej. 91 |R999900068148|
@@ -140,12 +167,11 @@ class StockPicking(models.Model):
                 dest_cons_final and '0' or '1',
 
                 # DESTINO_DOMICILIO_CALLE
-                # esto rellena y trunca
-                '{:40.40}'.format(dest_partner.street),
+                (dest_partner.street or '')[:40],
 
                 # DESTINO_DOMICILIO_NUMERO
                 # TODO implementar
-                '{:5}'.format(' '),
+                '',
 
                 # DESTINO_DOMICILIO_COMPLE
                 # TODO implementar valores ’ ’, ‘S/N’ , ‘1/2’, ‘1/4’, ‘BIS’
@@ -153,29 +179,29 @@ class StockPicking(models.Model):
 
                 # DESTINO_DOMICILIO_PISO
                 # TODO implementar
-                '{:5}'.format(' '),
+                '',
 
                 # DESTINO_DOMICILIO_DTO
                 # TODO implementar
-                '{:3}'.format(' '),
+                '',
 
                 # DESTINO_DOMICILIO_BARRIO
                 # TODO implementar
-                '{:30}'.format(' '),
+                '',
 
                 # DESTINO_DOMICILIO_CODIGOP
-                '{:8}'.format(dest_partner.zip or ''),
+                (dest_partner.zip or '')[:8],
 
                 # DESTINO_DOMICILIO_LOCALIDAD
-                '{:50}'.format(dest_partner.city or ''),
+                (dest_partner.city or '')[:50],
 
                 # DESTINO_DOMICILIO_PROVINCIA: ver tabla de provincias
                 # usa código distinto al de afip
-                '{:50}'.format(dest_partner.state_id.code),
+                (dest_partner.state_id.code or '')[:1],
 
                 # PROPIO_DESTINO_DOMICILIO_CODIGO
                 # TODO implementar
-                '{:20}'.format(' '),
+                '',
 
                 # ENTREGA_DOMICILIO_ORIGEN: 'SI' o 'NO'
                 # TODO implementar
@@ -185,19 +211,18 @@ class StockPicking(models.Model):
                 cuit,
 
                 # ORIGEN_RAZON_SOCIAL
-                companies.name,
+                company.name[:50],
 
                 # EMISOR_TENEDOR: 0=no, 1=si
                 # TODO implementar
                 '0',
 
                 # ORIGEN_DOMICILIO_CALLE
-                # esto rellena y trunca
-                '{:40.40}'.format(source_partner.street),
+                (source_partner.street or '')[:40],
 
                 # ORIGEN DOMICILIO_NUMBERO
                 # TODO implementar
-                '{:5}'.format(' '),
+                '',
 
                 # ORIGEN_DOMICILIO_COMPLE
                 # TODO implementar valores ’ ’, ‘S/N’ , ‘1/2’, ‘1/4’, ‘BIS’
@@ -205,24 +230,24 @@ class StockPicking(models.Model):
 
                 # ORIGEN_DOMICILIO_PISO
                 # TODO implementar
-                '{:5}'.format(' '),
+                '',
 
                 # ORIGEN_DOMICILIO_DTO
                 # TODO implementar
-                '{:3}'.format(' '),
+                '',
 
                 # ORIGEN_DOMICILIO_BARRIO
                 # TODO implementar
-                '{:30}'.format(' '),
+                '',
 
                 # ORIGEN_DOMICILIO_CODIGOP
-                '{:8}'.format(source_partner.zip or ''),
+                (source_partner.zip or '')[:8],
 
                 # ORIGEN_DOMICILIO_LOCALIDAD
-                '{:50}'.format(source_partner.city or ''),
+                (source_partner.city or '')[:50],
 
                 # ORIGEN_DOMICILIO_PROVINCIA: ver tabla de provincias
-                '{:50}'.format(source_partner.state_id.code),
+                (source_partner.state_id.code or '')[:1],
 
                 # TRANSPORTISTA_CUIT
                 carrier_partner.cuit_required(),
@@ -232,15 +257,15 @@ class StockPicking(models.Model):
 
                 # RECORRIDO_LOCALIDAD: máx. 50 caracteres,
                 # TODO implementar
-                '{:50}'.format(' '),
+                '',
 
                 # RECORRIDO_CALLE: máx. 40 caracteres
                 # TODO implementar
-                '{:40}'.format(' '),
+                '',
 
                 # RECORRIDO_RUTA: máx. 40 caracteres
                 # TODO implementar
-                '{:40}'.format(' '),
+                '',
 
                 # PATENTE_VEHICULO: 3 letras y 3 números
                 patente_vehiculo or '',
@@ -252,76 +277,136 @@ class StockPicking(models.Model):
                 prod_no_term_dev,
 
                 # IMPORTE: formato 8 enteros 2 decimales,
-                str(round(importe * 100.0))[-10:],
+                str(int(round(importe * 100.0)))[-10:],
             ])
 
-        PRODUCTOS = []
-        for line in self.mapped('pack_operation_ids'):
-            if not line.product_uom_id.arba_code:
-                raise UserError(_('No arba code for uom %s (Id: %s') % (
-                    line.product_uom_id.name, line.product_uom_id.id))
-            if not line.product_id.arba_code:
-                raise UserError(_('No arba code for product %s (Id: %s') % (
-                    line.product_id.name, line.product_id.id))
+            for line in rec.mapped('pack_operation_ids'):
+                if not line.product_uom_id.arba_code:
+                    raise UserError(_('No arba code for uom %s (Id: %s') % (
+                        line.product_uom_id.name, line.product_uom_id.id))
+                if not line.product_id.arba_code:
+                    raise UserError(_(
+                        'No arba code for product %s (Id: %s') % (
+                        line.product_id.name, line.product_id.id))
 
-            PRODUCTOS.append([
-                # TIPO_REGISTRO: 03
-                '03',
+                REMITOS_PRODUCTOS.append([
+                    # TIPO_REGISTRO: 03
+                    '03',
 
-                # CODIGO_UNICO_PRODUCTO nomenclador COT (Transporte de Bienes)
-                line.product_id.arba_code,
+                    # CODIGO_UNICO_PRODUCTO
+                    # nomenclador COT (Transporte de Bienes)
+                    line.product_id.arba_code,
 
-                # RENTAS_CODIGO_UNIDAD_MEDIDA: ver tabla unidades de medida
-                line.product_uom_id.arba_code,
+                    # RENTAS_CODIGO_UNIDAD_MEDIDA: ver tabla unidades de medida
+                    line.product_uom_id.arba_code,
 
-                # CANTIDAD: 13 enteros y 2 decimales (no incluir coma ni punto)
-                # , ej 200 un -> 20000
-                str(round(line.product_qty * 100.0))[-15:],
+                    # CANTIDAD: 13 enteros y 2 decimales (no incluir coma
+                    # ni punto), ej 200 un -> 20000
+                    str(int(round(line.product_qty * 100.0)))[-15:],
 
-                # PROPIO_CODIGO_PRODUCTO: máx. 25 caracteres
-                '{:.25}'.format(line.product_id.default_code),
+                    # PROPIO_CODIGO_PRODUCTO: máx. 25 caracteres
+                    (line.product_id.default_code or '')[:25],
 
-                # PROPIO_DESCRIPCION_PRODUCTO: máx. 40 caracteres
-                '{:.40}'.format(line.product_id.name),
+                    # PROPIO_DESCRIPCION_PRODUCTO: máx. 40 caracteres
+                    (line.product_id.name)[:40],
 
-                # PROPIO_DESCRIPCION_UNIDAD_MEDIDA: máx. 20 caracteres
-                '{:.20}'.format(line.product_uom_id.name),
+                    # PROPIO_DESCRIPCION_UNIDAD_MEDIDA: máx. 20 caracteres
+                    (line.product_uom_id.name)[:20],
 
-                # CANTIDAD_AJUSTADA: 13 enteros y 2 decimales (no incluir coma
-                # ni punto), ej 200 un -> 20000 (en los que vi mandan lo mismo)
-                str(round(line.product_qty * 100.0))[-15:],
-            ])
+                    # CANTIDAD_AJUSTADA: 13 enteros y 2 decimales (no incluir
+                    # coma ni punto), ej 200 un -> 20000 (en los que vi mandan
+                    # lo mismo)
+                    str(int(round(line.product_qty * 100.0)))[-15:],
+                ])
 
         content = ''
-        print '[HEADER] + REMITOS + PRODUCTOS + [FOOTER]', [HEADER] + REMITOS + PRODUCTOS + [FOOTER]
-        for line in [HEADER] + REMITOS + PRODUCTOS + [FOOTER]:
-            print 'line', line
-            print 'line 2', '|'.join(line)
-            content += '%s\n' % ('|'.join(line))
-
+        for line in [HEADER] + REMITOS_PRODUCTOS + [FOOTER]:
+            content += '%s\r\n' % ('|'.join(line))
         return (content, filename)
 
     @api.multi
-    def do_pyafipws_presentar_remito(self):
+    def do_pyafipws_presentar_remito(
+            self, datetime_out, tipo_recorrido, carrier_partner,
+            patente_vehiculo, patente_acomplado, prod_no_term_dev, importe):
         self.ensure_one()
 
         COT = self.company_id.arba_cot_connect()
 
-        with tempfile.NamedTemporaryFile() as file:
-            print 'file.name', file.name
-            COT.PresentarRemito(file.name, testing="")
-        print 'COT.Excepcion', COT.Excepcion
+        content, filename = self.get_arba_file_data(
+            datetime_out, tipo_recorrido, carrier_partner,
+            patente_vehiculo, patente_acomplado,
+            prod_no_term_dev, importe)
+
+        # NO podemos usar tmp porque agrega un sufijo distinto y arba exije
+        # que sea tal cual el nombre del archivo
+        # with tempfile.NamedTemporaryFile(
+        #         prefix=filename, suffix='.txt') as file:
+        #     file.write(content.encode('utf-8'))
+        #     COT.PresentarRemito(file.name, testing="")
+
+        filename = '/tmp/%s' % filename
+        file = open(filename, 'w+b')
+        file.write(content.encode('utf-8'))
+        file.close()
+        _logger.info('Presentando COT con archivo "%s"' % filename)
+        COT.PresentarRemito(filename, testing="")
+        os.remove(filename)
+
         if COT.Excepcion:
-            raise UserError(_(
-                "Errores:\n"
+            msg = _('Error al presentar remito:\n* %s') % COT.Excepcion
+            _logger.warning(msg)
+            raise UserError(msg)
+        # no seria necesairio porque iteramos mas abajo
+        # elif COT.CodigoError:
+        #     msg = _(
+        #         "Error al presentar remito:\n"
+        #         "* MensajeError: %s\n"
+        #         "* TipoError: %s\n"
+        #         "* CodigoError: %s\n") % (
+        #             COT.MensajeError, COT.TipoError, COT.CodigoError)
+        #     _logger.warning(msg)
+        #     raise UserError(msg)
+
+        errors = []
+        while COT.LeerErrorValidacion():
+            errors.append((
                 "* MensajeError: %s\n"
                 "* TipoError: %s\n"
                 "* CodigoError: %s\n") % (
                     COT.MensajeError, COT.TipoError, COT.CodigoError))
-        print 'COT.NumeroComprobante', COT.NumeroComprobante
-        print 'COT.CodigoIntegridad', COT.CodigoIntegridad
-        print 'COT.Procesado', COT.Procesado
-        print 'COT.NumeroUnico', COT.NumeroUnico
+
+        if errors:
+            raise UserError(_(
+                "Error al presentar remito:\n%s") % '\n'.join(errors))
+            # print "Error TipoError: %s" % COT.TipoError
+            # print "Error CodigoError: %s" % COT.CodigoError
+            # print "Error MensajeError: %s" % COT.MensajeError
+
+        # TODO deberiamos tratar de usar este archivo y no generar el de arriba
+        attachments = [(filename, content)]
+        body = """
+<p>
+    Resultado solictud COT:
+    <ul>
+        <li>Numero Comprobante: %s</li>
+        <li>Codigo Integridad: %s</li>
+        <li>Procesado: %s</li>
+        <li>Numero Unico: %s</li>
+    </ul>
+</p>
+""" % (COT.NumeroComprobante, COT.CodigoIntegridad,
+            COT.Procesado, COT.NumeroUnico)
+
+        self.message_post(
+            body=body,
+            subject='Remito Electrónico Solicitado', attachments=attachments)
+        # print 'COT.Excepcion', COT.Excepcion
+        # if COT.Excepcion:
+        #     raise UserError(
+        # print 'COT.NumeroComprobante', COT.NumeroComprobante
+        # print 'COT.CodigoIntegridad', COT.CodigoIntegridad
+        # print 'COT.Procesado', COT.Procesado
+        # print 'COT.NumeroUnico', COT.NumeroUnico
 
         return True
 

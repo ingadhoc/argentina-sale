@@ -6,6 +6,13 @@
 Remito electrónico Argentino
 ============================
 
+PENDIENTE:
+* validaciones formato patente
+* validación requerimiento patente
+* parsear datetime_out y validar fecha >= hoy-1 y menor= a hoy mas 30
+* asistente de importe y otras mejroas de usabilidad
+* Implementar, si es necesario, nro_planta y nro_puerta
+
 IMPORTANTE: por ahora está implementado para stock.picking pero no seria muy dificil implementarlo también para facturas ya que la factura puede ser el comprobante de entrega (ver documentos de más abajo)
 
 Por ahora implementados ARBA y Santa Fe.
