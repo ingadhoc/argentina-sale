@@ -14,3 +14,4 @@
 # To provide both the URL and a branch, use:
 # sale-workflow https://github.com/OCA/sale-workflow branchname
 ingadhoc-odoo-argentina https://github.com/ingadhoc/odoo-argentina
+ingadhoc-stock https://github.com/ingadhoc/stock
