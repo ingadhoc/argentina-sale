@@ -409,15 +409,3 @@ class StockPicking(models.Model):
         # print 'COT.NumeroUnico', COT.NumeroUnico
 
         return True
-
-    @api.multi
-    def do_pyafipws_lee_validacion_remito(self):
-        COT = self.company_id.arba_cot_connect()
-        while COT.LeerValidacionRemito():
-            print "Numero Unico: %s" % COT.NumeroUnico
-            print "Procesado: %s" % COT.Procesado
-            while COT.LeerErrorValidacion():
-                print "Error Validacion: %s | %s" % (
-                    COT.CodigoError, COT.MensajeError)
-        print "p1 %s" % COT.ObtenerTagXml(
-            'validacionesRemitos', 'remito', 1, 'procesado')
