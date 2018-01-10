@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Remito electrónico Argentino',
-    'version': '9.0.1.0.0',
+    'version': '9.0.1.1.0',
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA,Odoo Community Association (OCA)',
@@ -24,6 +24,7 @@
         'views/product_template_view.xml',
         'views/product_uom_view.xml',
         'data/ir_sequence_data.xml',
+        'data/product_uom_data.xml',
         # 'security/invoice_sale_security.xml',
         # 'views/sale_view.xml',
         # 'views/res_company_view.xml',

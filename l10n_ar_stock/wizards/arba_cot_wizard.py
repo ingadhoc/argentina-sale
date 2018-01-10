@@ -11,7 +11,9 @@ class get_(models.TransientModel):
     _description = 'arba.cot.wizard'
 
     datetime_out = fields.Datetime(
-        required=True
+        required=True,
+        help='Fecha de salida. No debe ser inferior a ayer ni superior a '
+        'dentro de 30 días.'
     )
     tipo_recorrido = fields.Selection(
         [('U', 'Urbano'), ('R', 'Rural'), ('M', 'Mixto')],

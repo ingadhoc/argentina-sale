@@ -21,6 +21,14 @@ class StockPicking(models.Model):
         related='book_id.document_type_id',
         readonly=True
     )
+    cot_numero_unico = fields.Char(
+        'COT - Nro Único',
+        help='Número único del último COT solicitado',
+    )
+    cot_numero_comprobante = fields.Char(
+        'COT - Nro Comprobante',
+        help='Número de comprobante del último COT solicitado',
+    )
 
     @api.multi
     def get_arba_file_data(
@@ -44,6 +52,12 @@ class StockPicking(models.Model):
                 'Los remitos seleccionados deben pertenecer a la misma '
                 'compañía'))
         cuit = company.cuit_required()
+        cuit_carrier = carrier_partner.cuit_required()
+
+        if cuit_carrier == cuit and not patente_vehiculo:
+            raise UserError(_(
+                'Si el CUIT de la compañía y el cuit del transportista son el '
+                'mismo, se debe informar la patente del vehículo.'))
 
         # ej. nombre archivo TB_30111111118_003002_20060716_000183.txt
         # TODO ver de donde obtener estos datos
@@ -250,7 +264,7 @@ class StockPicking(models.Model):
                 (source_partner.state_id.code or '')[:1],
 
                 # TRANSPORTISTA_CUIT
-                carrier_partner.cuit_required(),
+                cuit_carrier,
 
                 # TIPO_RECORRIDO: 'U' urbano, 'R' rural, 'M' mixto
                 tipo_recorrido,
@@ -281,12 +295,32 @@ class StockPicking(models.Model):
             ])
 
             for line in rec.mapped('pack_operation_ids'):
-                if not line.product_uom_id.arba_code:
-                    raise UserError(_('No arba code for uom %s (Id: %s') % (
-                        line.product_uom_id.name, line.product_uom_id.id))
+
+                # buscamos si hay unidad de medida de la cateogria que tenga
+                # codigo de arba y usamos esa, ademas convertimos la cantidad
+                product_qty = line.product_qty
+                print 'line.product_uom_id.arba_code', line.product_uom_id.arba_code
+                if line.product_uom_id.arba_code:
+                    uom_arba_with_code = line.product_uom_id
+                else:
+                    uom_arba_with_code = line.product_uom_id.search([
+                        ('category_id', '=',
+                            line.product_uom_id.category_id.id),
+                        ('arba_code', '!=', False)], limit=1)
+                    if not uom_arba_with_code:
+                        raise UserError(_(
+                            'No arba code for uom "%s" (Id: %s) or any uom in '
+                            'category "%s"') % (
+                            line.product_uom_id.name, line.product_uom_id.id,
+                            line.product_uom_id.category_id.name))
+
+                    product_qty = line.product_uom_id._compute_qty(
+                        line.product_uom_id.id, product_qty,
+                        uom_arba_with_code.id)
+
                 if not line.product_id.arba_code:
                     raise UserError(_(
-                        'No arba code for product %s (Id: %s') % (
+                        'No arba code for product "%s" (Id: %s)') % (
                         line.product_id.name, line.product_id.id))
 
                 REMITOS_PRODUCTOS.append([
@@ -298,11 +332,11 @@ class StockPicking(models.Model):
                     line.product_id.arba_code,
 
                     # RENTAS_CODIGO_UNIDAD_MEDIDA: ver tabla unidades de medida
-                    line.product_uom_id.arba_code,
+                    uom_arba_with_code.arba_code,
 
                     # CANTIDAD: 13 enteros y 2 decimales (no incluir coma
                     # ni punto), ej 200 un -> 20000
-                    str(int(round(line.product_qty * 100.0)))[-15:],
+                    str(int(round(product_qty * 100.0)))[-15:],
 
                     # PROPIO_CODIGO_PRODUCTO: máx. 25 caracteres
                     (line.product_id.default_code or '')[:25],
@@ -311,12 +345,12 @@ class StockPicking(models.Model):
                     (line.product_id.name)[:40],
 
                     # PROPIO_DESCRIPCION_UNIDAD_MEDIDA: máx. 20 caracteres
-                    (line.product_uom_id.name)[:20],
+                    (uom_arba_with_code.name)[:20],
 
                     # CANTIDAD_AJUSTADA: 13 enteros y 2 decimales (no incluir
                     # coma ni punto), ej 200 un -> 20000 (en los que vi mandan
                     # lo mismo)
-                    str(int(round(line.product_qty * 100.0)))[-15:],
+                    str(int(round(product_qty * 100.0)))[-15:],
                 ])
 
         content = ''
@@ -388,15 +422,19 @@ class StockPicking(models.Model):
 <p>
     Resultado solictud COT:
     <ul>
-        <li>Numero Comprobante: %s</li>
+        <li>Número Comprobante: %s</li>
         <li>Codigo Integridad: %s</li>
         <li>Procesado: %s</li>
-        <li>Numero Unico: %s</li>
+        <li>Número Único: %s</li>
     </ul>
 </p>
 """ % (COT.NumeroComprobante, COT.CodigoIntegridad,
             COT.Procesado, COT.NumeroUnico)
 
+        self.write({
+            'cot_numero_unico': COT.NumeroComprobante,
+            'cot_numero_comprobante': COT.NumeroUnico,
+        })
         self.message_post(
             body=body,
             subject='Remito Electrónico Solicitado', attachments=attachments)

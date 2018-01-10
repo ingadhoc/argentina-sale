@@ -7,11 +7,11 @@ Remito electrónico Argentino
 ============================
 
 PENDIENTE:
-* validaciones formato patente
-* validación requerimiento patente
-* parsear datetime_out y validar fecha >= hoy-1 y menor= a hoy mas 30
-* asistente de importe y otras mejroas de usabilidad
+* validaciones formato patentes (3 letras y 3 números ó 2 letras, 3 números y 2 letras)
+* parsear datetime_out y validar fecha >= hoy-1 y menor= a hoy mas 30 (no tan necesario, ya lo valida la respuesta, por ahora en el help)
 * Implementar, si es necesario, nro_planta y nro_puerta
+* Si es necesario o mejor imprimir el número obtenido en el remito, entonces tenemos que ver que las dos cosas se hagan en el mismo momento (reporte de remito y solicitud de cot)
+
 
 IMPORTANTE: por ahora está implementado para stock.picking pero no seria muy dificil implementarlo también para facturas ya que la factura puede ser el comprobante de entrega (ver documentos de más abajo)
 
