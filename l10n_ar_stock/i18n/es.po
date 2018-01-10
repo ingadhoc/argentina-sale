@@ -1,0 +1,282 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * l10n_ar_stock
+# 
+# Translators:
+# andressl <aleibrecht@gmail.com>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-12-04 22:38+0000\n"
+"PO-Revision-Date: 2017-12-04 22:38+0000\n"
+"Last-Translator: andressl <aleibrecht@gmail.com>, 2017\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,help:l10n_ar_stock.field_arba_cot_wizard_patente_acomplado
+msgid "3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_product_template_arba_code
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_product_uom_arba_code
+msgid "Arba code"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.actions.act_window,name:l10n_ar_stock.action_arba_cot_wizard
+#: model:ir.ui.view,arch_db:l10n_ar_stock.view_arba_cot_wizard
+msgid "Asistente para Código de Operaciones de Traslado"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.view_arba_cot_wizard
+msgid "Cancel"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_carrier_id
+msgid "Carrier"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model,name:l10n_ar_stock.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.view_arba_cot_wizard
+msgid "Confirm"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_datetime_out
+msgid "Datetime out"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_book_document_type_id
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_picking_document_type_id
+msgid "Document Type"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:102
+#, python-format
+msgid "Document type has no validator, code or letter configured (Id: %s"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/product_template.py:21
+#, python-format
+msgid "El código según nomenclador de arba debe ser de 6 dígitos numéricos"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:379
+#, python-format
+msgid ""
+"Error al presentar remito:\n"
+"%s"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:356
+#, python-format
+msgid ""
+"Error al presentar remito:\n"
+"* %s"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_importe
+msgid "Importe"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:90
+#, python-format
+msgid ""
+"Las provincias de origen y destino son obligatorias y deben tener un código "
+"válido"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard___last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:43
+#, python-format
+msgid "Los remitos seleccionados deben pertenecer a la misma compañía"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: selection:arba.cot.wizard,tipo_recorrido:0
+msgid "Mixto"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: selection:arba.cot.wizard,prod_no_term_dev:0
+msgid "No"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:288
+#, python-format
+msgid "No arba code for product %s (Id: %s"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:285
+#, python-format
+msgid "No arba code for uom %s (Id: %s"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:81
+#, python-format
+msgid "No se asignó número de remito"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:55
+#, python-format
+msgid "No sequence found for COT files (code = \"arba.cot.file\") on company \"%s"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.view_picking_form
+msgid "Obtener COT (BETA)"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.view_picking_form
+msgid "Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_patente_acomplado
+msgid "Patente acomplado"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_patente_vehiculo
+msgid "Patente vehiculo"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:95
+#, python-format
+msgid "Picking has no \"Document type\" linked (Id: %s"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model,name:l10n_ar_stock.model_product_template
+msgid "Product Template"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model,name:l10n_ar_stock.model_product_uom
+msgid "Product Unit of Measure"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_prod_no_term_dev
+msgid "Productos no terminados / devoluciones"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,help:l10n_ar_stock.field_arba_cot_wizard_patente_vehiculo
+msgid ""
+"Requerido si CUIT Transportista = CUIT Compañía\n"
+"3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: selection:arba.cot.wizard,tipo_recorrido:0
+msgid "Rural"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: selection:arba.cot.wizard,prod_no_term_dev:0
+msgid "Si"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model,name:l10n_ar_stock.model_stock_book
+msgid "Stock Voucher Book"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_tipo_recorrido
+msgid "Tipo recorrido"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model,name:l10n_ar_stock.model_stock_picking
+msgid "Transfer"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: selection:arba.cot.wizard,tipo_recorrido:0
+msgid "Urbano"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.product_template_only_form_view
+msgid "Ver Nomenclador"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.product_uom_form_view
+msgid "Ver códigos"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/res_company.py:38
+#, python-format
+msgid "You must configure ARBA CIT on company %s"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model,name:l10n_ar_stock.model_arba_cot_wizard
+msgid "arba.cot.wizard"
+msgstr ""
