@@ -299,7 +299,6 @@ class StockPicking(models.Model):
                 # buscamos si hay unidad de medida de la cateogria que tenga
                 # codigo de arba y usamos esa, ademas convertimos la cantidad
                 product_qty = line.product_qty
-                print 'line.product_uom_id.arba_code', line.product_uom_id.arba_code
                 if line.product_uom_id.arba_code:
                     uom_arba_with_code = line.product_uom_id
                 else:
