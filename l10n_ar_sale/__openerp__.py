@@ -39,7 +39,7 @@ hay un campo "vat discriminated", abajo de posición fiscal, donde se
     ],
     'test': [
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'application': False,
 }
