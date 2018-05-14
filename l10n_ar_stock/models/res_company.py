@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from odoo import models, api, _
 # import odoo.tools as tools
 try:

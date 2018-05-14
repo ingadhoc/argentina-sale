@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     'name': 'Argentinian Sale Total Fields',
     'version': '9.0.1.2.0',

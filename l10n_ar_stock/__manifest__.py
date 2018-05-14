@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     'name': 'Remito electrónico Argentino',
     'version': '9.0.1.1.0',
