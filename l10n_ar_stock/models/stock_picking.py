@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
+from odoo import models, fields, api, _
 import datetime
-# import openerp.tools as tools
+# import odoo.tools as tools
 try:
     from pyafipws.iibb import IIBB
 except ImportError:
     IIBB = None
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 # import tempfile
 import os
 import logging
