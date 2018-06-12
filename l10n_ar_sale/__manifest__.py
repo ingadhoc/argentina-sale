@@ -1,6 +1,6 @@
 {
     'name': 'Argentinian Sale Total Fields',
-    'version': '9.0.1.2.0',
+    'version': '9.0.1.3.0',
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA,Odoo Community Association (OCA)',

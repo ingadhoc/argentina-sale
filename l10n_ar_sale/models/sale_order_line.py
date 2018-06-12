@@ -2,8 +2,8 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import models, fields, api
-# from odoo.exceptions import UserError
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -32,6 +32,25 @@ class SaleOrderLine(models.Model):
         comodel_name='account.tax',
         string='Taxes'
     )
+
+    vat_tax_id = fields.Many2one(
+        'account.tax',
+        compute='_compute_vat_tax_id',
+    )
+
+    @api.multi
+    @api.depends(
+        'tax_id.tax_group_id.type',
+        'tax_id.tax_group_id.tax',
+    )
+    def _compute_vat_tax_id(self):
+        for rec in self:
+            vat_tax_id = rec.tax_id.filtered(lambda x: (
+                x.tax_group_id.type == 'tax' and
+                x.tax_group_id.tax == 'vat'))
+            if len(vat_tax_id) > 1:
+                raise UserError(_('Only one vat tax allowed per line'))
+            rec.vat_tax_id = vat_tax_id
 
     @api.multi
     @api.depends(
