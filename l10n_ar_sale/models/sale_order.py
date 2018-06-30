@@ -36,7 +36,7 @@ class SaleOrder(models.Model):
         for rec in self:
             vat_discriminated = True
             company_vat_type = rec.company_id.sale_allow_vat_no_discrimination
-            if company_vat_type:
+            if company_vat_type and company_vat_type != 'discriminate_default':
                 # letters = rec.env['account.document.letter']
                 # if rec.company_id.partner_id.afip_responsability_type_id:
                 letters = rec.env[
