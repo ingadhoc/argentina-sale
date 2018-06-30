@@ -8,6 +8,6 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.sale_allow_vat_no_discrimination'
     )
     group_price_unit_with_tax = fields.Boolean(
-        "Show Unit Price w/ Taxes On sale Order Lines",
+        "Unit Price w/ Taxes",
         implied_group='l10n_ar_sale.sale_price_unit_with_tax',
     )
