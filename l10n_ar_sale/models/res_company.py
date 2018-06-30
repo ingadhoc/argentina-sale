@@ -5,7 +5,7 @@
 from odoo import fields, models
 
 
-class res_company(models.Model):
+class ResCompany(models.Model):
     _inherit = "res.company"
 
     sale_allow_vat_no_discrimination = fields.Selection(

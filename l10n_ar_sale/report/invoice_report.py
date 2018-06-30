@@ -5,7 +5,7 @@
 from odoo import models
 
 
-class account_invoice_report(models.Model):
+class AccountInvoiceReport(models.Model):
     """
     Este es un dummy depends para que si se actualza account_document no se
     rompa este reporte (porque sale agrega el campo team_id), hay que ver

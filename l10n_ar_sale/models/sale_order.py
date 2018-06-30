@@ -27,29 +27,30 @@ class SaleOrder(models.Model):
     vat_discriminated = fields.Boolean(
         compute='_compute_vat_discriminated')
 
-    @api.one
     @api.depends(
         'partner_id',
         'partner_id.afip_responsability_type_id',
         'company_id',
         'company_id.partner_id.afip_responsability_type_id',)
     def _compute_vat_discriminated(self):
-        vat_discriminated = True
-        company_vat_type = self.company_id.sale_allow_vat_no_discrimination
-        if company_vat_type:
-            # letters = self.env['account.document.letter']
-            # if self.company_id.partner_id.afip_responsability_type_id:
-            letters = self.env[
-                'account.journal']._get_journal_letter(
-                    'sale', self.company_id,
-                    self.partner_id.commercial_partner_id)
-            if letters:
-                # letters = letters.browse(letter_ids)
-                vat_discriminated = not letters[0].taxes_included
-            # if no responsability or no letters
-            if not letters and company_vat_type == 'no_discriminate_default':
-                vat_discriminated = False
-        self.vat_discriminated = vat_discriminated
+        for rec in self:
+            vat_discriminated = True
+            company_vat_type = rec.company_id.sale_allow_vat_no_discrimination
+            if company_vat_type:
+                # letters = rec.env['account.document.letter']
+                # if rec.company_id.partner_id.afip_responsability_type_id:
+                letters = rec.env[
+                    'account.journal']._get_journal_letter(
+                        'sale', rec.company_id,
+                        rec.partner_id.commercial_partner_id)
+                if letters:
+                    # letters = letters.browse(letter_ids)
+                    vat_discriminated = not letters[0].taxes_included
+                # if no responsability or no letters
+                if not letters and \
+                        company_vat_type == 'no_discriminate_default':
+                    vat_discriminated = False
+            rec.vat_discriminated = vat_discriminated
 
     @api.depends(
         'amount_untaxed', 'amount_tax', 'vat_discriminated')
