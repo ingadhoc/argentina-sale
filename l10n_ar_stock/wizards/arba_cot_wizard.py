@@ -5,7 +5,7 @@
 from odoo import fields, models, api
 
 
-class get_(models.TransientModel):
+class ArbaCotWizard(models.TransientModel):
     _name = 'arba.cot.wizard'
     _description = 'arba.cot.wizard'
 

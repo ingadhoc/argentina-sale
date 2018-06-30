@@ -435,7 +435,8 @@ class StockPicking(models.Model):
         })
         self.message_post(
             body=body,
-            subject='Remito Electrónico Solicitado', attachments=attachments)
+            subject=_('Remito Electrónico Solicitado'),
+            attachments=attachments)
         # print 'COT.Excepcion', COT.Excepcion
         # if COT.Excepcion:
         #     raise UserError(

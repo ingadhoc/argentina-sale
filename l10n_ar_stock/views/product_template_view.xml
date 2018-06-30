@@ -13,7 +13,7 @@
                      <a target="_blank" href="http://www.arba.gov.ar/Aplicaciones/NomencladorTB/NomencladorTB.asp" class="oe_edit_only oe_inline">Ver Nomenclador</a>
                 </div>
             </field>
-        </field>  
+        </field>
     </record>
 
 </odoo>
