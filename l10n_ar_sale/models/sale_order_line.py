@@ -3,7 +3,7 @@
 # directory
 ##############################################################################
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -101,11 +101,14 @@ class SaleOrderLine(models.Model):
 
     @api.multi
     def check_vat_tax(self):
-        for rec in self:
+        """For recs of companies with company_requires_vat (that comes from
+        the responsability), we ensure one and only one vat tax is configured
+        """
+        for rec in self.filtered('company_id.company_requires_vat'):
             vat_taxes = rec.tax_id.filtered(
                 lambda x: x.tax_group_id.tax == 'vat')
             if len(vat_taxes) != 1:
-                raise ValidationError(_(
+                raise UserError(_(
                     'Debe haber un y solo un impuestos de IVA por línea. '
                     'Verificar líneas con producto "%s"' % (
                         rec.product_id.name)))
@@ -113,7 +116,7 @@ class SaleOrderLine(models.Model):
     @api.multi
     def write(self, vals):
         res = super(SaleOrderLine, self).write(vals)
-        # for performance we only check if tax is on vals
-        if vals.get('tax_id', False):
+        # for performance we only check if tax or company is on vals
+        if 'tax_id' in vals or 'company_id' in vals:
             self.check_vat_tax()
         return res
