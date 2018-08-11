@@ -106,7 +106,8 @@ class SaleOrderLine(models.Model):
         """
         for rec in self.filtered('company_id.company_requires_vat'):
             vat_taxes = rec.tax_id.filtered(
-                lambda x: x.tax_group_id.tax == 'vat')
+                lambda x:
+                x.tax_group_id.tax == 'vat' and x.tax_group_id.type == 'tax')
             if len(vat_taxes) != 1:
                 raise UserError(_(
                     'Debe haber un y solo un impuestos de IVA por línea. '
