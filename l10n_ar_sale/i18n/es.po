@@ -3,15 +3,14 @@
 # * l10n_ar_sale
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2017
-# Gonzalo Ruzafa <gr@ingadhoc.com>, 2017
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2018
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-06 14:03+0000\n"
-"PO-Revision-Date: 2017-06-06 14:03+0000\n"
-"Last-Translator: Gonzalo Ruzafa <gr@ingadhoc.com>, 2017\n"
+"POT-Creation-Date: 2018-08-23 19:53+0000\n"
+"PO-Revision-Date: 2018-08-23 19:53+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,17 +29,22 @@ msgid "Companies"
 msgstr "Compañías"
 
 #. module: l10n_ar_sale
+#: code:addons/l10n_ar_sale/models/sale_order_line.py:118
+#, python-format
+msgid ""
+"Debe haber un y solo un impuestos de IVA por lÃ­nea. Verificar lÃ­neas con "
+"producto \"%s\""
+msgstr ""
+
+#. module: l10n_ar_sale
 #: model:ir.model.fields,help:l10n_ar_sale.field_res_company_sale_allow_vat_no_discrimination
+#: model:ir.model.fields,help:l10n_ar_sale.field_res_config_settings_sale_allow_vat_no_discrimination
 msgid ""
 "Definie behaviour on sales orders and quoatations reports. Discrimination or not will depend in partner and company responsability and AFIP letters setup:\n"
-"* If False, then VAT will be discriminated like always in odoo\n"
-"* If No Discriminate Default, if no match found it won't discriminate by default\n"
-"* If Discriminate Default, if no match found it would discriminate by default"
+"* If No, Always Discriminate, then VAT will be discriminated like always in odoo\n"
+"* If Yes, No Discriminate Default, if no match found it won't discriminate by default\n"
+"* If Yes, Discriminate Default, if no match found it would discriminate by default"
 msgstr ""
-"Definir comportamiento en informes de ordenes de venta y presupuestos. La discriminación o no dependerá del partner y de la Responsabilidad de la Compañía y la configuración de las Letras de AFIP.\n"
-"* Si Falso, entonces el IVA será discrimiando como Odoo siempre lo hace.\n"
-"* Si No Discrimina por Defecto, si no se encuentra coincidencia no discriminará por defecto.\n"
-"* Si Discrimina por Defecto, si no se encuentra coincidencia discriminará por defecto."
 
 #. module: l10n_ar_sale
 #: model:ir.model,name:l10n_ar_sale.model_account_invoice_report
@@ -48,9 +52,25 @@ msgid "Invoices Statistics"
 msgstr "Estadisticas de Facturas"
 
 #. module: l10n_ar_sale
+#: model:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
+msgid "Line subtotals in sales orders"
+msgstr ""
+
+#. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line_report_price_net
 msgid "Net Amount"
 msgstr "Importe Neto"
+
+#. module: l10n_ar_sale
+#: selection:res.company,sale_allow_vat_no_discrimination:0
+msgid "No, Always Discriminate"
+msgstr ""
+
+#. module: l10n_ar_sale
+#: code:addons/l10n_ar_sale/models/sale_order_line.py:52
+#, python-format
+msgid "Only one vat tax allowed per line"
+msgstr ""
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line_price_unit_with_tax
@@ -58,7 +78,13 @@ msgid "Price Unit Price"
 msgstr "Precio Unitario"
 
 #. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_sale_order
+msgid "Quotation"
+msgstr ""
+
+#. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_res_company_sale_allow_vat_no_discrimination
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings_sale_allow_vat_no_discrimination
 msgid "Sale Allow VAT no discrimination?"
 msgstr "Permitir no discriminar IVA en ventas?"
 
@@ -68,14 +94,14 @@ msgid "Sale Unit Prices w/ Taxes"
 msgstr "Precio Unitario con Impuestos"
 
 #. module: l10n_ar_sale
-#: model:ir.model,name:l10n_ar_sale.model_sale_order
-msgid "Sales Order"
-msgstr "Orden de Ventas"
-
-#. module: l10n_ar_sale
 #: model:ir.model,name:l10n_ar_sale.model_sale_order_line
 msgid "Sales Order Line"
 msgstr "Línea de orden de ventas"
+
+#. module: l10n_ar_sale
+#: model:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
+msgid "Show Unit Price with Taxes included On sale Order Lines"
+msgstr ""
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_report_amount_tax
@@ -93,21 +119,36 @@ msgid "Unit Price"
 msgstr "Precio Unitario"
 
 #. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings_group_price_unit_with_tax
+msgid "Unit Price w/ Taxes"
+msgstr ""
+
+#. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_report_amount_untaxed
 msgid "Untaxed Amount"
 msgstr "Subtotal s/ Impuestos"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_vat_discriminated
-msgid "Vat discriminated"
-msgstr "IVA Discriminado"
+msgid "Vat Discriminated"
+msgstr ""
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line_vat_tax_id
+msgid "Vat Tax"
+msgstr ""
 
 #. module: l10n_ar_sale
 #: selection:res.company,sale_allow_vat_no_discrimination:0
-msgid "Yes, Discrimnate Default"
-msgstr "Si, Discriminar por defecto"
+msgid "Yes, Discriminate Default"
+msgstr ""
 
 #. module: l10n_ar_sale
 #: selection:res.company,sale_allow_vat_no_discrimination:0
 msgid "Yes, No Discriminate Default"
 msgstr "Si, No discriminar por defecto"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_res_config_settings
+msgid "res.config.settings"
+msgstr ""
