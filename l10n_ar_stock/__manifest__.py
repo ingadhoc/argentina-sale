@@ -14,14 +14,12 @@
         # TODO sacar esta dependencia moviendo el campo de arba cit a otro mod.
         'l10n_ar_account_withholding',
     ],
-    'external_dependencies': {
-    },
     'data': [
-        'wizards/arba_cot_wizard_view.xml',
-        'views/stock_picking_view.xml',
-        'views/stock_book_view.xml',
-        'views/product_template_view.xml',
-        'views/product_uom_view.xml',
+        'wizards/arba_cot_wizard_views.xml',
+        'views/stock_picking_views.xml',
+        'views/stock_book_views.xml',
+        'views/product_template_views.xml',
+        'views/product_uom_views.xml',
         'data/ir_sequence_data.xml',
         'data/product_uom_data.xml',
         # 'security/invoice_sale_security.xml',
@@ -31,9 +29,7 @@
     ],
     'demo': [
     ],
-    'test': [
-    ],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
 }
