@@ -293,7 +293,7 @@ class StockPicking(models.Model):
                 str(int(round(importe * 100.0)))[-10:],
             ])
 
-            for line in rec.mapped('pack_operation_ids'):
+            for line in rec.mapped('move_line_ids'):
 
                 # buscamos si hay unidad de medida de la cateogria que tenga
                 # codigo de arba y usamos esa, ademas convertimos la cantidad
