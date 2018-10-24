@@ -1,0 +1,25 @@
+<odoo>
+    <template id="portal_order_page" inherit_id="sale.portal_order_page" name="Sales Order">
+
+        <xpath expr="//span[@t-esc='i.number']" position="attributes">
+            <attribute name="t-esc">i.display_name</attribute>
+        </xpath>
+        <xpath expr="//span[@t-field='ol.price_unit']" position="attributes">
+            <attribute name="t-field">ol.report_price_unit</attribute>
+        </xpath>
+        <xpath expr="//span[@t-field='ol.price_subtotal']" position="attributes">
+            <attribute name="t-field">ol.report_price_subtotal</attribute>
+        </xpath>
+        <xpath expr="//span[@t-field='order.amount_untaxed']" position="attributes">
+            <attribute name="t-field">order.report_amount_untaxed</attribute>
+        </xpath>
+        <xpath expr="//span[@t-field='order.report_amount_untaxed']/../../.." position="attributes">
+            <attribute name="t-if">order.vat_discriminated</attribute>
+        </xpath>
+        <xpath expr="//t[@t-as='amount_by_group']" position="attributes">
+            <attribute name="t-if">order.vat_discriminated</attribute>
+        </xpath>
+
+    </template>
+
+</odoo>
