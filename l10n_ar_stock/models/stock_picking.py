@@ -175,7 +175,7 @@ class StockPicking(models.Model):
                 dest_cuit,
 
                 # DESTINATARIO_RAZON_SOCIAL
-                commercial_partner.name,
+                commercial_partner.name[:50],
 
                 # DESTINATARIO_TENEDOR: 0=no, 1=si.
                 dest_cons_final and '0' or '1',
