@@ -174,7 +174,7 @@ class StockPicking(models.Model):
                 dest_cuit,
 
                 # DESTINATARIO_RAZON_SOCIAL
-                commercial_partner.name,
+                commercial_partner.name[:50],
 
                 # DESTINATARIO_TENEDOR: 0=no, 1=si.
                 dest_cons_final and '0' or '1',
@@ -293,7 +293,7 @@ class StockPicking(models.Model):
                 str(int(round(importe * 100.0)))[-10:],
             ])
 
-            for line in rec.mapped('pack_operation_ids'):
+            for line in rec.mapped('move_line_ids'):
 
                 # buscamos si hay unidad de medida de la cateogria que tenga
                 # codigo de arba y usamos esa, ademas convertimos la cantidad
