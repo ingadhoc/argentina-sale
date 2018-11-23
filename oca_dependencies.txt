@@ -1,2 +1,3 @@
 ingadhoc-odoo-argentina https://github.com/ingadhoc/odoo-argentina
 ingadhoc-stock https://github.com/ingadhoc/stock
+stock-logistics-workflow
