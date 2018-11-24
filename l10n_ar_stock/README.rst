@@ -10,9 +10,15 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-============================
-Remito electrónico Argentino
-============================
+===========================================================
+Integración del módulo de stock a requerimientos argentinos
+===========================================================
+
+#. Remito electrónico Argentino
+#. Número de despacho en lotes
+
+Sobre remito electrónico
+------------------------
 
 PENDIENTE:
 

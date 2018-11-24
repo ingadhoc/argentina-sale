@@ -13,8 +13,13 @@ class AccountInvoiceLine(models.Model):
     )
     lot_ids = fields.Many2many(
         'stock.production.lot',
-        related='move_line_ids.move_line_ids.lot_id',
+        compute='_compute_lots',
     )
+
+    @api.multi
+    def _compute_lots(self):
+        for rec in self:
+            rec.lot_ids = rec.move_line_ids.mapped('move_line_ids.lot_id')
 
     @api.multi
     @api.constrains('arba_code')
