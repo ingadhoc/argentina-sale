@@ -13,6 +13,7 @@
         'l10n_ar_afipws',
         # TODO sacar esta dependencia moviendo el campo de arba cit a otro mod.
         'l10n_ar_account_withholding',
+        'stock_picking_invoice_link',
     ],
     'data': [
         'wizards/arba_cot_wizard_views.xml',
@@ -20,6 +21,8 @@
         'views/stock_book_views.xml',
         'views/product_template_views.xml',
         'views/product_uom_views.xml',
+        'views/stock_production_lot_views.xml',
+        'views/account_invoice_line_views.xml',
         'data/ir_sequence_data.xml',
         'data/product_uom_data.xml',
         # 'security/invoice_sale_security.xml',
