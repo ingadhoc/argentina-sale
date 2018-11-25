@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="stock_voucher.view_stock_book_form"/>
         <field name="arch" type="xml">
             <field name="next_number" position="after">
-                <field name="document_type_id"/>
+                <field name="document_type_id" groups="l10n_ar_stock.arba_cot_enabled"/>
             </field>
         </field>
     </record>
