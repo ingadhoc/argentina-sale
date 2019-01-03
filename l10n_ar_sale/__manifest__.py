@@ -1,6 +1,6 @@
 {
     'name': 'Argentinian Sale Total Fields',
-    'version': '11.0.1.1.0',
+    'version': '11.0.1.2.0',
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -15,8 +15,10 @@
     },
     'data': [
         'security/invoice_sale_security.xml',
+        'security/ir.model.access.csv',
         'views/sale_view.xml',
         'views/l10n_ar_sale_templates.xml',
+        'views/sale_checkbook_views.xml',
         'wizards/res_config_settings_view.xml',
     ],
     'demo': [

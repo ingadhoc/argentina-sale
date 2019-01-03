@@ -2,7 +2,12 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from . import res_company
-from . import sale_checkbook
-from . import sale_order
-from . import sale_order_line
+from odoo import models, fields
+
+
+class SaleOrderType(models.Model):
+    _inherit = "sale.order.type"
+
+    sale_checkbook_id = fields.Many2one(
+        'sale.checkbook',
+    )

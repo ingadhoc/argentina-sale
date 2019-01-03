@@ -6,4 +6,10 @@
         <field name="category_id" ref="base.module_category_hidden"/>
     </record>
 
+
+    <record id="use_sale_checkbook" model="res.groups">
+        <field name="name">View Sale Order Checkbook</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
 </odoo>

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_sale_checkbook_search" model="ir.ui.view">
+        <field name="name">sale.checkbook.search</field>
+        <field name="model">sale.checkbook</field>
+        <field name="arch" type="xml">
+            <search string="Sale Checkbook">
+                <field name="name"/>
+                <field name="discriminate_taxes"/>
+                <field name="sequence_id"/>
+                <field name="company_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sale_checkbook_tree" model="ir.ui.view">
+        <field name="name">sale.checkbook.tree</field>
+        <field name="model">sale.checkbook</field>
+        <field name="arch" type="xml">
+            <tree string="Sale Checkbook">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="discriminate_taxes"/>
+                <field name="company_id" widget="selection" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sale_checkbook_form" model="ir.ui.view">
+        <field name="name">sale.checkbook.form</field>
+        <field name="model">sale.checkbook</field>
+        <field name="arch" type="xml">
+            <form string="Sale Checkbook">
+                <sheet string="Sale Checkbook">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="discriminate_taxes"/>
+                        </group>
+                        <group>
+                            <field name="sequence_id"/>
+                            <field name="next_number"/>
+                            <field name="company_id" widget="selection" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_checkbook_form" model="ir.actions.act_window">
+        <field name="name">Sale Checkbook</field>
+        <field name="res_model">sale.checkbook</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_sale_checkbook_search"/>
+    </record>
+
+    <menuitem name="Sale Checkbook" action="action_checkbook_form" id="menu_checkbook" sequence="25" parent="sale.menu_sales_config" groups="l10n_ar_sale.use_sale_checkbook"/>
+</odoo>
