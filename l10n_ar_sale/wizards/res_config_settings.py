@@ -11,3 +11,7 @@ class ResConfigSettings(models.TransientModel):
         "Unit Price w/ Taxes",
         implied_group='l10n_ar_sale.sale_price_unit_with_tax',
     )
+    group_use_sale_checkbook = fields.Boolean(
+        "Use Sale Checkbook in Sales",
+        implied_group='l10n_ar_sale.use_sale_checkbook',
+    )
