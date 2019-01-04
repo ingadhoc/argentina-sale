@@ -53,6 +53,7 @@ class SaleOrder(models.Model):
                         rec.partner_id.commercial_partner_id)
                     vat_discriminated = \
                         letters and not letters[0].taxes_included or True
+                rec.vat_discriminated = vat_discriminated
                 continue
 
             # dejamos esto por compatibilidad hacia atras sin sale.checkbook
