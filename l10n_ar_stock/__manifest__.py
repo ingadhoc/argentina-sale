@@ -11,8 +11,6 @@
         'delivery',
         'l10n_ar_account',
         'l10n_ar_afipws',
-        # TODO sacar esta dependencia moviendo el campo de arba cit a otro mod.
-        'l10n_ar_account_withholding',
         'stock_picking_invoice_link',
     ],
     'data': [
