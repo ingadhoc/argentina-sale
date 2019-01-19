@@ -1,0 +1,35 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * l10n_ar_sale_order_type
+# 
+# Translators:
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2019
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-01-05 12:46+0000\n"
+"PO-Revision-Date: 2019-01-03 19:35+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2019\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_ar_sale_order_type
+#: model:ir.model,name:l10n_ar_sale_order_type.model_sale_order
+msgid "Quotation"
+msgstr "Presupuesto"
+
+#. module: l10n_ar_sale_order_type
+#: model:ir.model.fields,field_description:l10n_ar_sale_order_type.field_sale_order_type_sale_checkbook_id
+msgid "Sale Checkbook"
+msgstr "Talonario de Ventas"
+
+#. module: l10n_ar_sale_order_type
+#: model:ir.model,name:l10n_ar_sale_order_type.model_sale_order_type
+msgid "Type of sale order"
+msgstr "Tipo de pedido de venta"
