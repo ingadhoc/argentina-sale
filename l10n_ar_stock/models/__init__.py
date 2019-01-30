@@ -9,3 +9,4 @@ from . import product_template
 from . import product_uom
 from . import account_invoice_line
 from . import stock_production_lot
+from . import account_chart_template
