@@ -111,8 +111,8 @@ class SaleOrderLine(models.Model):
         # desactivamos en la instalacion
         if self.env.context.get('install_mode'):
             return True
-        for rec in self.filtered(lambda x:
-                x.company_id.localization == 'argentina' and
+        for rec in self.filtered(
+                lambda x: x.company_id.localization == 'argentina' and
                 x.company_id.company_requires_vat):
             vat_taxes = rec.tax_id.filtered(
                 lambda x:
