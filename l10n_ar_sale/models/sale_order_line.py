@@ -101,14 +101,19 @@ class SaleOrderLine(models.Model):
 
     @api.multi
     def check_vat_tax(self):
-        """For recs of companies with company_requires_vat (that comes from
-        the responsability), we ensure one and only one vat tax is configured
+        """For recs of argentinian companies with company_requires_vat (that
+        comes from the responsability), we ensure one and only one vat tax is
+        configured
+        TODO: we could also integrate with so_type invoice journal id or
+        with sale_checkbook_id
         """
         # por ahora, para no romper el install de sale_timesheet lo
         # desactivamos en la instalacion
         if self.env.context.get('install_mode'):
             return True
-        for rec in self.filtered('company_id.company_requires_vat'):
+        for rec in self.filtered(lambda x:
+                x.company_id.localization == 'argentina' and
+                x.company_id.company_requires_vat):
             vat_taxes = rec.tax_id.filtered(
                 lambda x:
                 x.tax_group_id.tax == 'vat' and x.tax_group_id.type == 'tax')
