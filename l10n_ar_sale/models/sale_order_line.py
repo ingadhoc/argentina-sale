@@ -37,6 +37,17 @@ class SaleOrderLine(models.Model):
         'account.tax',
         compute='_compute_vat_tax_id',
     )
+    report_price_reduce = fields.Monetary(
+        compute='_compute_report_price_reduce'
+    )
+
+    @api.depends('price_unit', 'price_subtotal', 'order_id.vat_discriminated')
+    def _compute_report_price_reduce(self):
+        for line in self:
+            price_type = line.price_subtotal \
+                if line.order_id.vat_discriminated else line.price_total
+            line.report_price_reduce = price_type / line.product_uom_qty \
+                if line.product_uom_qty else 0.0
 
     @api.multi
     @api.depends(
