@@ -113,8 +113,11 @@ class SaleOrder(models.Model):
 
     @api.model
     def create(self, vals):
-        if vals.get('name', _('New')) == _('New') and \
+        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
+            vals.get('name', _('New')) == _('New') and \
                 vals.get('sale_checkbook_id'):
-            vals['name'] = self.env['sale.checkbook'].browse(
-                vals.get('sale_checkbook_id')).sequence_id._next() or _('New')
+            sale_checkbook = self.env['sale.checkbook'].browse(
+                vals.get('sale_checkbook_id'))
+            vals['name'] = sale_checkbook.sequence_id and\
+                sale_checkbook.sequence_id._next() or _('New')
         return super(SaleOrder, self).create(vals)
