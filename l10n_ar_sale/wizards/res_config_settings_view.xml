@@ -36,6 +36,7 @@
                     </div>
                     <div class="o_setting_right_pane">
                         <label for="sale_allow_vat_no_discrimination"/>
+                        <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
                         <div class="text-muted">
                             Line subtotals in sales orders
                         </div>

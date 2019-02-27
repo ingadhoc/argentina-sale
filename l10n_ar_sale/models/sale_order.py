@@ -25,10 +25,12 @@ class SaleOrder(models.Model):
     #     string='Taxes'
     # )
     vat_discriminated = fields.Boolean(
-        compute='_compute_vat_discriminated')
-
+        compute='_compute_vat_discriminated',
+    )
     sale_checkbook_id = fields.Many2one(
         'sale.checkbook',
+        readonly=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
     )
 
     @api.depends(
@@ -37,11 +39,13 @@ class SaleOrder(models.Model):
         'company_id',
         'company_id.partner_id.afip_responsability_type_id',)
     def _compute_vat_discriminated(self):
+        use_sale_checkbook = self.env.user.has_group(
+            'l10n_ar_sale.use_sale_checkbook')
         for rec in self:
             # si tiene checkbook y discrimna en funcion al partner pero
             # no tiene responsabilidad seteada, dejamos comportamiento nativo
             # de odoo de discriminar impuestos
-            if rec.sale_checkbook_id:
+            if use_sale_checkbook and rec.sale_checkbook_id:
                 discriminate_taxes = rec.sale_checkbook_id.discriminate_taxes
                 if discriminate_taxes == 'yes':
                     vat_discriminated = True
@@ -52,7 +56,7 @@ class SaleOrder(models.Model):
                         'sale', rec.company_id,
                         rec.partner_id.commercial_partner_id)
                     vat_discriminated = \
-                        letters and not letters[0].taxes_included or True
+                        not letters[0].taxes_included if letters else True
                 rec.vat_discriminated = vat_discriminated
                 continue
 
@@ -100,8 +104,8 @@ class SaleOrder(models.Model):
 
     @api.onchange('company_id')
     def set_sale_checkbook(self):
-        if self.user_has_groups('l10n_ar_sale.use_sale_checkbook') and \
-                self.company_id:
+        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
+           self.company_id:
             self.sale_checkbook_id = self.env['sale.checkbook'].search(
                 [('company_id', 'in', [self.company_id.id, False])], limit=1)
         else:
@@ -109,7 +113,7 @@ class SaleOrder(models.Model):
 
     @api.model
     def create(self, vals):
-        if self.user_has_groups('l10n_ar_sale.use_sale_checkbook') and \
+        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
             vals.get('name', _('New')) == _('New') and \
                 vals.get('sale_checkbook_id'):
             sale_checkbook = self.env['sale.checkbook'].browse(
