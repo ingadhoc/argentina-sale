@@ -25,10 +25,12 @@ class SaleOrder(models.Model):
     #     string='Taxes'
     # )
     vat_discriminated = fields.Boolean(
-        compute='_compute_vat_discriminated')
-
+        compute='_compute_vat_discriminated',
+    )
     sale_checkbook_id = fields.Many2one(
         'sale.checkbook',
+        readonly=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
     )
 
     @api.depends(
@@ -54,7 +56,7 @@ class SaleOrder(models.Model):
                         'sale', rec.company_id,
                         rec.partner_id.commercial_partner_id)
                     vat_discriminated = \
-                        letters and not letters[0].taxes_included or True
+                        not letters[0].taxes_included if letters else True
                 rec.vat_discriminated = vat_discriminated
                 continue
 
