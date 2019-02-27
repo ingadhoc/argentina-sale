@@ -37,11 +37,13 @@ class SaleOrder(models.Model):
         'company_id',
         'company_id.partner_id.afip_responsability_type_id',)
     def _compute_vat_discriminated(self):
+        use_sale_checkbook = self.env.user.has_group(
+            'l10n_ar_sale.use_sale_checkbook')
         for rec in self:
             # si tiene checkbook y discrimna en funcion al partner pero
             # no tiene responsabilidad seteada, dejamos comportamiento nativo
             # de odoo de discriminar impuestos
-            if rec.sale_checkbook_id:
+            if use_sale_checkbook and rec.sale_checkbook_id:
                 discriminate_taxes = rec.sale_checkbook_id.discriminate_taxes
                 if discriminate_taxes == 'yes':
                     vat_discriminated = True
@@ -100,7 +102,8 @@ class SaleOrder(models.Model):
 
     @api.onchange('company_id')
     def set_sale_checkbook(self):
-        if self.company_id:
+        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
+           self.company_id:
             self.sale_checkbook_id = self.env['sale.checkbook'].search(
                 [('company_id', 'in', [self.company_id.id, False])], limit=1)
         else:
