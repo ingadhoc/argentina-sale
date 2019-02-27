@@ -100,7 +100,8 @@ class SaleOrder(models.Model):
 
     @api.onchange('company_id')
     def set_sale_checkbook(self):
-        if self.company_id:
+        if self.user_has_groups('l10n_ar_sale.use_sale_checkbook') and \
+                self.company_id:
             self.sale_checkbook_id = self.env['sale.checkbook'].search(
                 [('company_id', 'in', [self.company_id.id, False])], limit=1)
         else:
@@ -108,8 +109,11 @@ class SaleOrder(models.Model):
 
     @api.model
     def create(self, vals):
-        if vals.get('name', _('New')) == _('New') and \
+        if self.user_has_groups('l10n_ar_sale.use_sale_checkbook') and \
+            vals.get('name', _('New')) == _('New') and \
                 vals.get('sale_checkbook_id'):
-            vals['name'] = self.env['sale.checkbook'].browse(
-                vals.get('sale_checkbook_id')).sequence_id._next() or _('New')
+            sale_checkbook = self.env['sale.checkbook'].browse(
+                vals.get('sale_checkbook_id'))
+            vals['name'] = sale_checkbook.sequence_id and\
+                sale_checkbook.sequence_id._next() or _('New')
         return super(SaleOrder, self).create(vals)
