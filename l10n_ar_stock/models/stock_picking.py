@@ -28,6 +28,10 @@ class StockPicking(models.Model):
         'COT - Nro Comprobante',
         help='Número de comprobante del último COT solicitado',
     )
+    cot = fields.Char(
+        'COT',
+        help='Número de COT del último COT solicitado',
+    )
 
     @api.multi
     def get_arba_file_data(
@@ -353,7 +357,7 @@ class StockPicking(models.Model):
 
         content = ''
         for line in [HEADER] + REMITOS_PRODUCTOS + [FOOTER]:
-            content += '%s\r\n' % ('|'.join(line))
+            content += '%s\r' % ('|'.join(line))
         return (content, filename)
 
     @api.multi
@@ -377,27 +381,27 @@ class StockPicking(models.Model):
         #     COT.PresentarRemito(file.name, testing="")
 
         filename = '/tmp/%s' % filename
-        file = open(filename, 'w+b')
-        file.write(content.encode('utf-8'))
+        file = open(filename, 'w')
+        file.write(content)
         file.close()
         _logger.info('Presentando COT con archivo "%s"' % filename)
-        COT.PresentarRemito(filename, testing="")
+        res = COT.PresentarRemito(filename, testing="")
+        import pdb; pdb.set_trace()
         os.remove(filename)
 
-        if COT.Excepcion:
+        if COT.TipoError:
+            msg = _(
+                'Error al presentar remito:\n'
+                '* Tipo Error: %s\n'
+                '* Codigo Error: %s\n'
+                '* Mensaje Error: %s') % (
+                    COT.TipoError, COT.CodigoError, COT.MensajeError)
+            _logger.warning(msg)
+            raise UserError(msg)
+        elif COT.Excepcion:
             msg = _('Error al presentar remito:\n* %s') % COT.Excepcion
             _logger.warning(msg)
             raise UserError(msg)
-        # no seria necesairio porque iteramos mas abajo
-        # elif COT.CodigoError:
-        #     msg = _(
-        #         "Error al presentar remito:\n"
-        #         "* MensajeError: %s\n"
-        #         "* TipoError: %s\n"
-        #         "* CodigoError: %s\n") % (
-        #             COT.MensajeError, COT.TipoError, COT.CodigoError)
-        #     _logger.warning(msg)
-        #     raise UserError(msg)
 
         errors = []
         while COT.LeerErrorValidacion():
@@ -410,9 +414,6 @@ class StockPicking(models.Model):
         if errors:
             raise UserError(_(
                 "Error al presentar remito:\n%s") % '\n'.join(errors))
-            # print "Error TipoError: %s" % COT.TipoError
-            # print "Error CodigoError: %s" % COT.CodigoError
-            # print "Error MensajeError: %s" % COT.MensajeError
 
         # TODO deberiamos tratar de usar este archivo y no generar el de arriba
         attachments = [(filename, content)]
@@ -424,25 +425,20 @@ class StockPicking(models.Model):
         <li>Codigo Integridad: %s</li>
         <li>Procesado: %s</li>
         <li>Número Único: %s</li>
+        <li>COT: %s</li>
     </ul>
 </p>
 """ % (COT.NumeroComprobante, COT.CodigoIntegridad,
-            COT.Procesado, COT.NumeroUnico)
+            COT.Procesado, COT.NumeroUnico, COT.COT)
 
         self.write({
             'cot_numero_unico': COT.NumeroComprobante,
             'cot_numero_comprobante': COT.NumeroUnico,
+            'cot': COT.COT,
         })
         self.message_post(
             body=body,
             subject=_('Remito Electrónico Solicitado'),
             attachments=attachments)
-        # print 'COT.Excepcion', COT.Excepcion
-        # if COT.Excepcion:
-        #     raise UserError(
-        # print 'COT.NumeroComprobante', COT.NumeroComprobante
-        # print 'COT.CodigoIntegridad', COT.CodigoIntegridad
-        # print 'COT.Procesado', COT.Procesado
-        # print 'COT.NumeroUnico', COT.NumeroUnico
 
         return True

@@ -10,6 +10,7 @@
                 <button name="%(action_arba_cot_wizard)d" string="Obtener COT (BETA)" help="Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)" type="action" attrs="{'invisible': ['|',('book_id','=',False),'|', ('picking_type_code','=','incoming'), ('state','!=','done')]}" context="{'default_carrier_id': carrier_id, 'default_importe': declared_value}"/>
             </button>
              <field name="priority" position="after">
+                <field name="cot"/>
                 <field name="cot_numero_unico"/>
                 <field name="cot_numero_comprobante"/>
             </field>
