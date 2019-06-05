@@ -35,7 +35,10 @@ Por ahora implementados ARBA y Santa Fe.
 * Tabla de códigos (Según arba): http://www.arba.gov.ar/bajadas/Fiscalizacion/Operativos/TransporteBienes/Documentacion/20080701-TB-TablasDeValidacion.pdf
 * Tablas de códigos (Según santa fe): https://www.santafe.gov.ar/index.php/content/download/72020/349107/file/Descargar (igual a la de arba)
 * Tabla en sistemas ágiles: http://www.sistemasagiles.com.ar/trac/wiki/RemitoElectronicoCotArba?format=pdf
-* Especificación archivo txt: http://www.arba.gov.ar/Transporte_Bienes/VerPDF.asp?param=DA
+* Especificación archivo txt (viejo): http://www.arba.gov.ar/Transporte_Bienes/VerPDF.asp?param=DA
+* Nuevo diseño archivo txt: https://www.arba.gov.ar/archivos/Publicaciones/nuevodiseniodearchivotxt.pdf
+* Sobre nuevo diseño: https://www.arba.gov.ar/Apartados/Agentes/AgenteCot.asp?apartado=IIBB&Lugar=E
+* Instructivo: https://www.arba.gov.ar/archivos/Publicaciones/especificacionesparalaaplicacioncliente.pdf
 * Nomenclador productos: https://www.arba.gov.ar/Aplicaciones/NomencladorTB/NomencladorTB.asp
 
 Installation
