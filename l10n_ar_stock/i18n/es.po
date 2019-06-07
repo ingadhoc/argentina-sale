@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-05 12:46+0000\n"
+"POT-Creation-Date: 2019-06-05 12:43+0000\n"
 "PO-Revision-Date: 2018-11-23 22:56+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2019\n"
 "Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
@@ -42,6 +42,11 @@ msgstr "Código de ARBA"
 #: model:ir.ui.view,arch_db:l10n_ar_stock.view_arba_cot_wizard
 msgid "Asistente para Código de Operaciones de Traslado"
 msgstr "Asistente para Código de Operaciones de Traslado"
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_picking_cot
+msgid "COT"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_picking_cot_numero_comprobante
@@ -105,7 +110,7 @@ msgid "Document Type"
 msgstr "Tipo de Documento"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:115
+#: code:addons/l10n_ar_stock/models/stock_picking.py:120
 #, python-format
 msgid "Document type has no validator, code or letter configured (Id: %s"
 msgstr ""
@@ -116,13 +121,11 @@ msgstr ""
 #: code:addons/l10n_ar_stock/models/account_invoice_line.py:29
 #: code:addons/l10n_ar_stock/models/product_template.py:19
 #, python-format
-msgid ""
-"El cÃ³digo segÃºn nomenclador de arba debe ser de 6 dÃ­gitos numÃ©ricos"
+msgid "El código según nomenclador de arba debe ser de 6 dígitos numéricos"
 msgstr ""
-"El cÃ³digo segÃºn nomenclador de arba debe ser de 6 dÃ­gitos numÃ©ricos"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:411
+#: code:addons/l10n_ar_stock/models/stock_picking.py:416
 #, python-format
 msgid ""
 "Error al presentar remito:\n"
@@ -132,7 +135,7 @@ msgstr ""
 "%s"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:388
+#: code:addons/l10n_ar_stock/models/stock_picking.py:403
 #, python-format
 msgid ""
 "Error al presentar remito:\n"
@@ -140,6 +143,16 @@ msgid ""
 msgstr ""
 "Error al presentar remito:\n"
 "* %s"
+
+#. module: l10n_ar_stock
+#: code:addons/l10n_ar_stock/models/stock_picking.py:394
+#, python-format
+msgid ""
+"Error al presentar remito:\n"
+"* Tipo Error: %s\n"
+"* Codigo Error: %s\n"
+"* Mensaje Error: %s"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_arba_cot_wizard_datetime_out
@@ -157,8 +170,8 @@ msgstr "ID"
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_importe
-msgid "Importe"
-msgstr "Importe"
+msgid "Importe Neto"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_account_invoice_line
@@ -166,14 +179,12 @@ msgid "Invoice Line"
 msgstr "Líneas de la factura"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:103
+#: code:addons/l10n_ar_stock/models/stock_picking.py:107
 #, python-format
 msgid ""
-"Las provincias de origen y destino son obligatorias y deben tener un cÃ³digo"
-" vÃ¡lido"
+"Las provincias de origen y destino son obligatorias y deben tener un código "
+"válido"
 msgstr ""
-"Las provincias de origen y destino son obligatorias y deben tener un cÃ³digo"
-" vÃ¡lido"
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard___last_update
@@ -191,10 +202,10 @@ msgid "Last Updated on"
 msgstr "Última actualización en"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:50
+#: code:addons/l10n_ar_stock/models/stock_picking.py:54
 #, python-format
-msgid "Los remitos seleccionados deben pertenecer a la misma compaÃ±Ã­a"
-msgstr "Los remitos seleccionados deben pertenecer a la misma compaÃ±Ã­a"
+msgid "Los remitos seleccionados deben pertenecer a la misma compañía"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_account_invoice_line_lot_ids
@@ -217,13 +228,13 @@ msgid "No"
 msgstr "No"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:320
+#: code:addons/l10n_ar_stock/models/stock_picking.py:326
 #, python-format
 msgid "No arba code for product \"%s\" (Id: %s)"
 msgstr "No hay código de arba para el producto \"%s\" (Id: %s)"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:309
+#: code:addons/l10n_ar_stock/models/stock_picking.py:315
 #, python-format
 msgid "No arba code for uom \"%s\" (Id: %s) or any uom in category \"%s\""
 msgstr ""
@@ -231,18 +242,23 @@ msgstr ""
 "categoría \"%s\""
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:94
+#: code:addons/l10n_ar_stock/models/stock_picking.py:98
 #, python-format
-msgid "No se asignÃ³ nÃºmero de remito"
-msgstr "No se asignÃ³ nÃºmero de remito"
+msgid "No se asignó número de remito"
+msgstr ""
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:68
+#: code:addons/l10n_ar_stock/models/stock_picking.py:72
 #, python-format
 msgid "No sequence found for COT files (code = \"arba.cot.file\") on company \"%s"
 msgstr ""
 "No se encontró secuencia para archivos de COT (código = \"arba.cot.file\") "
 "en la compañía \"%s"
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,help:l10n_ar_stock.field_stock_picking_cot
+msgid "Número de COT del último COT solicitado"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_stock_picking_cot_numero_comprobante
@@ -293,7 +309,7 @@ msgstr ""
 "remitos en las entregas."
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:108
+#: code:addons/l10n_ar_stock/models/stock_picking.py:112
 #, python-format
 msgid "Picking has no \"Document type\" linked (Id: %s"
 msgstr "La transferencia no tiene \"Tipo de documento\" vinculado (Id: %s"
@@ -314,10 +330,10 @@ msgid "Productos no terminados / devoluciones"
 msgstr "Productos no terminados / devoluciones"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:438
+#: code:addons/l10n_ar_stock/models/stock_picking.py:442
 #, python-format
-msgid "Remito ElectrÃ³nico Solicitado"
-msgstr "Remito ElectrÃ³nico Solicitado"
+msgid "Remito Electrónico Solicitado"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_arba_cot_wizard_patente_vehiculo
@@ -339,19 +355,22 @@ msgid "Si"
 msgstr "Si"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:57
+#: code:addons/l10n_ar_stock/models/stock_picking.py:61
 #, python-format
 msgid ""
-"Si el CUIT de la compaÃ±Ã­a y el cuit del transportista son el mismo, se "
-"debe informar la patente del vehÃ­culo."
+"Si el CUIT de la compañía y el cuit del transportista son el mismo, se debe "
+"informar la patente del vehículo."
 msgstr ""
-"Si el CUIT de la compaÃ±Ã­a y el cuit del transportista son el mismo, se "
-"debe informar la patente del vehÃ­culo."
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_stock_book
 msgid "Stock Voucher Book"
 msgstr "Talonario de Remitos"
+
+#. module: l10n_ar_stock
+#: model:ir.model,name:l10n_ar_stock.model_account_chart_template
+msgid "Templates for Account Chart"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_tipo_recorrido

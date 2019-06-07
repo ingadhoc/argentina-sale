@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-05 12:46+0000\n"
+"POT-Creation-Date: 2019-06-05 12:43+0000\n"
 "PO-Revision-Date: 2018-08-23 19:53+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2019\n"
 "Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
@@ -18,6 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_ar_sale
+#: model:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
+msgid ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" groups=\"base.group_multi_company\"/>"
+msgstr ""
 
 #. module: l10n_ar_sale
 #: selection:sale.checkbook,discriminate_taxes:0
@@ -55,14 +62,12 @@ msgid "Created on"
 msgstr "Creado en"
 
 #. module: l10n_ar_sale
-#: code:addons/l10n_ar_sale/models/sale_order_line.py:118
+#: code:addons/l10n_ar_sale/models/sale_order_line.py:134
 #, python-format
 msgid ""
-"Debe haber un y solo un impuestos de IVA por lÃ­nea. Verificar lÃ­neas con "
+"Debe haber un y solo un impuestos de IVA por línea. Verificar líneas con "
 "producto \"%s\""
 msgstr ""
-"Debe haber un y solo un impuestos de IVA por lÃ­nea. Verificar lÃ­neas con "
-"producto \"%s\""
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,help:l10n_ar_sale.field_res_company_sale_allow_vat_no_discrimination
@@ -134,8 +139,8 @@ msgid "Net Amount"
 msgstr "Importe Neto"
 
 #. module: l10n_ar_sale
-#: code:addons/l10n_ar_sale/models/sale_order.py:111
-#: code:addons/l10n_ar_sale/models/sale_order.py:114
+#: code:addons/l10n_ar_sale/models/sale_order.py:117
+#: code:addons/l10n_ar_sale/models/sale_order.py:122
 #, python-format
 msgid "New"
 msgstr "Nuevo"
@@ -165,7 +170,7 @@ msgid "No, Always Discriminate"
 msgstr "No, Discriminar Siempre"
 
 #. module: l10n_ar_sale
-#: code:addons/l10n_ar_sale/models/sale_order_line.py:52
+#: code:addons/l10n_ar_sale/models/sale_order_line.py:63
 #, python-format
 msgid "Only one vat tax allowed per line"
 msgstr "Solo se permite un impuesto de IVA por línea"
@@ -179,6 +184,11 @@ msgstr "Precio Unitario"
 #: model:ir.model,name:l10n_ar_sale.model_sale_order
 msgid "Quotation"
 msgstr "Presupuesto"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line_report_price_reduce
+msgid "Report Price Reduce"
+msgstr ""
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_res_company_sale_allow_vat_no_discrimination
@@ -231,6 +241,11 @@ msgstr "Impuesto"
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line_report_tax_id
 msgid "Taxes"
 msgstr "Impuestos"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_account_chart_template
+msgid "Templates for Account Chart"
+msgstr ""
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,help:l10n_ar_sale.field_sale_checkbook_sequence_id
