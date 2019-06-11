@@ -16,6 +16,16 @@
                         <div class="text-muted">
                             Permite generar el COT de arba una vez que se han asignado números de remitos en las entregas.
                         </div>
+                        <div class="content-group" attrs="{'invisible': [('group_arba_cot_enabled', '=', False)]}">
+                            <div class="row">
+                                <label for="arba_cot" class="col-md-6 o_light_label" string="Clave COT ARBA"/>
+                                <field name="arba_cot" class="oe_inline" password="True"/>
+                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
+                            </div>
+                        </div>
+                        <div class="text-muted" attrs="{'invisible': [('group_arba_cot_enabled', '=', False)]}">
+                            Indique la clave COT utilizada para generación de remito electrónico / COT. Puede probarla intentando subir cualquier archivo en este <a target="_blank" href="https://cot.arba.gov.ar/TransporteBienes/pages/remitos/PresentarRemitos.jsp">link</a> (el usuario es el CUIT). Si da error en nombre de archivo entonces la clave es correcta.
+                        </div>
                     </div>
                 </div>
             </div>

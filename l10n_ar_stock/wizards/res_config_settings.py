@@ -10,3 +10,6 @@ class ResConfigSettings(models.TransientModel):
         'números de remitos en las entregas',
         implied_group='l10n_ar_stock.arba_cot_enabled',
     )
+    arba_cot = fields.Char(
+        related='company_id.arba_cot'
+    )
