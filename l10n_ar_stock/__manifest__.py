@@ -1,6 +1,6 @@
 {
     'name': 'Remito electrónico Argentino',
-    'version': '11.0.1.30',
+    'version': '11.0.1.30.0',
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
