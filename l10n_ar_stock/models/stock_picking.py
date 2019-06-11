@@ -387,8 +387,7 @@ class StockPicking(models.Model):
         file.write(content)
         file.close()
         _logger.info('Presentando COT con archivo "%s"' % filename)
-        res = COT.PresentarRemito(filename, testing="")
-        import pdb; pdb.set_trace()
+        COT.PresentarRemito(filename, testing="")
         os.remove(filename)
 
         if COT.TipoError:
