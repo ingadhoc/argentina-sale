@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-05 12:43+0000\n"
+"POT-Creation-Date: 2019-06-11 18:44+0000\n"
 "PO-Revision-Date: 2018-11-23 22:56+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2019\n"
 "Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
@@ -20,9 +20,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.res_config_settings_view_form
+msgid ""
+"(el usuario es el CUIT). Si da error en nombre de archivo entonces la clave "
+"es correcta."
+msgstr ""
+
+#. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_arba_cot_wizard_patente_acomplado
 msgid "3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
 msgstr "3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
+
+#. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.res_config_settings_view_form
+msgid ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" groups=\"base.group_multi_company\"/>"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:res.groups,name:l10n_ar_stock.arba_cot_enabled
@@ -67,6 +81,23 @@ msgstr "Cancelar"
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_carrier_id
 msgid "Carrier"
 msgstr "Forma de envío"
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_res_company_arba_cot
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_res_config_settings_arba_cot
+msgid "Clave COT"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.res_config_settings_view_form
+msgid "Clave COT ARBA"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,help:l10n_ar_stock.field_res_company_arba_cot
+#: model:ir.model.fields,help:l10n_ar_stock.field_res_config_settings_arba_cot
+msgid "Clave para generación de remito electŕonico"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_res_company
@@ -171,6 +202,13 @@ msgstr "ID"
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard_importe
 msgid "Importe Neto"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.res_config_settings_view_form
+msgid ""
+"Indique la clave COT utilizada para generación de remito electrónico / COT. "
+"Puede probarla intentando subir cualquier archivo en este"
 msgstr ""
 
 #. module: l10n_ar_stock
@@ -403,15 +441,20 @@ msgid "Ver códigos"
 msgstr "Ver códigos"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/res_company.py:37
+#: code:addons/l10n_ar_stock/models/res_company.py:42
 #, python-format
-msgid "You must configure ARBA CIT on company %s"
-msgstr "Debe configurar el CIT de ARBA en la compañía %s"
+msgid "You must configure ARBA COT on company %s"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_arba_cot_wizard
 msgid "arba.cot.wizard"
 msgstr "arba.cot.wizard"
+
+#. module: l10n_ar_stock
+#: model:ir.ui.view,arch_db:l10n_ar_stock.res_config_settings_view_form
+msgid "link"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_res_config_settings
