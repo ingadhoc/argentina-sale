@@ -114,7 +114,7 @@ class StockPicking(models.Model):
                     rec.id))
             validator = rec.document_type_id.validator_id
             CODIGO_DGI = rec.document_type_id.code
-            CODIGO_DGI = CODIGO_DGI.rjust(3, '0')
+            # CODIGO_DGI = CODIGO_DGI.rjust(3, '0')
             letter = rec.document_type_id.document_letter_id
             if not validator or not CODIGO_DGI or not letter:
                 raise UserError(_(
@@ -124,10 +124,9 @@ class StockPicking(models.Model):
             # TODO ver de hacer uno por número de remito?
             PREFIJO, NUMERO = validator.validate_value(
                 voucher.name, return_parts=True)
-            PREFIJO = PREFIJO.rjust(5, '0')
 
             # rellenar y truncar a 2
-            # TIPO = '{:>2.2}'.format(letter.name)
+            TIPO = '{:>2.2}'.format(letter.name)
 
             # si nro doc y tipo en ‘DNI’, ‘LC’, ‘LE’, ‘PAS’, ‘CI’ y doc
             doc_categ_id = commercial_partner.main_id_category_id
@@ -156,7 +155,7 @@ class StockPicking(models.Model):
 
                 # CODIGO_UNICO formato (CODIGO_DGI, TIPO, PREFIJO, NUMERO)
                 # ej. 91 |R999900068148|
-                "%s%s%s" % (CODIGO_DGI, PREFIJO, NUMERO),
+                "%s%s%s%s" % (CODIGO_DGI, TIPO, PREFIJO, NUMERO),
 
                 # FECHA_SALIDA_TRANSPORTE: formato AAAAMMDD
                 FECHA_SALIDA_TRANSPORTE,
