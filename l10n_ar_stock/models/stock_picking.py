@@ -16,6 +16,12 @@ class StockPicking(models.Model):
 
     _inherit = "stock.picking"
 
+    dispatch_number = fields.Char(
+        states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
+        help='Si define un número de despacho, al validar la transferencia, '
+        'el mismo será asociado a los lotes sin número de despacho vinculados '
+        'a la transferencia.'
+    )
     document_type_id = fields.Many2one(
         related='book_id.document_type_id',
         readonly=True
@@ -442,3 +448,14 @@ class StockPicking(models.Model):
             attachments=attachments)
 
         return True
+
+    @api.multi
+    def action_done(self):
+        res = super().action_done()
+        for rec in self.filtered(
+                lambda x: x.picking_type_code == 'incoming' and
+                x.dispatch_number):
+            rec.move_line_ids.filtered(
+                lambda l: l.lot_id and not l.lot_id.dispatch_number).mapped(
+                    'lot_id').write({'dispatch_number': rec.dispatch_number})
+        return res
