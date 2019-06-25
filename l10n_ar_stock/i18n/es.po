@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-20 00:46+0000\n"
+"POT-Creation-Date: 2019-06-24 14:09+0000\n"
 "PO-Revision-Date: 2018-11-23 22:56+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2019\n"
 "Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
@@ -310,12 +310,12 @@ msgid "Número único del último COT solicitado"
 msgstr "Número único del último COT solicitado"
 
 #. module: l10n_ar_stock
-#: model:ir.ui.view,arch_db:l10n_ar_stock.view_picking_form
+#: model:ir.ui.view,arch_db:l10n_ar_stock.view_picking_cot_form
 msgid "Obtener COT (BETA)"
 msgstr "Obtener COT (BETA)"
 
 #. module: l10n_ar_stock
-#: model:ir.ui.view,arch_db:l10n_ar_stock.view_picking_form
+#: model:ir.ui.view,arch_db:l10n_ar_stock.view_picking_cot_form
 msgid "Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)"
 msgstr "Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)"
 
