@@ -4,6 +4,7 @@
 ##############################################################################
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from odoo.addons import decimal_precision as dp
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -11,21 +12,24 @@ _logger = logging.getLogger(__name__)
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    report_price_unit = fields.Monetary(
+    report_price_unit = fields.Float(
         string='Unit Price',
-        compute='_compute_report_prices_and_taxes'
+        compute='_compute_report_prices_and_taxes',
+        digits=dp.get_precision('Product Price'),
     )
-    price_unit_with_tax = fields.Monetary(
+    price_unit_with_tax = fields.Float(
         string='Price Unit Price',
-        compute='_compute_report_prices_and_taxes'
+        compute='_compute_report_prices_and_taxes',
+        digits=dp.get_precision('Product Price'),
     )
     report_price_subtotal = fields.Monetary(
         string='Amount',
         compute='_compute_report_prices_and_taxes'
     )
-    report_price_net = fields.Monetary(
+    report_price_net = fields.Float(
         string='Net Amount',
-        compute='_compute_report_prices_and_taxes'
+        compute='_compute_report_prices_and_taxes',
+        digits=dp.get_precision('Product Price'),
     )
     report_tax_id = fields.One2many(
         compute="_compute_report_prices_and_taxes",
