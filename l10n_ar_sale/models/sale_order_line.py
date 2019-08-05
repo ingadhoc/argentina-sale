@@ -94,13 +94,15 @@ class SaleOrderLine(models.Model):
                 included_taxes = line.tax_id
                 not_included_taxes = (
                     line.tax_id - included_taxes)
-                report_price_unit = included_taxes.compute_all(
+                report_price_unit = included_taxes.with_context(
+                    round=False).compute_all(
                     line.price_unit, order.currency_id, 1.0, line.product_id,
                     order.partner_id)['total_included']
                 report_price_net = report_price_unit * (
                     1 - (line.discount or 0.0) / 100.0)
-                report_price_subtotal = (
-                    report_price_net * line.product_uom_qty)
+                report_price_subtotal = included_taxes.compute_all(
+                    line.price_unit, order.currency_id, line.product_uom_qty,
+                    line.product_id, order.partner_id)['total_included']
 
             line.price_unit_with_tax = price_unit['total_included']
             line.report_price_subtotal = report_price_subtotal
