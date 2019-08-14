@@ -4,6 +4,7 @@
 ##############################################################################
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from odoo.addons import decimal_precision as dp
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -11,18 +12,20 @@ _logger = logging.getLogger(__name__)
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    report_price_unit = fields.Monetary(
-        compute='_compute_report_prices_and_taxes'
+    report_price_unit = fields.Float(
+        compute='_compute_report_prices_and_taxes',
+        digits=dp.get_precision('Product Price'),
     )
-    price_unit_with_tax = fields.Monetary(
-        string='Price Unit with tax',
-        compute='_compute_report_prices_and_taxes'
+    price_unit_with_tax = fields.Float(
+        compute='_compute_report_prices_and_taxes',
+        digits=dp.get_precision('Product Price'),
     )
     report_price_subtotal = fields.Monetary(
         compute='_compute_report_prices_and_taxes'
     )
-    report_price_net = fields.Monetary(
-        compute='_compute_report_prices_and_taxes'
+    report_price_net = fields.Float(
+        compute='_compute_report_prices_and_taxes',
+        digits=dp.get_precision('Product Price'),
     )
     report_tax_id = fields.One2many(
         compute="_compute_report_prices_and_taxes",
@@ -86,13 +89,15 @@ class SaleOrderLine(models.Model):
                 included_taxes = line.tax_id
                 not_included_taxes = (
                     line.tax_id - included_taxes)
-                report_price_unit = included_taxes.compute_all(
+                report_price_unit = included_taxes.with_context(
+                    round=False).compute_all(
                     line.price_unit, order.currency_id, 1.0, line.product_id,
                     order.partner_id)['total_included']
                 report_price_net = report_price_unit * (
                     1 - (line.discount or 0.0) / 100.0)
-                report_price_subtotal = (
-                    report_price_net * line.product_uom_qty)
+                report_price_subtotal = included_taxes.compute_all(
+                    line.price_subtotal, order.currency_id, 1.0,
+                    line.product_id, order.partner_id)['total_included']
 
             line.price_unit_with_tax = price_unit['total_included']
             line.report_price_subtotal = report_price_subtotal
