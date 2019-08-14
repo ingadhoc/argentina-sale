@@ -13,28 +13,23 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     report_price_unit = fields.Float(
-        string='Unit Price',
         compute='_compute_report_prices_and_taxes',
         digits=dp.get_precision('Product Price'),
     )
     price_unit_with_tax = fields.Float(
-        string='Price Unit Price',
         compute='_compute_report_prices_and_taxes',
         digits=dp.get_precision('Product Price'),
     )
     report_price_subtotal = fields.Monetary(
-        string='Amount',
         compute='_compute_report_prices_and_taxes'
     )
     report_price_net = fields.Float(
-        string='Net Amount',
         compute='_compute_report_prices_and_taxes',
         digits=dp.get_precision('Product Price'),
     )
     report_tax_id = fields.One2many(
         compute="_compute_report_prices_and_taxes",
         comodel_name='account.tax',
-        string='Taxes'
     )
 
     vat_tax_id = fields.Many2one(
