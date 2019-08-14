@@ -12,25 +12,21 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     report_price_unit = fields.Monetary(
-        string='Unit Price',
         compute='_compute_report_prices_and_taxes'
     )
     price_unit_with_tax = fields.Monetary(
-        string='Price Unit Price',
+        string='Price Unit with tax',
         compute='_compute_report_prices_and_taxes'
     )
     report_price_subtotal = fields.Monetary(
-        string='Amount',
         compute='_compute_report_prices_and_taxes'
     )
     report_price_net = fields.Monetary(
-        string='Net Amount',
         compute='_compute_report_prices_and_taxes'
     )
     report_tax_id = fields.One2many(
         compute="_compute_report_prices_and_taxes",
         comodel_name='account.tax',
-        string='Taxes'
     )
 
     vat_tax_id = fields.Many2one(

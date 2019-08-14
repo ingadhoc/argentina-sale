@@ -7,6 +7,7 @@ from odoo import models, fields, api
 
 class SaleCheckbook(models.Model):
     _name = 'sale.checkbook'
+    _description = 'sale.checkbook'
     _order = 'sequence'
 
     sequence = fields.Integer(
@@ -20,6 +21,7 @@ class SaleCheckbook(models.Model):
     )
     next_number = fields.Integer(
         related='sequence_id.number_next_actual',
+        readonly=False,
     )
     discriminate_taxes = fields.Selection(
         [
