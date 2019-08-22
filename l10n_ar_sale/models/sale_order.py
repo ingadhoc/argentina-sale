@@ -13,17 +13,9 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    report_amount_tax = fields.Monetary(
-        compute='_compute_report_amount_and_taxes'
-    )
     report_amount_untaxed = fields.Monetary(
-        compute='_compute_report_amount_and_taxes'
+        compute='_compute_report_report_amount_untaxed'
     )
-    # report_tax_line_ids = fields.One2many(
-    #     compute="_compute_report_amount_and_taxes",
-    #     comodel_name='account.invoice.tax',
-    #     string='Taxes'
-    # )
     vat_discriminated = fields.Boolean(
         compute='_compute_vat_discriminated',
     )
@@ -76,9 +68,8 @@ class SaleOrder(models.Model):
                     vat_discriminated = False
             rec.vat_discriminated = vat_discriminated
 
-    @api.depends(
-        'amount_untaxed', 'amount_tax', 'vat_discriminated')
-    def _compute_report_amount_and_taxes(self):
+    @api.depends('amount_untaxed', 'vat_discriminated')
+    def _compute_report_report_amount_untaxed(self):
         """
         Similar a account_document intoive pero por ahora incluimos o no todos
         los impuestos (TODO mejorar y solo incluir impuestos IVA)
@@ -86,21 +77,11 @@ class SaleOrder(models.Model):
         for order in self:
             taxes_included = not order.vat_discriminated
             if not taxes_included:
-                report_amount_tax = order.amount_tax
                 report_amount_untaxed = order.amount_untaxed
-                # not_included_taxes = order.order_line.mapped('tax_id')
             else:
-                # not_included_taxes = False
-                report_amount_tax = False
-                report_amount_untaxed = order.amount_total
-            #     not_included_taxes = (
-            #         order.tax_line_ids - included_taxes)
-            #     report_amount_tax = sum(not_included_taxes.mapped('amount'))
-            #     report_amount_untaxed = order.amount_untaxed + sum(
-            #         included_taxes.mapped('amount'))
-            order.report_amount_tax = report_amount_tax
+                report_amount_untaxed = order.amount_total - sum(
+                    x[1] for x in order.amount_by_group)
             order.report_amount_untaxed = report_amount_untaxed
-            # order.report_tax_line_ids = not_included_taxes
 
     @api.onchange('company_id')
     def set_sale_checkbook(self):
