@@ -3,6 +3,8 @@
 # directory
 ##############################################################################
 from odoo import models, fields, api, _
+from functools import partial
+from odoo.tools.misc import formatLang
 # from odoo.exceptions import UserError
 import logging
 _logger = logging.getLogger(__name__)
@@ -11,19 +13,9 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    report_amount_tax = fields.Monetary(
-        string='Tax',
-        compute='_compute_report_amount_and_taxes'
-    )
     report_amount_untaxed = fields.Monetary(
-        string='Untaxed Amount',
-        compute='_compute_report_amount_and_taxes'
+        compute='_compute_report_report_amount_untaxed'
     )
-    # report_tax_line_ids = fields.One2many(
-    #     compute="_compute_report_amount_and_taxes",
-    #     comodel_name='account.invoice.tax',
-    #     string='Taxes'
-    # )
     vat_discriminated = fields.Boolean(
         compute='_compute_vat_discriminated',
     )
@@ -76,31 +68,20 @@ class SaleOrder(models.Model):
                     vat_discriminated = False
             rec.vat_discriminated = vat_discriminated
 
-    @api.depends(
-        'amount_untaxed', 'amount_tax', 'vat_discriminated')
-    def _compute_report_amount_and_taxes(self):
+    @api.depends('amount_untaxed', 'vat_discriminated')
+    def _compute_report_report_amount_untaxed(self):
         """
         Similar a account_document intoive pero por ahora incluimos o no todos
-        los impuestos
+        los impuestos (TODO mejorar y solo incluir impuestos IVA)
         """
         for order in self:
             taxes_included = not order.vat_discriminated
             if not taxes_included:
-                report_amount_tax = order.amount_tax
                 report_amount_untaxed = order.amount_untaxed
-                # not_included_taxes = order.order_line.mapped('tax_id')
             else:
-                # not_included_taxes = False
-                report_amount_tax = False
-                report_amount_untaxed = order.amount_total
-            #     not_included_taxes = (
-            #         order.tax_line_ids - included_taxes)
-            #     report_amount_tax = sum(not_included_taxes.mapped('amount'))
-            #     report_amount_untaxed = order.amount_untaxed + sum(
-            #         included_taxes.mapped('amount'))
-            order.report_amount_tax = report_amount_tax
+                report_amount_untaxed = order.amount_total - sum(
+                    x[1] for x in order.amount_by_group)
             order.report_amount_untaxed = report_amount_untaxed
-            # order.report_tax_line_ids = not_included_taxes
 
     @api.onchange('company_id')
     def set_sale_checkbook(self):
@@ -121,3 +102,27 @@ class SaleOrder(models.Model):
             vals['name'] = sale_checkbook.sequence_id and\
                 sale_checkbook.sequence_id._next() or _('New')
         return super(SaleOrder, self).create(vals)
+
+    def _amount_by_group(self):
+        order_vat_not_discriminated = self.filtered(lambda x: not x.vat_discriminated)
+        for order in order_vat_not_discriminated:
+            currency = order.currency_id or order.company_id.currency_id
+            fmt = partial(formatLang, self.with_context(lang=order.partner_id.lang).env, currency_obj=currency)
+            res = {}
+            for line in order.order_line:
+                price_reduce = line.price_unit * (1.0 - line.discount / 100.0)
+                taxes = line.report_tax_id.compute_all(price_reduce, quantity=line.product_uom_qty, product=line.product_id, partner=order.partner_shipping_id)['taxes']
+                for tax in line.report_tax_id:
+                    group = tax.tax_group_id
+                    res.setdefault(group, {'amount': 0.0, 'base': 0.0})
+                    for t in taxes:
+                        if t['id'] == tax.id or t['id'] in tax.children_tax_ids.ids:
+                            res[group]['amount'] += t['amount']
+                            res[group]['base'] += t['base']
+            res = sorted(res.items(), key=lambda l: l[0].sequence)
+            order.amount_by_group = [(
+                l[0].name, l[1]['amount'], l[1]['base'],
+                fmt(l[1]['amount']), fmt(l[1]['base']),
+                len(res),
+            ) for l in res]
+        super(SaleOrder, self - order_vat_not_discriminated)._amount_by_group()

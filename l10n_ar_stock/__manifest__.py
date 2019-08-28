@@ -20,7 +20,7 @@
         'views/stock_picking_views.xml',
         'views/stock_book_views.xml',
         'views/product_template_views.xml',
-        'views/product_uom_views.xml',
+        'views/uom_uom_views.xml',
         'views/stock_production_lot_views.xml',
         'views/account_invoice_line_views.xml',
         'data/ir_sequence_data.xml',
@@ -28,7 +28,7 @@
     ],
     'demo': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
 }

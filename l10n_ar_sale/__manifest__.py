@@ -19,11 +19,12 @@
         'views/sale_view.xml',
         'views/l10n_ar_sale_templates.xml',
         'views/sale_checkbook_views.xml',
+        'views/sale_report_templates.xml',
         'wizards/res_config_settings_view.xml',
     ],
     'demo': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
 }

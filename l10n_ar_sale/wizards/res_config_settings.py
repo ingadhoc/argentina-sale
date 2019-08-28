@@ -5,7 +5,8 @@ class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
     sale_allow_vat_no_discrimination = fields.Selection(
-        related='company_id.sale_allow_vat_no_discrimination'
+        related='company_id.sale_allow_vat_no_discrimination',
+        readonly=False,
     )
     group_price_unit_with_tax = fields.Boolean(
         "Unit Price w/ Taxes",

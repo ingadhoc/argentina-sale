@@ -13,28 +13,23 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     report_price_unit = fields.Float(
-        string='Unit Price',
         compute='_compute_report_prices_and_taxes',
         digits=dp.get_precision('Product Price'),
     )
     price_unit_with_tax = fields.Float(
-        string='Price Unit Price',
         compute='_compute_report_prices_and_taxes',
         digits=dp.get_precision('Product Price'),
     )
     report_price_subtotal = fields.Monetary(
-        string='Amount',
         compute='_compute_report_prices_and_taxes'
     )
     report_price_net = fields.Float(
-        string='Net Amount',
         compute='_compute_report_prices_and_taxes',
         digits=dp.get_precision('Product Price'),
     )
     report_tax_id = fields.One2many(
         compute="_compute_report_prices_and_taxes",
         comodel_name='account.tax',
-        string='Taxes'
     )
 
     vat_tax_id = fields.Many2one(
@@ -74,10 +69,6 @@ class SaleOrderLine(models.Model):
         'order_id.vat_discriminated'
     )
     def _compute_report_prices_and_taxes(self):
-        """
-        Similar a account_document pero por ahora inluimos o no todos los
-        impuestos
-        """
         for line in self:
             order = line.order_id
             taxes_included = not order.vat_discriminated
@@ -91,7 +82,8 @@ class SaleOrderLine(models.Model):
                 report_price_net = report_price_unit * (
                     1 - (line.discount or 0.0) / 100.0)
             else:
-                included_taxes = line.tax_id
+                included_taxes = line.tax_id.filtered(
+                    lambda x: x.tax_group_id.tax == 'vat' and x.tax_group_id.type == 'tax')
                 not_included_taxes = (
                     line.tax_id - included_taxes)
                 report_price_unit = included_taxes.with_context(
@@ -129,7 +121,8 @@ class SaleOrderLine(models.Model):
         if self.env.context.get('install_mode'):
             return True
         for rec in self.filtered(
-                lambda x: x.company_id.localization == 'argentina' and
+                lambda x: not x.display_type and
+                x.company_id.localization == 'argentina' and
                 x.company_id.company_requires_vat):
             vat_taxes = rec.tax_id.filtered(
                 lambda x:
