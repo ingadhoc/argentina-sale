@@ -81,7 +81,7 @@ class SaleOrderLine(models.Model):
         for line in self:
             order = line.order_id
             taxes_included = not order.vat_discriminated
-            price_unit = line.tax_id.compute_all(
+            price_unit = line.tax_id.with_context(round=False).compute_all(
                 line.price_unit, order.currency_id, 1.0, line.product_id,
                 order.partner_id)
             if not taxes_included:
