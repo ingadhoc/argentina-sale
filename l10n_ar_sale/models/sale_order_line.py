@@ -83,7 +83,7 @@ class SaleOrderLine(models.Model):
             taxes_included = not order.vat_discriminated
             price_unit = line.tax_id.with_context(round=False).compute_all(
                 line.price_unit, order.currency_id, 1.0, line.product_id,
-                order.partner_id)
+                order.partner_shipping_id)
             if not taxes_included:
                 report_price_unit = price_unit['total_excluded']
                 report_price_subtotal = line.price_subtotal
@@ -97,12 +97,12 @@ class SaleOrderLine(models.Model):
                 report_price_unit = included_taxes.with_context(
                     round=False).compute_all(
                     line.price_unit, order.currency_id, 1.0, line.product_id,
-                    order.partner_id)['total_included']
+                    order.partner_shipping_id)['total_included']
                 report_price_net = report_price_unit * (
                     1 - (line.discount or 0.0) / 100.0)
                 report_price_subtotal = included_taxes.compute_all(
-                    line.price_subtotal, order.currency_id, 1.0,
-                    line.product_id, order.partner_id)['total_included']
+                    line.price_unit, order.currency_id, line.product_uom_qty,
+                    line.product_id, order.partner_shipping_id)['total_included']
 
             line.price_unit_with_tax = price_unit['total_included']
             line.report_price_subtotal = report_price_subtotal
