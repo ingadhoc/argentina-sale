@@ -116,7 +116,7 @@ class StockPicking(models.Model):
 
             if not rec.document_type_id:
                 raise UserError(_(
-                    'Picking has no "Document type" linked (Id: %s') % (
+                    'Picking has no "Document type" linked (Id: %s)') % (
                     rec.id))
             validator = rec.document_type_id.validator_id
             CODIGO_DGI = rec.document_type_id.code
@@ -324,9 +324,8 @@ class StockPicking(models.Model):
                             line.product_uom.name, line.product_uom.id,
                             line.product_uom.category_id.name))
 
-                    product_qty = line.product_uom._compute_qty(
-                        line.product_uom.id, product_qty,
-                        uom_arba_with_code.id)
+                    product_qty = line.product_uom._compute_quantity(
+                        product_qty, uom_arba_with_code)
 
                 if not line.product_id.arba_code:
                     raise UserError(_(
@@ -376,6 +375,10 @@ class StockPicking(models.Model):
 
         COT = self.company_id.arba_cot_connect()
 
+        if not carrier_partner:
+            raise UserError(
+                'Debe vincular una "Empresa transportista" a la forma de envío'
+                ' seleccionada o elegir otra forma de envío')
         content, filename = self.get_arba_file_data(
             datetime_out, tipo_recorrido, carrier_partner,
             patente_vehiculo, patente_acomplado,
