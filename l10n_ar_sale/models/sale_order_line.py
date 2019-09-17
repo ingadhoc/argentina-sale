@@ -14,7 +14,7 @@ class SaleOrderLine(models.Model):
 
     report_price_unit = fields.Float(
         compute='_compute_report_prices_and_taxes',
-        digits=dp.get_precision('Product Price'),
+        digits=dp.get_precision('Report Product Price'),
     )
     price_unit_with_tax = fields.Float(
         compute='_compute_report_prices_and_taxes',
@@ -25,7 +25,7 @@ class SaleOrderLine(models.Model):
     )
     report_price_net = fields.Float(
         compute='_compute_report_prices_and_taxes',
-        digits=dp.get_precision('Product Price'),
+        digits=dp.get_precision('Report Product Price'),
     )
     report_tax_id = fields.One2many(
         compute="_compute_report_prices_and_taxes",
