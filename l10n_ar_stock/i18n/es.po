@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-24 14:09+0000\n"
+"POT-Creation-Date: 2019-09-08 14:16+0000\n"
 "PO-Revision-Date: 2018-11-23 22:56+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2019\n"
 "Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
@@ -157,7 +157,7 @@ msgid "El código según nomenclador de arba debe ser de 6 dígitos numéricos"
 msgstr ""
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:421
+#: code:addons/l10n_ar_stock/models/stock_picking.py:425
 #, python-format
 msgid ""
 "Error al presentar remito:\n"
@@ -167,7 +167,7 @@ msgstr ""
 "%s"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:408
+#: code:addons/l10n_ar_stock/models/stock_picking.py:412
 #, python-format
 msgid ""
 "Error al presentar remito:\n"
@@ -177,7 +177,7 @@ msgstr ""
 "* %s"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:399
+#: code:addons/l10n_ar_stock/models/stock_picking.py:403
 #, python-format
 msgid ""
 "Error al presentar remito:\n"
@@ -273,7 +273,7 @@ msgid "No arba code for product \"%s\" (Id: %s)"
 msgstr "No hay código de arba para el producto \"%s\" (Id: %s)"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:320
+#: code:addons/l10n_ar_stock/models/stock_picking.py:321
 #, python-format
 msgid "No arba code for uom \"%s\" (Id: %s) or any uom in category \"%s\""
 msgstr ""
@@ -350,8 +350,8 @@ msgstr ""
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/stock_picking.py:118
 #, python-format
-msgid "Picking has no \"Document type\" linked (Id: %s"
-msgstr "La transferencia no tiene \"Tipo de documento\" vinculado (Id: %s"
+msgid "Picking has no \"Document type\" linked (Id: %s)"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_product_template
@@ -369,7 +369,7 @@ msgid "Productos no terminados / devoluciones"
 msgstr "Productos no terminados / devoluciones"
 
 #. module: l10n_ar_stock
-#: code:addons/l10n_ar_stock/models/stock_picking.py:447
+#: code:addons/l10n_ar_stock/models/stock_picking.py:451
 #, python-format
 msgid "Remito Electrónico Solicitado"
 msgstr ""
