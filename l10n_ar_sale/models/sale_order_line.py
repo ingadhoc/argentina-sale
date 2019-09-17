@@ -100,8 +100,9 @@ class SaleOrderLine(models.Model):
                     order.partner_shipping_id)['total_included']
                 report_price_net = report_price_unit * (
                     1 - (line.discount or 0.0) / 100.0)
+                price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
                 report_price_subtotal = included_taxes.compute_all(
-                    line.price_unit, order.currency_id, line.product_uom_qty,
+                    price, order.currency_id, line.product_uom_qty,
                     line.product_id, order.partner_shipping_id)['total_included']
 
             line.price_unit_with_tax = price_unit['total_included']
