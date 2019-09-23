@@ -141,17 +141,14 @@ class StockPicking(models.Model):
                     'DNI', 'LC', 'LE', 'PAS', 'CI']:
                 dest_tipo_doc = doc_categ_id.code
                 dest_doc = commercial_partner.main_id_number
+                dest_cuit = ''
             else:
                 dest_tipo_doc = ''
                 dest_doc = ''
-
-            dest_tipo_doc = dest_tipo_doc
-            dest_doc = dest_doc
+                dest_cuit = commercial_partner.cuit_required()
 
             dest_cons_final = commercial_partner.\
-                afip_responsability_type_id.id == "5" and '1' or '0'
-
-            dest_cuit = commercial_partner.cuit
+                afip_responsability_type_id.code == "5" and '1' or '0'
 
             REMITOS_PRODUCTOS.append([
                 "02",  # TIPO_REGISTRO
