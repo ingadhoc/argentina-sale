@@ -10,13 +10,13 @@ class AccountChartTemplate(models.Model):
 
     @api.multi
     def _load_template(
-            self, company, code_digits=None, transfer_account_id=None,
+            self, company, code_digits=None,
             account_ref=None, taxes_ref=None):
         self.ensure_one()
         if company.localization:
             self.generate_sale_checkbook(company)
         return super(AccountChartTemplate, self)._load_template(
-            company, code_digits, transfer_account_id,
+            company, code_digits,
             account_ref, taxes_ref)
 
     @api.model
