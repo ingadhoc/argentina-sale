@@ -1,0 +1,313 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * l10n_ar_sale
+# 
+# Translators:
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2019
+# Federico La Torre <3doeste@gmail.com>, 2019
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-26 01:03+0000\n"
+"PO-Revision-Date: 2019-08-14 17:44+0000\n"
+"Last-Translator: Federico La Torre <3doeste@gmail.com>, 2019\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
+msgid ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" groups=\"base.group_multi_company\"/>"
+msgstr ""
+
+#. module: l10n_ar_sale
+#: selection:sale.checkbook,discriminate_taxes:0
+msgid "According to partner VAT responsibility"
+msgstr "Según el tipo de responsabilidad"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_account_chart_template
+msgid "Account Chart Template"
+msgstr "Modelo del Plan Contable"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__next_number
+msgid "Actual Next Number"
+msgstr "Número siguiente real"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_res_config_settings
+msgid "Config Settings"
+msgstr "Parámetros de Configuración"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: l10n_ar_sale
+#: code:addons/l10n_ar_sale/models/sale_order_line.py:134
+#, python-format
+msgid ""
+"Debe haber un y solo un impuestos de IVA por línea. Verificar líneas con "
+"producto \"%s\""
+msgstr ""
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,help:l10n_ar_sale.field_res_company__sale_allow_vat_no_discrimination
+#: model:ir.model.fields,help:l10n_ar_sale.field_res_config_settings__sale_allow_vat_no_discrimination
+msgid ""
+"Definie behaviour on sales orders and quoatations reports. Discrimination or not will depend in partner and company responsability and AFIP letters setup:\n"
+"* If No, Always Discriminate, then VAT will be discriminated like always in odoo\n"
+"* If Yes, No Discriminate Default, if no match found it won't discriminate by default\n"
+"* If Yes, Discriminate Default, if no match found it would discriminate by default"
+msgstr ""
+"Define el comportamiento en pedidos de ventas y reportes de venta. La discriminación o no dependerá de la responsabilidad de la empresa, de la compañía y de la configuración de las letras AFIP:\n"
+"* Si es 'No, Siempre Discriminar', entonces el IVA será discriminado como siempre en odoo\n"
+"* Si es 'Sí, No Discriminar por defecto', si no se encuentra una coincidencia, no discriminará por defecto\n"
+"* Si es 'Sí, Discriminar por defecto', si no se encuentra una coincidencia, se discriminaría por defecto"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__discriminate_taxes
+msgid "Discriminate taxes?"
+msgstr "¿Discriminar impuestos?"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__sequence_id
+msgid "Entry Sequence"
+msgstr "Secuencia de Asiento"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización de"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
+msgid "Line subtotals in sales orders"
+msgstr "Subtotales de línea en pedidos de venta"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: l10n_ar_sale
+#: code:addons/l10n_ar_sale/models/sale_order.py:98
+#: code:addons/l10n_ar_sale/models/sale_order.py:103
+#, python-format
+msgid "New"
+msgstr "Nuevo"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,help:l10n_ar_sale.field_sale_checkbook__next_number
+msgid ""
+"Next number that will be used. This number can be incremented frequently so "
+"the displayed value might already be obsolete"
+msgstr ""
+"Próximo número que se utilizará. Este número puede incrementarse "
+"frecuentemente por lo que el valor mostrado puede estar ya obsoleto."
+
+#. module: l10n_ar_sale
+#: selection:sale.checkbook,discriminate_taxes:0
+msgid "No"
+msgstr "No"
+
+#. module: l10n_ar_sale
+#: selection:res.company,sale_allow_vat_no_discrimination:0
+msgid "No, Always Discriminate"
+msgstr "No, Discriminar Siempre"
+
+#. module: l10n_ar_sale
+#: code:addons/l10n_ar_sale/models/sale_order_line.py:62
+#, python-format
+msgid "Only one vat tax allowed per line"
+msgstr "Solo se permite un impuesto de IVA por línea"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__price_unit_with_tax
+msgid "Price Unit With Tax"
+msgstr "Precio Unitario Con Impuestos"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order__report_amount_untaxed
+msgid "Report Amount Untaxed"
+msgstr "Informe del Valor sin Impuestos"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__report_price_net
+msgid "Report Price Net"
+msgstr "Informe del Precio Neto"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__report_price_reduce
+msgid "Report Price Reduce"
+msgstr "Informe de Reducción de Precios"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__report_price_subtotal
+msgid "Report Price Subtotal"
+msgstr "Informe del Subtotal de Precios"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__report_price_unit
+msgid "Report Price Unit"
+msgstr "Informe del Precio Unitario"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__report_tax_id
+msgid "Report Tax"
+msgstr "Informe de Impuestos"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_company__sale_allow_vat_no_discrimination
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__sale_allow_vat_no_discrimination
+msgid "Sale Allow VAT no discrimination?"
+msgstr "Permitir no discriminar IVA en ventas?"
+
+#. module: l10n_ar_sale
+#: model:ir.actions.act_window,name:l10n_ar_sale.action_checkbook_form
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order__sale_checkbook_id
+#: model:ir.ui.menu,name:l10n_ar_sale.menu_checkbook
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.view_sale_checkbook_form
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.view_sale_checkbook_search
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.view_sale_checkbook_tree
+msgid "Sale Checkbook"
+msgstr "Talonario de Ventas"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_sale_order
+msgid "Sale Order"
+msgstr "Orden de Venta"
+
+#. module: l10n_ar_sale
+#: model:res.groups,name:l10n_ar_sale.sale_price_unit_with_tax
+msgid "Sale Unit Prices w/ Taxes"
+msgstr "Precio Unitario con Impuestos"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea de orden de ventas"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
+msgid "Show Checkbook in Sale Order."
+msgstr "Mostrar Talonario de Ventas en los Pedidos de Venta"
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
+msgid "Show Unit Price with Taxes included On sale Order Lines"
+msgstr ""
+"Mostrar precio unitario con impuestos incluidos en las líneas de venta"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,help:l10n_ar_sale.field_sale_checkbook__sequence_id
+msgid ""
+"This field contains the information related to the numbering of the receipt "
+"entries of this receiptbook."
+msgstr ""
+"Este campo contiene información relacionada con la numeración de las ventas "
+"de este talonario de ventas."
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__group_price_unit_with_tax
+msgid "Unit Price w/ Taxes"
+msgstr "Precio unitario con impuestos"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__group_use_sale_checkbook
+msgid "Use Sale Checkbook in Sales"
+msgstr "Usa Talonario de Ventas en ventas"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,help:l10n_ar_sale.field_sale_checkbook__sequence
+msgid "Used to order the receiptbooks"
+msgstr "Utilizado para ordenar los talonarios de venta"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order__vat_discriminated
+msgid "Vat Discriminated"
+msgstr "IVA Discriminado"
+
+#. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__vat_tax_id
+msgid "Vat Tax"
+msgstr "IVA"
+
+#. module: l10n_ar_sale
+#: model:res.groups,name:l10n_ar_sale.use_sale_checkbook
+msgid "View Sale Order Checkbook"
+msgstr "Ver Talonario de Venta"
+
+#. module: l10n_ar_sale
+#: selection:sale.checkbook,discriminate_taxes:0
+msgid "Yes"
+msgstr "Si"
+
+#. module: l10n_ar_sale
+#: selection:res.company,sale_allow_vat_no_discrimination:0
+msgid "Yes, Discriminate Default"
+msgstr "Si, Discriminar por Defecto"
+
+#. module: l10n_ar_sale
+#: selection:res.company,sale_allow_vat_no_discrimination:0
+msgid "Yes, No Discriminate Default"
+msgstr "Si, No discriminar por defecto"
+
+#. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_sale_checkbook
+msgid "sale.checkbook"
+msgstr "sale.checkbook"
