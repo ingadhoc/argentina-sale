@@ -35,7 +35,7 @@ class AccountChartTemplate(models.Model):
             ('name', '=', book_vals['name']),
             ('company_id', '=', company.id)])
         if not book:
-            book.create(book_vals)
+            book.sudo().create(book_vals)
         return True
 
     @api.model
