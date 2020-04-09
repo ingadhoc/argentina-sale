@@ -1,10 +1,8 @@
 from odoo import models, api, fields, _
-# import odoo.tools as tools
 try:
     from pyafipws.cot import COT
 except ImportError:
     COT = None
-# from pyafipws.padron import PadronAFIP
 from odoo.exceptions import UserError
 import logging
 _logger = logging.getLogger(__name__)
@@ -30,7 +28,6 @@ class ResCompany(models.Model):
                 'SeguridadCliente/presentarRemitos.do')
         return arba_login_url
 
-    @api.multi
     def arba_cot_connect(self):
         """
         Method to be called

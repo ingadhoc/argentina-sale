@@ -1,12 +1,10 @@
-from odoo import models, fields, api, _
+from odoo import models, fields, _
 import datetime
-# import odoo.tools as tools
 try:
     from pyafipws.iibb import IIBB
 except ImportError:
     IIBB = None
 from odoo.exceptions import UserError
-# import tempfile
 import os
 import logging
 _logger = logging.getLogger(__name__)
@@ -39,7 +37,6 @@ class StockPicking(models.Model):
         help='Número de COT del último COT solicitado',
     )
 
-    @api.multi
     def get_arba_file_data(
             self, datetime_out, tipo_recorrido, carrier_partner,
             patente_vehiculo, patente_acomplado, prod_no_term_dev, importe):
@@ -136,11 +133,11 @@ class StockPicking(models.Model):
             # TIPO = '{:>2.2}'.format(letter.name)
 
             # si nro doc y tipo en ‘DNI’, ‘LC’, ‘LE’, ‘PAS’, ‘CI’ y doc
-            doc_categ_id = commercial_partner.main_id_category_id
-            if commercial_partner.main_id_number and doc_categ_id.code in [
+            doc_categ_id = commercial_partner.l10n_latam_identification_type_id
+            if commercial_partner.vat and doc_categ_id.code in [
                     'DNI', 'LC', 'LE', 'PAS', 'CI']:
                 dest_tipo_doc = doc_categ_id.code
-                dest_doc = commercial_partner.main_id_number
+                dest_doc = commercial_partner.vat
                 dest_cuit = ''
             else:
                 dest_tipo_doc = ''
@@ -148,7 +145,7 @@ class StockPicking(models.Model):
                 dest_cuit = commercial_partner.cuit_required()
 
             dest_cons_final = commercial_partner.\
-                afip_responsability_type_id.code == "5" and '1' or '0'
+                l10n_ar_afip_responsibility_type_id.code == "5" and '1' or '0'
 
             REMITOS_PRODUCTOS.append([
                 "02",  # TIPO_REGISTRO
@@ -364,7 +361,6 @@ class StockPicking(models.Model):
             content += '%s\r' % ('|'.join(line))
         return (content, filename)
 
-    @api.multi
     def do_pyafipws_presentar_remito(
             self, datetime_out, tipo_recorrido, carrier_partner,
             patente_vehiculo, patente_acomplado, prod_no_term_dev, importe):
@@ -450,7 +446,6 @@ class StockPicking(models.Model):
 
         return True
 
-    @api.multi
     def action_done(self):
         res = super().action_done()
         for rec in self.filtered(
