@@ -26,14 +26,13 @@ class SaleOrder(models.Model):
     )
 
     @api.depends(
-        'partner_id',
-        'partner_id.afip_responsability_type_id',
-        'company_id',
-        'company_id.partner_id.afip_responsability_type_id',)
+        'partner_id.l10n_ar_afip_responsibility_type_id',
+        'company_id.partner_id.l10n_ar_afip_responsibility_type_id',)
     def _compute_vat_discriminated(self):
         use_sale_checkbook = self.env.user.has_group(
             'l10n_ar_sale.use_sale_checkbook')
         for rec in self:
+            l10n_ar_afip_responsibility_type = rec.partner_id.commercial_partner_id.l10n_ar_afip_responsibility_type_id
             # si tiene checkbook y discrimna en funcion al partner pero
             # no tiene responsabilidad seteada, dejamos comportamiento nativo
             # de odoo de discriminar impuestos
@@ -44,28 +43,20 @@ class SaleOrder(models.Model):
                 elif discriminate_taxes == 'no':
                     vat_discriminated = False
                 else:
-                    letters = rec.env['account.journal']._get_journal_letter(
-                        'sale', rec.company_id,
-                        rec.partner_id.commercial_partner_id)
-                    vat_discriminated = \
-                        not letters[0].taxes_included if letters else True
+                    vat_discriminated = rec.company_id.l10n_ar_company_requires_vat and \
+                        l10n_ar_afip_responsibility_type.code in ['1'] or False
                 rec.vat_discriminated = vat_discriminated
                 continue
 
             # dejamos esto por compatibilidad hacia atras sin sale.checkbook
             vat_discriminated = True
             company_vat_type = rec.company_id.sale_allow_vat_no_discrimination
-            if company_vat_type and company_vat_type != 'discriminate_default':
-                letters = rec.env[
-                    'account.journal']._get_journal_letter(
-                        'sale', rec.company_id,
-                        rec.partner_id.commercial_partner_id)
-                if letters:
-                    vat_discriminated = not letters[0].taxes_included
-                # if no responsability or no letters
-                if not letters and \
-                        company_vat_type == 'no_discriminate_default':
+            if company_vat_type and company_vat_type != 'discriminate':
+                if not l10n_ar_afip_responsibility_type and company_vat_type == 'no_discriminate_default':
                     vat_discriminated = False
+                else:
+                    vat_discriminated = rec.company_id.l10n_ar_company_requires_vat and \
+                        l10n_ar_afip_responsibility_type.code in ['1'] or False
             rec.vat_discriminated = vat_discriminated
 
     @api.depends('amount_untaxed', 'vat_discriminated')

@@ -52,7 +52,6 @@
     <record id="action_checkbook_form" model="ir.actions.act_window">
         <field name="name">Sale Checkbook</field>
         <field name="res_model">sale.checkbook</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="view_sale_checkbook_search"/>
     </record>

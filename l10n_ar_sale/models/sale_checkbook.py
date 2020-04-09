@@ -19,10 +19,6 @@ class SaleCheckbook(models.Model):
         required=True,
         index=True,
     )
-    next_number = fields.Integer(
-        related='sequence_id.number_next_actual',
-        readonly=False,
-    )
     discriminate_taxes = fields.Selection(
         [
             ('yes', 'Yes'),
@@ -42,9 +38,13 @@ class SaleCheckbook(models.Model):
         domain=[('code', '=', 'sale.order')],
         context={'default_code': 'sale.order'},
     )
+    next_number = fields.Integer(
+        related='sequence_id.number_next_actual',
+        readonly=False,
+    )
     company_id = fields.Many2one(
         'res.company',
-        default=lambda self: self.env.user.company_id,
+        default=lambda self: self.env.company,
     )
     active = fields.Boolean(
         default=True,

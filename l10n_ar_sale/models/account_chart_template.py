@@ -8,12 +8,11 @@ from odoo import models, api
 class AccountChartTemplate(models.Model):
     _inherit = 'account.chart.template'
 
-    @api.multi
     def _load_template(
             self, company, code_digits=None,
             account_ref=None, taxes_ref=None):
         self.ensure_one()
-        if company.localization:
+        if company.country_id == self.env.ref('base.ar'):
             self.generate_sale_checkbook(company)
         return super(AccountChartTemplate, self)._load_template(
             company, code_digits,
