@@ -2,7 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import fields, models, api
+from odoo import fields, models
 
 
 class ArbaCotWizard(models.TransientModel):
@@ -43,7 +43,6 @@ class ArbaCotWizard(models.TransientModel):
         string='Importe Neto',
     )
 
-    @api.multi
     def confirm(self):
         self.ensure_one()
         if self._context.get('active_model') != 'stock.picking':
