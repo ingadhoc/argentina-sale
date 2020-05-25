@@ -20,6 +20,7 @@
         'views/product_template_views.xml',
         'views/uom_uom_views.xml',
         'views/stock_production_lot_views.xml',
+        'views/report_deliveryslip.xml',
         'data/ir_sequence_data.xml',
         'data/product_uom_data.xml',
     ],

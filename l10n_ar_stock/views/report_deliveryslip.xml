@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- we would do something like this if we want it multilocalization compatible as in l10n_latam_invoice_document -->
+    <!-- <template id="report_saleorder" inherit_id="sale.report_saleorder">
+        <t t-call="sale.report_saleorder_document" position="attributes">
+            <attribute name="t-call">#{ o.get_custom_report('sale.report_saleorder_document') }</attribute>
+        </t>
+    </template>
+
+    <template id="report_saleorder_pro_forma" inherit_id="sale.report_saleorder_pro_forma">
+        <t t-call="sale.report_saleorder_document" position="attributes">
+            <attribute name="t-call">#{ o.get_custom_report('sale.report_saleorder_document') }</attribute>
+        </t>
+    </template> -->
+
+    <!-- we force priority greater than 16 so that it dont break inheritance of report_saleorder_document_inherit_sale_stock. with this we are loosing the incoterm field added but that sale_stock view. TODO perhaps we should improve it priority="15" -->
+    <template id="report_delivery_document" inherit_id="stock.report_delivery_document">
+
+        <!-- custom header and footer -->
+        <t t-set="o" position="after">
+            <t t-set="custom_header" t-value="'l10n_ar.custom_header'"/>
+            <t t-set="report_date" t-value="o.date_done"/>
+            <t t-set="report_number" t-value="o.vouchers"/>
+            <t t-set="pre_printed_report" t-value="o.book_id.lines_per_voucher"/>
+            <t t-set="document_letter" t-value="o.document_type_id.l10n_ar_letter or 'X'"/>
+            <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
+            <t t-set="report_name" t-value="o.document_type_id.name or 'Comprobante de Entrega'"/>
+            <t t-set="header_address" t-value="o.company_id.partner_id"/>
+
+            <t t-set="custom_footer">
+                <div class="row">
+                    <div name="footer_left_column" class="col-8 text-center">
+                    </div>
+                    <div name="footer_right_column" class="col-4 text-right">
+                        <div name="pager" t-if="report_type == 'pdf'">
+                            Page: <span class="page"/> / <span class="topage"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+
+        <!-- remove default partner address -->
+        <t t-set="address" position="replace"/>
+
+        <!-- remove default document title -->
+        <h2 position="replace"/>
+
+        <div class="row mt32 mb32" position="replace">
+            <div id="informations" class="row mt8 mb8">
+                <div class="col-6">
+                    <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
+
+                    <!-- IDENTIFICACION (ADQUIRIENTE-LOCATARIO-PRESTARIO) -->
+
+                    <!-- (14) Apellido uy Nombre: Denominicacion o Razon Soclial -->
+                    <strong>Customer: </strong><span t-field="partner.name"/>
+
+                    <!-- (15) Domicilio Comercial -->
+                    <br/>
+
+                    <span t-esc="partner" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True, "no_tag_br": True}'/>
+
+                    <!-- (16) Responsabilidad AFIP -->
+                    <strong>VAT Cond: </strong><span t-field="partner.l10n_ar_afip_responsibility_type_id"/>
+
+                    <!-- (17) CUIT -->
+                    <t t-if="partner.vat and partner.l10n_latam_identification_type_id.name and partner.l10n_latam_identification_type_id.name != 'Sigd'">
+                        <br/><strong><t t-esc="partner.l10n_latam_identification_type_id.name or o.company_id.country_id.vat_label" id="inv_tax_id_label"/>:</strong> <span t-field="partner.l10n_ar_formatted_vat"/>
+                    </t>
+
+                </div>
+                <div class="col-6">
+
+                    <t>
+                        <strong>Order:</strong>
+                        <span t-field="o.origin"/>
+                    </t>
+
+                    <t t-if="o.sudo().sale_id.client_order_ref">
+                        <br/><strong>Customer Reference:</strong>
+                        <span t-field="o.sudo().sale_id.client_order_ref"/>
+                    </t>
+
+                    <t t-if="o.picking_type_id.code == 'outgoing' and o.carrier_id">
+                        <br/><strong>Carrier:</strong>
+                        <span t-field="o.carrier_id"/>
+                    </t>
+                    <t t-if="o.shipping_weight">
+                        <br/><strong>Weight:</strong>
+                        <span t-field="o.shipping_weight"/>
+                        <span t-field="o.weight_uom_name"/>
+                    </t>
+                    <t t-if="o.declared_value">
+                        <br/><strong>Valor Declarado:</strong>
+                        <span t-field="o.declared_value"/>
+                    </t>
+                    <t t-if="o.number_of_packages">
+                        <br/><strong>Q. Bultos:</strong>
+                        <span t-field="o.number_of_packages"/>
+                    </t>
+                    <t t-if="o.carrier_tracking_ref">
+                        <br/><strong>Tracking Number:</strong>
+                        <span t-field="o.carrier_tracking_ref"/>
+                    </t>
+
+                </div>
+
+            </div>
+        </div>
+
+    </template>
+
+</odoo>
