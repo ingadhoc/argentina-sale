@@ -24,6 +24,7 @@
         'views/report_deliveryslip.xml',
         'data/ir_sequence_data.xml',
         'data/product_uom_data.xml',
+        'data/document_type_data.xml',
     ],
     'demo': [
     ],

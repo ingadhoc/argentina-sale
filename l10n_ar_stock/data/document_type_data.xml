@@ -1,0 +1,11 @@
+<odoo>
+
+    <record id="l10n_ar.dc_r_r" model="l10n_latam.document.type">
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="l10n_ar.dc_remito_x" model="l10n_latam.document.type">
+        <field name="active" eval="True"/>
+    </record>
+
+</odoo>
