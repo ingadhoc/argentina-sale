@@ -57,8 +57,8 @@ class StockPicking(models.Model):
             raise UserError(_(
                 'Los remitos seleccionados deben pertenecer a la misma '
                 'compañía'))
-        cuit = company.cuit_required()
-        cuit_carrier = carrier_partner.cuit_required()
+        cuit = company.partner_id.ensure_vat()
+        cuit_carrier = carrier_partner.ensure_vat()
 
         if cuit_carrier == cuit and not patente_vehiculo:
             raise UserError(_(
@@ -115,18 +115,18 @@ class StockPicking(models.Model):
                 raise UserError(_(
                     'Picking has no "Document type" linked (Id: %s)') % (
                     rec.id))
-            validator = rec.document_type_id.validator_id
             CODIGO_DGI = rec.document_type_id.code
             CODIGO_DGI = CODIGO_DGI.rjust(3, '0')
-            letter = rec.document_type_id.document_letter_id
-            if not validator or not CODIGO_DGI or not letter:
+            letter = rec.document_type_id.l10n_ar_letter
+            if not CODIGO_DGI or not letter:
                 raise UserError(_(
                     'Document type has no validator, code or letter configured'
                     ' (Id: %s') % (rec.document_type_id.id))
 
             # TODO ver de hacer uno por número de remito?
-            PREFIJO, NUMERO = validator.validate_value(
-                voucher.name, return_parts=True)
+            document_parts = self.env['account.move']._l10n_ar_get_document_number_parts(voucher.name, CODIGO_DGI)
+            PREFIJO = str(document_parts['point_of_sale'])
+            NUMERO = str(document_parts['invoice_number'])
             PREFIJO = PREFIJO.rjust(5, '0')
 
             # rellenar y truncar a 2
@@ -134,15 +134,15 @@ class StockPicking(models.Model):
 
             # si nro doc y tipo en ‘DNI’, ‘LC’, ‘LE’, ‘PAS’, ‘CI’ y doc
             doc_categ_id = commercial_partner.l10n_latam_identification_type_id
-            if commercial_partner.vat and doc_categ_id.code in [
+            if commercial_partner.vat and doc_categ_id.name in [
                     'DNI', 'LC', 'LE', 'PAS', 'CI']:
-                dest_tipo_doc = doc_categ_id.code
+                dest_tipo_doc = doc_categ_id.l10n_ar_afip_code
                 dest_doc = commercial_partner.vat
                 dest_cuit = ''
             else:
                 dest_tipo_doc = ''
                 dest_doc = ''
-                dest_cuit = commercial_partner.cuit_required()
+                dest_cuit = commercial_partner.ensure_vat()
 
             dest_cons_final = commercial_partner.\
                 l10n_ar_afip_responsibility_type_id.code == "5" and '1' or '0'

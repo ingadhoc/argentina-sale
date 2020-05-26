@@ -33,7 +33,7 @@ class ResCompany(models.Model):
         Method to be called
         """
         self.ensure_one()
-        cuit = self.partner_id.cuit_required()
+        cuit = self.partner_id.ensure_vat()
 
         if not self.arba_cot:
             raise UserError(_(

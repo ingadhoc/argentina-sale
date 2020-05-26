@@ -9,6 +9,7 @@
     'depends': [
         'stock_voucher',  # por la clase receiptbooks y demas
         'delivery',
+        'delivery_ux',  # for partner_id on delivery carrier
         'l10n_ar',
     ],
     'data': [
