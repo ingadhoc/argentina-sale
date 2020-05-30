@@ -8,10 +8,6 @@ class StockBook(models.Model):
         'l10n_latam.document.type',
         'Document Type',
     )
-    cai = fields.Char(
-        'CAI',
-        help='Solo complete este dato si es auto-impresor',
-    )
     l10n_ar_cai = fields.Char(
         'CAI',
         help='Solo complete este dato si es auto-impresor',
