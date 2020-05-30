@@ -31,8 +31,15 @@
             <t t-set="custom_footer">
                 <div class="row">
                     <div name="footer_left_column" class="col-8 text-center">
+                        <img t-if="o.l10n_ar_afip_barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;humanreadable=1' % ('I2of5', o.l10n_ar_afip_barcode)" alt="Barcode"  style="height:80px"/>
                     </div>
                     <div name="footer_right_column" class="col-4 text-right">
+                        <div t-if="not o.book_id.lines_per_voucher and o.book_id.l10n_ar_cai">
+                            CAE: <span t-field="o.book_id.l10n_ar_cai"/>
+                        </div>
+                        <div t-if="not o.book_id.lines_per_voucher and o.book_id.l10n_ar_cai_due">
+                            CAE Due Date: <span t-field="o.book_id.l10n_ar_cai_due"/>
+                        </div>
                         <div name="pager" t-if="report_type == 'pdf'">
                             Page: <span class="page"/> / <span class="topage"/>
                         </div>

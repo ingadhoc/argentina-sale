@@ -7,6 +7,8 @@
         <field name="arch" type="xml">
             <field name="next_number" position="after">
                 <field name="document_type_id" groups="l10n_ar_stock.arba_cot_enabled"/>
+                <field name="l10n_ar_cai" attrs="{'invisible': [('lines_per_voucher', '!=', 0)]}"/>
+                <field name="l10n_ar_cai_due" attrs="{'invisible': [('lines_per_voucher', '!=', 0)]}"/>
             </field>
         </field>
     </record>
