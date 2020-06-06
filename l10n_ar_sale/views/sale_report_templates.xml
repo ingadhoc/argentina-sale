@@ -32,7 +32,7 @@
             <t t-if="env.context.get('proforma', False) or is_pro_forma">
                 <t t-set="report_name" t-value="'Pro-Forma Invoice'"/>
             </t>
-            <t t-set="header_address" t-value="doc.company_id.partner_id"/>
+            <t t-set="header_address" t-value="doc.sale_checkbook_id.report_partner_id or doc.company_id.partner_id"/>
 
             <t t-set="custom_footer">
                 <div class="row">

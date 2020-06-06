@@ -7,6 +7,7 @@
             <search string="Sale Checkbook">
                 <field name="name"/>
                 <field name="discriminate_taxes"/>
+                <field name="report_partner_id"/>
                 <field name="sequence_id"/>
                 <field name="company_id"/>
             </search>
@@ -21,6 +22,7 @@
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="discriminate_taxes"/>
+                <field name="report_partner_id"/>
                 <field name="company_id" widget="selection" groups="base.group_multi_company"/>
             </tree>
         </field>
@@ -36,6 +38,7 @@
                         <group>
                             <field name="name"/>
                             <field name="discriminate_taxes"/>
+                            <field name="report_partner_id"/>
                         </group>
                         <group>
                             <field name="sequence_id"/>

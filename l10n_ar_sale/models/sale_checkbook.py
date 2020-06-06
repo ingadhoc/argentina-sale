@@ -49,6 +49,9 @@ class SaleCheckbook(models.Model):
     active = fields.Boolean(
         default=True,
     )
+    report_partner_id = fields.Many2one(
+        'res.partner',
+    )
 
     @api.model
     def create(self, vals):
