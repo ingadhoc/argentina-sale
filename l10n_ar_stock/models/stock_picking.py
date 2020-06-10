@@ -145,6 +145,7 @@ class StockPicking(models.Model):
             PREFIJO = str(document_parts['point_of_sale'])
             NUMERO = str(document_parts['invoice_number'])
             PREFIJO = PREFIJO.rjust(5, '0')
+            NUMERO = NUMERO.rjust(8, '0')
 
             # rellenar y truncar a 2
             # TIPO = '{:>2.2}'.format(letter.name)
