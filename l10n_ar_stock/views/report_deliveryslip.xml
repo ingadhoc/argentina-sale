@@ -58,15 +58,17 @@
             <div id="informations" class="row mt8 mb8">
                 <div class="col-6">
                     <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
+                    <t t-set="commercial_partner" t-value="partner.commercial_partner_id"/>
 
                     <!-- IDENTIFICACION (ADQUIRIENTE-LOCATARIO-PRESTARIO) -->
 
                     <!-- (14) Apellido uy Nombre: Denominicacion o Razon Soclial -->
-                    <strong>Customer: </strong><span t-field="partner.name"/>
+                    <strong>Customer: </strong><span t-field="commercial_partner.name"/>
 
                     <!-- (15) Domicilio Comercial -->
                     <br/>
 
+                    <span t-if="commercial_partner != partner"><strong>Deliver to: </strong><span t-field="partner.name"/></span>
                     <span t-esc="partner" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True, "no_tag_br": True}'/>
 
                     <!-- (16) Responsabilidad AFIP -->
@@ -99,13 +101,14 @@
                         <span t-field="o.shipping_weight"/>
                         <span t-field="o.weight_uom_name"/>
                     </t>
-                    <t t-if="o.declared_value">
-                        <br/><strong>Valor Declarado:</strong>
-                        <span t-field="o.declared_value"/>
-                    </t>
+                    <span t-if="o.number_of_packages and o.shipping_weight"> - </span>
                     <t t-if="o.number_of_packages">
-                        <br/><strong>Q. Bultos:</strong>
+                        <br t-if="not o.shipping_weight"/><strong>Packages Qty:</strong>
                         <span t-field="o.number_of_packages"/>
+                    </t>
+                    <t t-if="o.declared_value">
+                        <br/><strong>Declared Value:</strong>
+                        <span t-field="o.declared_value"/>
                     </t>
                     <t t-if="o.carrier_tracking_ref">
                         <br/><strong>Tracking Number:</strong>
