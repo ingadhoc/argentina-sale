@@ -14,8 +14,8 @@
         </t>
     </template> -->
 
-    <!-- we force priority greater than 16 so that it dont break inheritance of report_saleorder_document_inherit_sale_stock. with this we are loosing the incoterm field added but that sale_stock view. TODO perhaps we should improve it priority="15" -->
-    <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+    <!-- we force priority greater than 16 so that it dont break inheritance of report_saleorder_document_inherit_sale_stock. with this we are loosing the incoterm field added but that sale_stock view -->
+    <template id="report_saleorder_document" priority="20" inherit_id="sale.report_saleorder_document">
 
         <!-- custom header and footer -->
         <t t-set="doc" position="after">
@@ -135,7 +135,7 @@
                     </t>
 
                     <t t-if="doc.payment_term_id" name="payment_term">
-                        <br/><strong>Payment Term: </strong><span t-field="doc.payment_term_id.name"/>
+                        <br/><strong>Payment Terms: </strong><span t-field="doc.payment_term_id.name"/>
                     </t>
 
                     <t t-if="doc.origin">
