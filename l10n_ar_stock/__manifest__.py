@@ -1,5 +1,5 @@
 {
-    'name': 'Remito electrónico Argentino',
+    'name': 'Remitos, COT y demas ajustes de stock para Argentina',
     'version': '13.0.1.2.0',
     'category': 'Localization/Argentina',
     'sequence': 14,
@@ -8,8 +8,6 @@
     'license': 'AGPL-3',
     'depends': [
         'stock_voucher',  # por la clase receiptbooks y demas
-        'delivery',
-        'delivery_ux',  # for partner_id on delivery carrier
         'l10n_ar',
     ],
     'data': [

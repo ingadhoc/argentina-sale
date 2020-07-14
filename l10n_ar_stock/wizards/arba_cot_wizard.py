@@ -19,9 +19,9 @@ class ArbaCotWizard(models.TransientModel):
         required=True,
         default='M',
     )
-    carrier_id = fields.Many2one(
-        'delivery.carrier',
-        string="Carrier",
+    partner_id = fields.Many2one(
+        'res.partner',
+        string="Transportista",
         required=True,
     )
     # TODO implementar validaciones de patentes
@@ -51,5 +51,5 @@ class ArbaCotWizard(models.TransientModel):
             self._context.get('active_ids'))
         pickings.do_pyafipws_presentar_remito(
             fields.Date.from_string(self.datetime_out), self.tipo_recorrido,
-            self.carrier_id.partner_id, self.patente_vehiculo,
+            self.partner_id, self.patente_vehiculo,
             self.patente_acomplado, self.prod_no_term_dev, self.importe)

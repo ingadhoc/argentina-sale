@@ -14,8 +14,8 @@
         </t>
     </template> -->
 
-    <!-- we force priority greater than 16 so that it dont break inheritance of report_saleorder_document_inherit_sale_stock. with this we are loosing the incoterm field added but that sale_stock view. TODO perhaps we should improve it priority="15" -->
-    <template id="report_delivery_document" inherit_id="stock.report_delivery_document">
+    <!-- we force priority greater than 20 so that it dont break inheritance with delivery view -->
+    <template id="report_delivery_document" priority="20" inherit_id="stock.report_delivery_document">
 
         <!-- custom header and footer -->
         <t t-set="o" position="after">
@@ -91,14 +91,9 @@
                         <br/><strong>Customer Reference:</strong>
                         <span t-field="o.sudo().sale_id.client_order_ref"/>
                     </t>
-
-                    <t t-if="o.picking_type_id.code == 'outgoing' and o.carrier_id">
-                        <br/><strong>Carrier:</strong>
-                        <span t-field="o.carrier_id"/>
-                    </t>
-                    <t t-if="o.shipping_weight">
+                    <t t-if="o.weight">
                         <br/><strong>Weight:</strong>
-                        <span t-field="o.shipping_weight"/>
+                        <span t-field="o.weight"/>
                         <span t-field="o.weight_uom_name"/>
                     </t>
                     <span t-if="o.number_of_packages and o.shipping_weight"> - </span>
@@ -109,10 +104,6 @@
                     <t t-if="o.declared_value">
                         <br/><strong>Declared Value:</strong>
                         <span t-field="o.declared_value"/>
-                    </t>
-                    <t t-if="o.carrier_tracking_ref">
-                        <br/><strong>Tracking Number:</strong>
-                        <span t-field="o.carrier_tracking_ref"/>
                     </t>
 
                 </div>
