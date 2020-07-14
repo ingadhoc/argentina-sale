@@ -7,13 +7,15 @@
         <field name="groups_id" eval="[(4, ref('l10n_ar_stock.arba_cot_enabled'))]"/>
         <field name="arch" type="xml">
             <button name="do_print_picking" position="after">
-                <button name="%(action_arba_cot_wizard)d" string="Obtener COT (BETA)" help="Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)" type="action" attrs="{'invisible': ['|',('book_id','=',False),'|', ('picking_type_code','=','incoming'), ('state','!=','done')]}" context="{'default_carrier_id': carrier_id, 'default_importe': declared_value}"/>
+                <button name="%(action_arba_cot_wizard)d" string="Obtener COT (BETA)" help="Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)" type="action" attrs="{'invisible': ['|',('book_id','=',False),'|', ('picking_type_code','=','incoming'), ('state','!=','done')]}" context="{'default_importe': declared_value}"/>
             </button>
-            <field name="priority" position="after">
-                <field name="cot"/>
-                <field name="cot_numero_unico"/>
-                <field name="cot_numero_comprobante"/>
-            </field>
+            <group name="other_infos" position="after">
+                <group string="Remito electrónico (COT)" name="cot">
+                    <field name="cot"/>
+                    <field name="cot_numero_unico"/>
+                    <field name="cot_numero_comprobante"/>
+                </group>
+            </group>
         </field>
     </record>
 

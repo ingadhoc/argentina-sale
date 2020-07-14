@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_delivery_document" inherit_id="l10n_ar_stock.report_delivery_document">
+
+        <t t-if="o.weight" position="before">
+            <t t-if="o.picking_type_id.code == 'outgoing' and o.carrier_id">
+                <br/><strong>Carrier:</strong>
+                <span t-field="o.carrier_id"/>
+            </t>
+            <t t-if="o.carrier_tracking_ref">
+                <br/><strong>Tracking Number:</strong>
+                <span t-field="o.carrier_tracking_ref"/>
+            </t>
+        </t>
+
+    </template>
+
+</odoo>
