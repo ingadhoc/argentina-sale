@@ -91,16 +91,6 @@
                         <br/><strong>Customer Reference:</strong>
                         <span t-field="o.sudo().sale_id.client_order_ref"/>
                     </t>
-                    <t t-if="o.weight">
-                        <br/><strong>Weight:</strong>
-                        <span t-field="o.weight"/>
-                        <span t-field="o.weight_uom_name"/>
-                    </t>
-                    <span t-if="o.number_of_packages and o.shipping_weight"> - </span>
-                    <t t-if="o.number_of_packages">
-                        <br t-if="not o.shipping_weight"/><strong>Packages Qty:</strong>
-                        <span t-field="o.number_of_packages"/>
-                    </t>
                     <t t-if="o.declared_value">
                         <br/><strong>Declared Value:</strong>
                         <span t-field="o.declared_value"/>
