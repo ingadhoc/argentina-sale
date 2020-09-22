@@ -131,3 +131,12 @@ class SaleOrderLine(models.Model):
         if 'tax_id' in vals or 'company_id' in vals:
             self.check_vat_tax()
         return res
+
+    @api.depends('order_id.date_order')
+    def _compute_amount(self):
+        """ Ver descripcion en modificacion en sale.order._amount_by_group
+        """
+        for line in self:
+            date_order = line.order_id.date_order or fields.Date.context_today(line)
+            line = line.with_context(invoice_date=date_order)
+            super(SaleOrderLine, line)._compute_amount()

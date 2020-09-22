@@ -95,27 +95,34 @@ class SaleOrder(models.Model):
         return super(SaleOrder, self).create(vals)
 
     def _amount_by_group(self):
-        order_vat_not_discriminated = self.filtered(lambda x: not x.vat_discriminated)
-        for order in order_vat_not_discriminated:
-            currency = order.currency_id or order.company_id.currency_id
-            fmt = partial(formatLang, self.with_context(lang=order.partner_id.lang).env, currency_obj=currency)
-            res = {}
-            for line in order.order_line:
-                price_reduce = line.price_unit * (1.0 - line.discount / 100.0)
-                taxes = line.report_tax_id.compute_all(
-                    price_reduce, quantity=line.product_uom_qty, product=line.product_id,
-                    partner=order.partner_shipping_id)['taxes']
-                for tax in line.report_tax_id:
-                    group = tax.tax_group_id
-                    res.setdefault(group, {'amount': 0.0, 'base': 0.0})
-                    for t in taxes:
-                        if t['id'] == tax.id or t['id'] in tax.children_tax_ids.ids:
-                            res[group]['amount'] += t['amount']
-                            res[group]['base'] += t['base']
-            res = sorted(res.items(), key=lambda l: l[0].sequence)
-            order.amount_by_group = [(
-                l[0].name, l[1]['amount'], l[1]['base'],
-                fmt(l[1]['amount']), fmt(l[1]['base']),
-                len(res),
-            ) for l in res]
-        super(SaleOrder, self - order_vat_not_discriminated)._amount_by_group()
+        for order in self:
+            # Hacemos esto para disponer de fecha del pedido y cia para calcular
+            # impuesto con código python (por ej. para ARBA).
+            # lo correcto seria que esto este en un modulo que dependa de l10n_ar_account_withholding, pero queremos
+            # evitar ese modulo adicional por ahora
+            date_order = order.date_order or fields.Date.context_today(order)
+            order = order.with_context(invoice_date=date_order)
+            if order.vat_discriminated:
+                super(SaleOrder, order)._amount_by_group()
+            else:
+                currency = order.currency_id or order.company_id.currency_id
+                fmt = partial(formatLang, self.with_context(lang=order.partner_id.lang).env, currency_obj=currency)
+                res = {}
+                for line in order.order_line:
+                    price_reduce = line.price_unit * (1.0 - line.discount / 100.0)
+                    taxes = line.report_tax_id.compute_all(
+                        price_reduce, quantity=line.product_uom_qty, product=line.product_id,
+                        partner=order.partner_shipping_id)['taxes']
+                    for tax in line.report_tax_id:
+                        group = tax.tax_group_id
+                        res.setdefault(group, {'amount': 0.0, 'base': 0.0})
+                        for t in taxes:
+                            if t['id'] == tax.id or t['id'] in tax.children_tax_ids.ids:
+                                res[group]['amount'] += t['amount']
+                                res[group]['base'] += t['base']
+                res = sorted(res.items(), key=lambda l: l[0].sequence)
+                order.amount_by_group = [(
+                    l[0].name, l[1]['amount'], l[1]['base'],
+                    fmt(l[1]['amount']), fmt(l[1]['base']),
+                    len(res),
+                ) for l in res]
