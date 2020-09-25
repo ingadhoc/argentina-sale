@@ -11,5 +11,6 @@ class ResConfigSettings(models.TransientModel):
         implied_group='l10n_ar_stock.arba_cot_enabled',
     )
     arba_cot = fields.Char(
-        related='company_id.arba_cot'
+        related='company_id.arba_cot',
+        readonly=False,
     )
