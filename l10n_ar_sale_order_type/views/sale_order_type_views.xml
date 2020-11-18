@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="sale_order_type.sot_sale_order_type_form_view"/>
         <field name="arch" type="xml">
             <field name="sequence_id" position="after">
-                <field name="sale_checkbook_id"/>
+                <field name="sale_checkbook_id" domain="['|',('company_id', '=', False),('company_id', '=', company_id)]"/>
             </field>
         </field>
     </record>
