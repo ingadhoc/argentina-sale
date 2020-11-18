@@ -10,4 +10,5 @@ class SaleOrderType(models.Model):
 
     sale_checkbook_id = fields.Many2one(
         'sale.checkbook',
+        check_company=True,
     )
