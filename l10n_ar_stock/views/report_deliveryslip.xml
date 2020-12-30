@@ -21,7 +21,7 @@
         <t t-set="o" position="after">
             <t t-set="custom_header" t-value="'l10n_ar.custom_header'"/>
             <t t-set="report_date" t-value="o.date_done"/>
-            <t t-set="report_number" t-value="o.vouchers"/>
+            <t t-set="report_number" t-value="o.vouchers or o.name"/>
             <t t-set="pre_printed_report" t-value="o.book_id.lines_per_voucher"/>
             <t t-set="document_letter" t-value="o.document_type_id.l10n_ar_letter or 'X'"/>
             <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
