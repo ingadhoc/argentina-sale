@@ -1,19 +1,24 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* l10n_ar_sale
-#
+# 
+# Translators:
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2020
+# Juan Carreras <jc@adhoc.com.ar>, 2020
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0+e\n"
+"Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-02 01:17+0000\n"
-"PO-Revision-Date: 2020-07-02 01:17+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2020-12-30 20:28+0000\n"
+"PO-Revision-Date: 2020-04-09 20:29+0000\n"
+"Last-Translator: Juan Carreras <jc@adhoc.com.ar>, 2020\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -51,6 +56,9 @@ msgid ""
 "            <span groups=\"account.group_show_line_subtotals_tax_included\">Amount</span>\n"
 "        </span>"
 msgstr ""
+"<span groups=\"account.group_show_line_subtotals_tax_included\" position=\"replace\">\n"
+"            Cantidad\n"
+"        </span>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -130,6 +138,8 @@ msgid ""
 "Debe haber un y solo un impuestos de IVA por línea. Verificar líneas con "
 "producto \"%s\""
 msgstr ""
+"Debe haber un y solo un impuestos de IVA por línea. Verificar líneas con "
+"producto \"%s\""
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,help:l10n_ar_sale.field_res_company__sale_allow_vat_no_discrimination
@@ -163,7 +173,7 @@ msgstr "Secuencia de Asiento"
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook____last_update
@@ -209,7 +219,7 @@ msgstr ""
 #. module: l10n_ar_sale
 #: model:ir.model.fields.selection,name:l10n_ar_sale.selection__sale_checkbook__discriminate_taxes__no
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields.selection,name:l10n_ar_sale.selection__res_company__sale_allow_vat_no_discrimination__discriminate
@@ -235,37 +245,37 @@ msgstr "Precio Unitario Con Impuestos"
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order__report_amount_untaxed
 msgid "Report Amount Untaxed"
-msgstr ""
+msgstr "Informe del Valor sin Impuestos"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__report_partner_id
 msgid "Report Partner"
-msgstr ""
+msgstr "Report Partner"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__report_price_net
 msgid "Report Price Net"
-msgstr ""
+msgstr "Informe del Precio Neto"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__report_price_reduce
 msgid "Report Price Reduce"
-msgstr ""
+msgstr "Informe de Reducción de Precios"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__report_price_subtotal
 msgid "Report Price Subtotal"
-msgstr ""
+msgstr "Informe del Subtotal de Precios"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__report_price_unit
 msgid "Report Price Unit"
-msgstr ""
+msgstr "Informe del Precio Unitario"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__report_tax_id
 msgid "Report Tax"
-msgstr ""
+msgstr "Informe de Impuestos"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_res_company__sale_allow_vat_no_discrimination
@@ -371,4 +381,4 @@ msgstr "Si, No Discriminar por Defecto"
 #. module: l10n_ar_sale
 #: model:ir.model,name:l10n_ar_sale.model_sale_checkbook
 msgid "sale.checkbook"
-msgstr ""
+msgstr "sale.checkbook"
