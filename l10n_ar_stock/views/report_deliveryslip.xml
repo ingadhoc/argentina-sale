@@ -95,7 +95,10 @@
                         <br/><strong>Declared Value:</strong>
                         <span t-field="o.declared_value"/>
                     </t>
-
+                    <t t-if="o.number_of_packages">
+                        <br/><strong>Packages Qty:</strong>
+                        <span t-field="o.number_of_packages"/>
+                    </t>
                 </div>
 
             </div>

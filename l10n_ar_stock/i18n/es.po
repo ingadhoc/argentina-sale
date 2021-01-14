@@ -45,6 +45,11 @@ msgid "<br/><strong>Declared Value:</strong>"
 msgstr "<br/><strong>Valor Declarado:</strong>"
 
 #. module: l10n_ar_stock
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
+msgid "<br/><strong>Packages Qty:</strong>"
+msgstr "<br/><strong>Q. Bultos:</strong>"
+
+#. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.res_config_settings_view_form
 msgid ""
 "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"

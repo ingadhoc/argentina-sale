@@ -31,13 +31,8 @@ msgstr "<br/><strong>Número de seguimiento:</strong>"
 
 #. module: l10n_ar_stock_delivery
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_delivery.report_delivery_document
-msgid "<br/><strong>Weight:</strong>"
-msgstr "<br/><strong>Peso:</strong>"
-
-#. module: l10n_ar_stock_delivery
-#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_delivery.report_delivery_document
-msgid "<strong>Packages Qty:</strong>"
-msgstr "<strong>Q. Bultos:</strong>"
+msgid "<strong>Weight:</strong>"
+msgstr "<strong>Peso:</strong>"
 
 #. module: l10n_ar_stock_delivery
 #: model:ir.model,name:l10n_ar_stock_delivery.model_arba_cot_wizard
