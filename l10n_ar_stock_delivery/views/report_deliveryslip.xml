@@ -2,16 +2,12 @@
 <odoo>
     <template id="report_delivery_document" inherit_id="l10n_ar_stock.report_delivery_document">
 
-        <t t-if="o.declared_value" position="after">
+        <t t-if="o.number_of_packages" position="after">
+            <span t-if="o.number_of_packages and o.weight"> - </span>
             <t t-if="o.weight">
-                <br/><strong>Weight:</strong>
+                <br t-if="not o.number_of_packages"/><strong>Weight:</strong>
                 <span t-field="o.weight"/>
                 <span t-field="o.weight_uom_name"/>
-            </t>
-            <span t-if="o.number_of_packages and o.shipping_weight"> - </span>
-            <t t-if="o.number_of_packages">
-                <br t-if="not o.shipping_weight"/><strong>Packages Qty:</strong>
-                <span t-field="o.number_of_packages"/>
             </t>
             <t t-if="o.carrier_tracking_ref">
                 <br/><strong>Tracking Number:</strong>
