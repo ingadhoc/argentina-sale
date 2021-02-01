@@ -176,6 +176,11 @@ msgid "ID"
 msgstr "ID"
 
 #. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
+msgid "Invalid document as invoice"
+msgstr "Doc. no válido como factura"
+
+#. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
@@ -234,6 +239,11 @@ msgstr "Solo se permite un impuesto de IVA por línea"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
+msgid "Order"
+msgstr "Pedido"
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "Page: <span class=\"page\"/> / <span class=\"topage\"/>"
 msgstr "Página: <span class=\"page\"/> / <span class=\"topage\"/>"
 
@@ -241,6 +251,16 @@ msgstr "Página: <span class=\"page\"/> / <span class=\"topage\"/>"
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__price_unit_with_tax
 msgid "Price Unit With Tax"
 msgstr "Precio Unitario Con Impuestos"
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
+msgid "Pro-Forma Invoice"
+msgstr "Factura Pro-Forma"
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
+msgid "Quotation"
+msgstr "Presupuesto"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order__report_amount_untaxed

@@ -24,13 +24,13 @@
             <t t-set="report_number" t-value="doc.name"/>
             <!-- <t t-set="pre_printed_report" t-value="doc.journal_id.l10n_ar_afip_pos_system == 'II_IM'"/> -->
             <t t-set="document_letter" t-value="'X'"/>
-            <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
+            <t t-set="document_legend">Invalid document as invoice</t>
             <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
-                <t t-set="report_name" t-if="doc.state not in ['draft','sent']" t-value="'Order'"/>
-                <t t-set="report_name" t-if="doc.state in ['draft','sent']" t-value="'Quotation'"/>
+                <t t-set="report_name" t-if="doc.state not in ['draft','sent']">Order</t>
+                <t t-set="report_name" t-if="doc.state in ['draft','sent']">Quotation</t>
             </t>
             <t t-if="env.context.get('proforma', False) or is_pro_forma">
-                <t t-set="report_name" t-value="'Pro-Forma Invoice'"/>
+                <t t-set="report_name">Pro-Forma Invoice</t>
             </t>
             <t t-set="header_address" t-value="doc.sale_checkbook_id.report_partner_id or doc.company_id.partner_id"/>
 
