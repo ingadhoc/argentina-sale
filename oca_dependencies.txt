@@ -1,4 +1,0 @@
-ingadhoc-odoo-argentina https://github.com/ingadhoc/odoo-argentina
-ingadhoc-stock https://github.com/ingadhoc/stock
-oca-sale-workflow https://github.com/OCA/sale-workflow.git
-stock-logistics-workflow
