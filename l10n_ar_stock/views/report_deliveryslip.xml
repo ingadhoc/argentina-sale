@@ -26,7 +26,7 @@
             <t t-set="document_letter" t-value="o.document_type_id.l10n_ar_letter or 'X'"/>
             <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
             <t t-set="report_name" t-value="o.document_type_id.name or 'Comprobante de Entrega'"/>
-            <t t-set="header_address" t-value="o.picking_type_id.warehouse_id.partner_id or o.company_id.partner_id"/>
+            <t t-set="header_address" t-value="o.book_id.report_partner_id or o.picking_type_id.warehouse_id.partner_id or o.company_id.partner_id"/>
 
             <t t-set="custom_footer">
                 <div class="row">
