@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="l10n_ar_sale_stock_report_invoice_document" model="ir.ui.view">
+        <!-- <field name="name">sale_stock.move.form.inherit</field>
+        <field name="model">account.move</field> -->
+        <field name="inherit_id" ref="sale_stock.sale_stock_report_invoice_document"/>
+        <field name="arch" type="xml">
+            <table name="invoice_snln_table" position="attributes">
+                <attribute name="style">width: 75%;</attribute>
+            </table>
+            <xpath expr="//table[@name='invoice_snln_table']/thead/tr" position="inside">
+                <th class="text-right">
+                    <span>Dispatch Number</span>
+                </th>
+            </xpath>
+            <xpath expr="//table[@name='invoice_snln_table']/tbody/t/tr" position="inside">
+                <td class="text-right">
+                    <t t-esc="snln_line['dispatch_number']"/>
+                </td>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
