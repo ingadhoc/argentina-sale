@@ -9,3 +9,4 @@ from . import product_template
 from . import uom_uom
 from . import stock_production_lot
 from . import account_chart_template
+from . import account_move
