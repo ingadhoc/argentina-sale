@@ -154,5 +154,11 @@
         </div>
 
     </template>
+    <template id="sale_order_portal_content_discount" inherit_id="sale.sale_order_portal_content">
 
+        <xpath expr="//t[@t-esc='(1-line.discount / 100.0) * line.price_unit']" position="attributes">
+            <attribute name="t-esc">(1-line.discount / 100.0) * line.report_price_unit</attribute>
+        </xpath>
+
+    </template>
 </odoo>
