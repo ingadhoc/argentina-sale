@@ -118,7 +118,7 @@
 
                     <!-- (17) CUIT -->
                     <t t-if="doc.partner_id.vat and doc.partner_id.l10n_latam_identification_type_id.name and doc.partner_id.l10n_latam_identification_type_id.name != 'Sigd'">
-                        <br/><strong><t t-esc="doc.partner_id.l10n_latam_identification_type_id.name or doc.company_id.country_id.vat_label" id="inv_tax_id_label"/>:</strong> <span t-field="doc.partner_id.l10n_ar_formatted_vat"/>
+                        <br/><strong><t t-esc="doc.partner_id.l10n_latam_identification_type_id.name or doc.company_id.country_id.vat_label" id="inv_tax_id_label"/>:</strong> <span t-esc="doc.partner_id.l10n_ar_formatted_vat if doc.partner_id.l10n_latam_identification_type_id.is_vat else doc.partner_id.vat"/>
                     </t>
 
                 </div>
