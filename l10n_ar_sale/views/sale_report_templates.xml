@@ -138,11 +138,6 @@
                         <br/><strong>Payment Terms: </strong><span t-field="doc.payment_term_id.name"/>
                     </t>
 
-                    <t t-if="doc.origin">
-                        <br/><strong>Source:</strong>
-                        <span t-field="doc.origin"/>
-                    </t>
-
                     <t t-if="doc.client_order_ref">
                         <br/><strong>Your Reference:</strong>
                         <span t-field="doc.client_order_ref"/>
