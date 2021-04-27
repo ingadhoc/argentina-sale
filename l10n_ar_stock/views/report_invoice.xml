@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="l10n_ar_sale_stock_report_invoice_document" model="ir.ui.view">
-        <!-- <field name="name">sale_stock.move.form.inherit</field>
-        <field name="model">account.move</field> -->
-        <field name="inherit_id" ref="sale_stock.sale_stock_report_invoice_document"/>
-        <field name="arch" type="xml">
-            <table name="invoice_snln_table" position="attributes">
-                <attribute name="style">width: 75%;</attribute>
-            </table>
-            <xpath expr="//table[@name='invoice_snln_table']/thead/tr" position="inside">
-                <th class="text-right">
-                    <span>Dispatch Number</span>
-                </th>
-            </xpath>
-            <xpath expr="//table[@name='invoice_snln_table']/tbody/t/tr" position="inside">
-                <td class="text-right">
-                    <t t-esc="snln_line['dispatch_number']"/>
-                </td>
-            </xpath>
-        </field>
-    </record>
+    <template id="report_invoice_document" inherit_id="l10n_ar.report_invoice_document">
 
+        <t t-set="fiscal_bond" position="after">
+            <t t-set="use_lot" t-value="any(o.mapped('invoice_line_ids.move_line_ids.move_line_ids.lot_id'))"/>
+        </t>
+        <th name="th_description" position="after">
+            <th name="th_lot" t-if="use_lot" class="text-left"><span>Lot</span></th>
+        </th>
+        <td name="account_invoice_line_name" position="after">
+            <td name="td_lot" t-if="use_lot"><span t-esc="line.move_line_ids.mapped('move_line_ids.lot_id') and '%s. Despachos: %s' % ('-'.join(line.move_line_ids.mapped('move_line_ids.lot_id.name')),', '.join(line.move_line_ids.mapped('move_line_ids.lot_id').filtered('dispatch_number').mapped('dispatch_number'))) or ''"/></td>
+        </td>
+    </template>
 </odoo>
