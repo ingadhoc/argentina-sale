@@ -1,6 +1,6 @@
 {
     'name': 'Remitos, COT y demas ajustes de stock para Argentina',
-    'version': '13.0.1.13.0',
+    'version': '13.0.1.14.0',
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -8,7 +8,7 @@
     'license': 'AGPL-3',
     'depends': [
         'stock_voucher',  # por la clase receiptbooks y demas
-        'l10n_ar',
+        'l10n_ar_ux',
     ],
     'data': [
         'security/l10n_ar_stock_security.xml',
