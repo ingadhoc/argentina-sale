@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <template id="report_deliveryslip" inherit_id="stock.report_deliveryslip">
+        <t t-foreach="docs" position="replace">
+            <t t-foreach="l10n_ar_copies_list" t-as="copy_type">
+                <t>$0</t>
+            </t>
+        </t>
+    </template>
+
     <!-- we would do something like this if we want it multilocalization compatible as in l10n_latam_invoice_document -->
     <!-- <template id="report_saleorder" inherit_id="sale.report_saleorder">
         <t t-call="sale.report_saleorder_document" position="attributes">
