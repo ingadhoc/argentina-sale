@@ -8,6 +8,8 @@ class StockBook(models.Model):
         'l10n_latam.document.type',
         'Document Type',
     )
+    # TODO when CAE addded by afip for remitos, we should add a selector
+    # so that we can use with autoimpresores and electronic remitos
     l10n_ar_cai = fields.Char(
         'CAI',
         help='Solo complete este dato si es auto-impresor',

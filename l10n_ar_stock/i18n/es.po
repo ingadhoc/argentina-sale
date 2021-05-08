@@ -114,13 +114,13 @@ msgstr "Código de barras"
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
-msgid "CAE Due Date:"
-msgstr "Fecha Vto. CAE:"
+msgid "CAI Due Date:"
+msgstr "Fecha Vto. CAI:"
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
-msgid "CAE:"
-msgstr "CAE:"
+msgid "CAI:"
+msgstr "CAI:"
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_book__l10n_ar_cai
