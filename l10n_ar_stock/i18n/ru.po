@@ -103,12 +103,12 @@ msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
-msgid "CAE Due Date:"
+msgid "CAI Due Date:"
 msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
-msgid "CAE:"
+msgid "CAI:"
 msgstr ""
 
 #. module: l10n_ar_stock

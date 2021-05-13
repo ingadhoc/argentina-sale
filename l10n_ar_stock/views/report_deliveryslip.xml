@@ -43,10 +43,10 @@
                     </div>
                     <div name="footer_right_column" class="col-4 text-right">
                         <div t-if="not o.book_id.lines_per_voucher and o.book_id.l10n_ar_cai">
-                            CAE: <span t-field="o.book_id.l10n_ar_cai"/>
+                            CAI: <span t-field="o.book_id.l10n_ar_cai"/>
                         </div>
                         <div t-if="not o.book_id.lines_per_voucher and o.book_id.l10n_ar_cai_due">
-                            CAE Due Date: <span t-field="o.book_id.l10n_ar_cai_due"/>
+                            CAI Due Date: <span t-field="o.book_id.l10n_ar_cai_due"/>
                         </div>
                         <div name="pager" t-if="report_type == 'pdf'">
                             Page: <span class="page"/> / <span class="topage"/>
@@ -77,7 +77,7 @@
                     <br/>
 
                     <span t-if="commercial_partner != partner"><strong>Deliver to: </strong><span t-field="partner.name"/></span>
-                    <span t-esc="partner" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True, "no_tag_br": True}'/>
+                    <span t-esc="partner" t-options='{"widget": "contact", "fields": ["address", "phone", "mobile"], "no_marker": False, "no_tag_br": True}'/>
 
                     <!-- (16) Responsabilidad AFIP -->
                     <strong>VAT Cond: </strong><span t-field="partner.l10n_ar_afip_responsibility_type_id"/>
