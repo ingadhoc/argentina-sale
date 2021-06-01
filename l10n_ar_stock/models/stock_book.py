@@ -27,3 +27,8 @@ class StockBook(models.Model):
         '* Dirección del Almacen de la transferencia\n'
         '* Información de la compañía de la transferencia'
     )
+    report_signature_section = fields.Boolean(
+        string="Añadir sección firma",
+        help="Agregar al reporte una sección para añadir firma de confirmación de recepción.",
+        default=False,
+    )

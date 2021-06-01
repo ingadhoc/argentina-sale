@@ -115,6 +115,37 @@
             </div>
         </div>
 
+        <table name="stock_move_line_table" position="after">
+            <t t-if="o.book_id.report_signature_section">
+                <br/>
+                <br/>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th width="25%">Recibí conforme:</th>
+                            <th width="25%"></th>
+                            <th width="25%"></th>
+                            <th width="25%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Fecha: _____ / _____ / _____</th>
+                            <td><hr style="border: 1px solid #000000;"/></td>
+                            <td><hr style="border: 1px solid #000000;"/></td>
+                            <td><hr style="border: 1px solid #000000;"/></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <th style="text-align: center;">DNI</th>
+                            <th style="text-align: center;">Firma</th>
+                            <th style="text-align: center;">Aclaración</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+        </table>
+
     </template>
 
 </odoo>
