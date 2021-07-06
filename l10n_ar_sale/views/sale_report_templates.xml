@@ -97,9 +97,6 @@
             </td>
         </td>
 
-        <!-- remove payment term, this is added on information section -->
-        <p t-if="doc.payment_term_id.note" position="replace"/>
-
         <div id="informations" position="replace">
             <div id="informations" class="row mt8 mb8">
                 <div class="col-6">
