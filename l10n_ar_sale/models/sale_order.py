@@ -130,3 +130,18 @@ class SaleOrder(models.Model):
                     fmt(l[1]['amount']), fmt(l[1]['base']),
                     len(res),
                 ) for l in res]
+
+    def _get_name_sale_report(self, report_xml_id):
+        """ Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document
+        Basically it allows different localizations to define it's own report
+        This method should actually go in a sale_ux module that later can be extended by different localizations
+        Another option would be to use report_substitute module and setup a subsitution with a domain
+        """
+        self.ensure_one()
+        # como estamos en estable, para no afectar comportamiento de todos los que tienen country = False
+        # hacemos que se use reporte AR si country = False
+        # podemos borrar esto en un cambio de version con un mensaje a clientes que al actualizar pueden mantener
+        # comportamiento usando el substitution report
+        if not self.company_id.country_id or self.company_id.country_id.code == 'AR':
+            return 'l10n_ar_sale.report_saleorder_document'
+        return report_xml_id
