@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- we would do something like this if we want it multilocalization compatible as in l10n_latam_invoice_document -->
-    <!-- <template id="report_saleorder" inherit_id="sale.report_saleorder">
+    <template id="report_saleorder" inherit_id="sale.report_saleorder">
         <t t-call="sale.report_saleorder_document" position="attributes">
-            <attribute name="t-call">#{ o.get_custom_report('sale.report_saleorder_document') }</attribute>
+            <attribute name="t-call">#{ doc._get_name_sale_report('sale.report_saleorder_document') }</attribute>
         </t>
     </template>
 
     <template id="report_saleorder_pro_forma" inherit_id="sale.report_saleorder_pro_forma">
         <t t-call="sale.report_saleorder_document" position="attributes">
-            <attribute name="t-call">#{ o.get_custom_report('sale.report_saleorder_document') }</attribute>
+            <attribute name="t-call">#{ doc._get_name_sale_report('sale.report_saleorder_document') }</attribute>
         </t>
-    </template> -->
+    </template>
 
     <!-- we force priority greater than 16 so that it dont break inheritance of report_saleorder_document_inherit_sale_stock. with this we are loosing the incoterm field added but that sale_stock view -->
-    <template id="report_saleorder_document" priority="20" inherit_id="sale.report_saleorder_document">
+    <template id="report_saleorder_document" priority="20" inherit_id="sale.report_saleorder_document" primary="True">
 
         <!-- custom header and footer -->
         <t t-set="doc" position="after">
