@@ -1,4 +1,3 @@
-[![Coverage Status](https://coveralls.io/repos/ingadhoc/argentina-sale/badge.png?branch=15.0)](https://coveralls.io/r/ingadhoc/argentina-sale?branch=15.0)
 [![Code Climate](https://codeclimate.com/github/ingadhoc/argentina-sale/badges/gpa.svg)](https://codeclimate.com/github/ingadhoc/argentina-sale)
 
 # ADHOC Odoo Argentina Sale
