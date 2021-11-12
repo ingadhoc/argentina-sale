@@ -3,9 +3,7 @@
 # directory
 ##############################################################################
 from odoo import models, fields, api, _
-from functools import partial
-from odoo.tools.misc import formatLang
-# from odoo.exceptions import UserError
+import json
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -63,21 +61,6 @@ class SaleOrder(models.Model):
                 # dejamos el vat_discriminated = True
             rec.vat_discriminated = vat_discriminated
 
-    @api.depends('amount_untaxed', 'vat_discriminated')
-    def _compute_report_report_amount_untaxed(self):
-        """
-        Similar a account_document intoive pero por ahora incluimos o no todos
-        los impuestos (TODO mejorar y solo incluir impuestos IVA)
-        """
-        for order in self:
-            taxes_included = not order.vat_discriminated
-            if not taxes_included:
-                report_amount_untaxed = order.amount_untaxed
-            else:
-                report_amount_untaxed = order.amount_total - sum(
-                    x[1] for x in order.amount_by_group)
-            order.report_amount_untaxed = report_amount_untaxed
-
     @api.onchange('company_id')
     def set_sale_checkbook(self):
         if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
@@ -98,7 +81,7 @@ class SaleOrder(models.Model):
                 sale_checkbook.sequence_id._next() or _('New')
         return super(SaleOrder, self).create(vals)
 
-    def _amount_by_group(self):
+    def _compute_tax_totals_json(self):
         for order in self:
             # Hacemos esto para disponer de fecha del pedido y cia para calcular
             # impuesto con código python (por ej. para ARBA).
@@ -107,29 +90,18 @@ class SaleOrder(models.Model):
             date_order = order.date_order or fields.Date.context_today(order)
             order = order.with_context(invoice_date=date_order)
             if order.vat_discriminated:
-                super(SaleOrder, order)._amount_by_group()
+                super(SaleOrder, order)._compute_tax_totals_json()
             else:
-                currency = order.currency_id or order.company_id.currency_id
-                fmt = partial(formatLang, self.with_context(lang=order.partner_id.lang).env, currency_obj=currency)
-                res = {}
-                for line in order.order_line:
-                    price_reduce = line.price_unit * (1.0 - line.discount / 100.0)
-                    taxes = line.report_tax_id.compute_all(
-                        price_reduce, quantity=line.product_uom_qty, product=line.product_id,
-                        partner=order.partner_shipping_id)['taxes']
-                    for tax in line.report_tax_id:
-                        group = tax.tax_group_id
-                        res.setdefault(group, {'amount': 0.0, 'base': 0.0})
-                        for t in taxes:
-                            if t['id'] == tax.id or t['id'] in tax.children_tax_ids.ids:
-                                res[group]['amount'] += t['amount']
-                                res[group]['base'] += t['base']
-                res = sorted(res.items(), key=lambda l: l[0].sequence)
-                order.amount_by_group = [(
-                    l[0].name, l[1]['amount'], l[1]['base'],
-                    fmt(l[1]['amount']), fmt(l[1]['base']),
-                    len(res),
-                ) for l in res]
+                def compute_taxes(order_line):
+                    price = order_line.price_unit * (1 - (order_line.discount or 0.0) / 100.0)
+                    order = order_line.order_id
+                    return order_line.report_tax_id._origin.compute_all(price, order.currency_id, order_line.product_uom_qty, product=order_line.product_id, partner=order.partner_shipping_id)
+
+                account_move = self.env['account.move']
+                for order in self:
+                    tax_lines_data = account_move._prepare_tax_lines_data_for_totals_from_object(order.order_line, compute_taxes)
+                    tax_totals = account_move._get_tax_totals(order.partner_id, tax_lines_data, order.amount_total, order.amount_untaxed, order.currency_id)
+                    order.tax_totals_json = json.dumps(tax_totals)
 
     def _get_name_sale_report(self, report_xml_id):
         """ Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document
