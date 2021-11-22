@@ -9,7 +9,6 @@
     'depends': [
         'stock_voucher',  # por la clase receiptbooks y demas
         'l10n_ar_ux',
-        'stock_picking_invoice_link',
     ],
     'data': [
         'security/l10n_ar_stock_security.xml',
