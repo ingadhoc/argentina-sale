@@ -57,7 +57,7 @@
         </t>
 
         <!-- remove default partner address -->
-        <t t-set="address" position="replace"/>
+        <div name="div_incoming_address" position="replace"/>
 
         <!-- remove default document title -->
         <h2 position="replace"/>

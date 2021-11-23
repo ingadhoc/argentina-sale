@@ -86,8 +86,7 @@ class StockPicking(models.Model):
         # TODO ver de donde obtener estos datos
         nro_planta = '000'
         nro_puerta = '000'
-        nro_secuencial = self.env['ir.sequence'].with_context(
-            force_company=company.id).next_by_code('arba.cot.file')
+        nro_secuencial = self.env['ir.sequence'].with_company(company).next_by_code('arba.cot.file')
         if not nro_secuencial:
             raise UserError(_(
                 'No sequence found for COT files (code = "arba.cot.file") on '
@@ -464,8 +463,8 @@ class StockPicking(models.Model):
 
         return True
 
-    def action_done(self):
-        res = super().action_done()
+    def _action_done(self):
+        res = super()._action_done()
         for rec in self.filtered(
                 lambda x: x.picking_type_code == 'incoming' and
                 x.dispatch_number):
