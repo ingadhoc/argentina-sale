@@ -1,4 +1,6 @@
 from odoo import models, api, fields, _
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 try:
     from pyafipws.cot import COT
 except ImportError:
