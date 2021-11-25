@@ -39,4 +39,10 @@
 
     </template>
 
+    <template id="sale_order_portal_content_totals_table" inherit_id="sale.sale_order_portal_content_totals_table" name="Sales Order Totals">
+        <t t-set="tax_totals" position="attributes">
+            <attribute name="t-value">sale_order._l10n_ar_get_invoice_totals_for_report()</attribute>
+        </t>
+    </template>
+
 </odoo>
