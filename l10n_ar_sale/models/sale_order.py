@@ -81,23 +81,27 @@ class SaleOrder(models.Model):
                 sale_checkbook.sequence_id._next() or _('New')
         return super(SaleOrder, self).create(vals)
 
-    def _l10n_ar_get_invoice_totals_for_report(self):
-        self.ensure_one()
+    def _compute_tax_totals_json(self):
+        for order in self:
+            # Hacemos esto para disponer de fecha del pedido y cia para calcular
+            # impuesto con código python (por ej. para ARBA).
+            # lo correcto seria que esto este en un modulo que dependa de l10n_ar_account_withholding, pero queremos
+            # evitar ese modulo adicional por ahora
+            date_order = order.date_order or fields.Date.context_today(order)
+            order = order.with_context(invoice_date=date_order)
+            if order.vat_discriminated:
+                super(SaleOrder, order)._compute_tax_totals_json()
+            else:
+                def compute_taxes(order_line):
+                    price = order_line.price_unit * (1 - (order_line.discount or 0.0) / 100.0)
+                    order = order_line.order_id
+                    return order_line.report_tax_id._origin.compute_all(price, order.currency_id, order_line.product_uom_qty, product=order_line.product_id, partner=order.partner_shipping_id)
 
-        def compute_taxes(order_line):
-            price = order_line.price_unit * (1 - (order_line.discount or 0.0) / 100.0)
-            order = order_line.order_id
-            return order_line.report_tax_id._origin.compute_all(price, order.currency_id, order_line.product_uom_qty, product=order_line.product_id, partner=order.partner_shipping_id)
-
-        account_move = self.env['account.move']
-        tax_lines_data = account_move._prepare_tax_lines_data_for_totals_from_object(self.order_line, compute_taxes)
-
-        if not self.vat_discriminated:
-            amount_untaxed = self.currency_id.round(
-                self.amount_total - sum([x['tax_amount'] for x in tax_lines_data if 'tax_amount' in x]))
-        else:
-            amount_untaxed = self.amount_untaxed
-        return account_move._get_tax_totals(self.partner_id, tax_lines_data, self.amount_total, amount_untaxed, self.currency_id)
+                account_move = self.env['account.move']
+                for order in self:
+                    tax_lines_data = account_move._prepare_tax_lines_data_for_totals_from_object(order.order_line, compute_taxes)
+                    tax_totals = account_move._get_tax_totals(order.partner_id, tax_lines_data, order.amount_total, order.amount_untaxed, order.currency_id)
+                    order.tax_totals_json = json.dumps(tax_totals)
 
     def _get_name_sale_report(self, report_xml_id):
         """ Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document

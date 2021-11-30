@@ -81,10 +81,6 @@
             <attribute name="t-field">line.report_price_subtotal</attribute>
         </span>
 
-        <t t-set="tax_totals" position="attributes">
-            <attribute name="t-value">doc._l10n_ar_get_invoice_totals_for_report()</attribute>
-        </t>
-
         <!-- use column vat instead of taxes and only if vat discriminated -->
         <th name="th_taxes" position="replace">
             <th t-if="doc.vat_discriminated" name="th_taxes" t-attf-class="text-left {{ 'd-md-table-cell' if report_type == 'html' else '' }}"><span>% VAT</span></th>
