@@ -33,7 +33,7 @@
         <!-- use column vat instead of taxes and only list vat taxes-->
         <td t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}" position="replace">
             <td t-if="sale_order.vat_discriminated" t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
-                <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)))"/>
+                <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)))"/>
             </td>
         </td>
 

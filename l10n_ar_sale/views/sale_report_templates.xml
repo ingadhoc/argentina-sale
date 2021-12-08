@@ -58,7 +58,7 @@
         </xpath>
 
         <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_id))" position="attributes">
-            <attribute name="t-esc">', '.join(map(lambda x: (x.description or x.name), line.report_tax_id))</attribute>
+            <attribute name="t-out">', '.join(map(lambda x: (x.description or x.name), line.report_tax_id))</attribute>
         </span>
 
         <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" position="attributes">
@@ -88,7 +88,7 @@
         <!-- use column vat instead of taxes and only list vat taxes-->
         <td name="td_taxes" class="text-right" position="replace">
             <td t-if="doc.vat_discriminated" name="td_taxes" class="text-right">
-                <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)))" id="line_tax_ids"/>
+                <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)))" id="line_tax_ids"/>
             </td>
         </td>
 
@@ -110,7 +110,7 @@
 
                     <!-- (17) CUIT -->
                     <t t-if="doc.partner_id.vat and doc.partner_id.l10n_latam_identification_type_id.name and doc.partner_id.l10n_latam_identification_type_id.name != 'Sigd'">
-                        <br/><strong><t t-esc="doc.partner_id.l10n_latam_identification_type_id.name or doc.company_id.country_id.vat_label" id="inv_tax_id_label"/>:</strong> <span t-esc="doc.partner_id.l10n_ar_formatted_vat or doc.partner_id.vat"/>
+                        <br/><strong><t t-out="doc.partner_id.l10n_latam_identification_type_id.name or doc.company_id.country_id.vat_label" id="inv_tax_id_label"/>:</strong> <span t-out="doc.partner_id.l10n_ar_formatted_vat or doc.partner_id.vat"/>
                     </t>
 
                 </div>
