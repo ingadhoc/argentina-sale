@@ -77,14 +77,14 @@
                     <br/>
 
                     <span t-if="commercial_partner != partner"><strong>Deliver to: </strong><span t-field="partner.name"/></span>
-                    <span t-esc="partner" t-options='{"widget": "contact", "fields": ["address", "phone", "mobile"], "no_marker": False, "no_tag_br": True}'/>
+                    <span t-out="partner" t-options='{"widget": "contact", "fields": ["address", "phone", "mobile"], "no_marker": False, "no_tag_br": True}'/>
 
                     <!-- (16) Responsabilidad AFIP -->
                     <strong>VAT Cond: </strong><span t-field="partner.l10n_ar_afip_responsibility_type_id"/>
 
                     <!-- (17) CUIT -->
                     <t t-if="partner.vat and partner.l10n_latam_identification_type_id.name and partner.l10n_latam_identification_type_id.name != 'Sigd'">
-                        <br/><strong><t t-esc="partner.l10n_latam_identification_type_id.name or o.company_id.country_id.vat_label" id="inv_tax_id_label"/>:</strong> <span t-esc="partner.l10n_ar_formatted_vat or partner.vat"/>
+                        <br/><strong><t t-out="partner.l10n_latam_identification_type_id.name or o.company_id.country_id.vat_label" id="inv_tax_id_label"/>:</strong> <span t-out="partner.l10n_ar_formatted_vat or partner.vat"/>
                     </t>
 
                 </div>
