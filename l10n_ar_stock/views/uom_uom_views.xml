@@ -10,8 +10,32 @@
                 <label for="arba_code"/>
                 <div class="oe_inline">
                     <field name="arba_code" class="oe_inline"/>
-                     <a target="_blank" href="http://www.arba.gov.ar/bajadas/Fiscalizacion/Operativos/TransporteBienes/Documentacion/20080701-TB-TablasDeValidacion.pdf" class="oe_edit_only oe_inline">Ver códigos</a>
+                    <button name="action_arba_codes" type="object" string="Ver códigos" class="oe_edit_only oe_inline"/>
                 </div>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_uom_tree_view" model="ir.ui.view">
+        <field name="name">uom.uom.tree</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_tree_view"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="arba_code" optional="show"/>
+                <button name="action_arba_codes" type="object" help="Ver códigos" icon="fa-external-link"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="product_uom_categ_form_view" model="ir.ui.view">
+        <field name="name">uom.category.form</field>
+        <field name="model">uom.category</field>
+        <field name="inherit_id" ref="uom.product_uom_categ_form_view"/>
+        <field name="arch" type="xml">
+            <field name="rounding" position="after">
+                <field name="arba_code" optional="show"/>
+                <button name="action_arba_codes" type="object" help="Ver códigos" icon="fa-external-link"/>
             </field>
         </field>
     </record>
