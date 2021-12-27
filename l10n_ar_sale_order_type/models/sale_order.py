@@ -23,7 +23,7 @@ class SaleOrder(models.Model):
             sale_checkbook = self.env['sale.checkbook'].browse(vals['sale_checkbook_id'])
             if sale_checkbook.sequence_id:
                 for record in self:
-                    if (
+                    if record.sale_checkbook_id != sale_checkbook and (
                         record.state in {"draft", "sent"}
                         and record.type_id.sequence_id != sale_checkbook.sequence_id
                     ):
