@@ -25,40 +25,19 @@ class SaleOrder(models.Model):
 
     @api.depends(
         'partner_id.l10n_ar_afip_responsibility_type_id',
-        'company_id.partner_id.l10n_ar_afip_responsibility_type_id',)
+        'company_id.l10n_ar_company_requires_vat',)
     def _compute_vat_discriminated(self):
-        use_sale_checkbook = self.env.user.has_group(
-            'l10n_ar_sale.use_sale_checkbook')
         for rec in self:
-            l10n_ar_afip_responsibility_type = rec.partner_id.commercial_partner_id.l10n_ar_afip_responsibility_type_id
-            # si tiene checkbook y discrimna en funcion al partner pero
-            # no tiene responsabilidad seteada, dejamos comportamiento nativo
-            # de odoo de discriminar impuestos
-            if use_sale_checkbook and rec.sale_checkbook_id:
-                discriminate_taxes = rec.sale_checkbook_id.discriminate_taxes
-                if discriminate_taxes == 'yes':
-                    vat_discriminated = True
-                elif discriminate_taxes == 'no':
-                    vat_discriminated = False
-                else:
-                    vat_discriminated = rec.company_id.l10n_ar_company_requires_vat and \
-                        l10n_ar_afip_responsibility_type.code in ['1'] or False
-                rec.vat_discriminated = vat_discriminated
-                continue
-
-            # dejamos esto por compatibilidad hacia atras sin sale.checkbook
-            vat_discriminated = True
-            company_vat_type = rec.company_id.sale_allow_vat_no_discrimination
-            if company_vat_type and company_vat_type != 'discriminate':
-                if l10n_ar_afip_responsibility_type:
-                    # si tiene responsabilidad evaluamos segun responsabilidad
-                    vat_discriminated = rec.company_id.l10n_ar_company_requires_vat and \
-                        l10n_ar_afip_responsibility_type.code in ['1'] or False
-                elif company_vat_type == 'no_discriminate_default':
-                    # si no tiene responsabilidad y no se discriinar por defecto, no discriminamos
-                    vat_discriminated = False
-                # si no tenia responsabilidad y no era no_discriminate_default, entonces es discriminate_default
-                # dejamos el vat_discriminated = True
+            # si tiene checkbook y discrimna en funcion al partner pero no tiene responsabilidad seteada,
+            # dejamos comportamiento nativo de odoo de discriminar impuestos
+            discriminate_taxes = rec.sale_checkbook_id.discriminate_taxes
+            if discriminate_taxes == 'yes':
+                vat_discriminated = True
+            elif discriminate_taxes == 'no':
+                vat_discriminated = False
+            else:
+                vat_discriminated = rec.company_id.l10n_ar_company_requires_vat and \
+                    rec.partner_id.l10n_ar_afip_responsibility_type_id.code in ['1'] or False
             rec.vat_discriminated = vat_discriminated
 
     @api.onchange('company_id')
