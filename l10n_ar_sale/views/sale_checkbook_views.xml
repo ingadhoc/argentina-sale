@@ -37,6 +37,7 @@
                     <group>
                         <group>
                             <field name="name"/>
+                            <field name="name"/>
                             <field name="discriminate_taxes"/>
                             <field name="report_partner_id"/>
                         </group>
