@@ -7,7 +7,7 @@ from odoo import models, api
 
 class AccountChartTemplate(models.Model):
     _inherit = 'account.chart.template'
-
+    _inherit = 'account.chart.template'
     def _load_template(
             self, company, code_digits=None,
             account_ref=None, taxes_ref=None):
