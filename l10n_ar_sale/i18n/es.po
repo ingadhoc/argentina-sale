@@ -135,11 +135,9 @@ msgstr "Creado en"
 #: code:addons/l10n_ar_sale/models/sale_order_line.py:0
 #, python-format
 msgid ""
-"Debe haber un y solo un impuestos de IVA por línea. Verificar líneas con "
-"producto \"%s\""
+"Debe haber un único impuesto IVA por línea, agréguelo a \"%s\". En "
+"caso de tenerlo, revise la configuración del impuesto."
 msgstr ""
-"Debe haber un y solo un impuestos de IVA por línea. Verificar líneas con "
-"producto \"%s\""
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,help:l10n_ar_sale.field_res_company__sale_allow_vat_no_discrimination
