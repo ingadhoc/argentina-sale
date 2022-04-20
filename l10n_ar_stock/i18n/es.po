@@ -3,18 +3,16 @@
 # 	* l10n_ar_stock
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2020
-# Juan Carreras <jc@adhoc.com.ar>, 2020
-# Juan Rivero <jr@adhoc.com.ar>, 2021
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0\n"
+"Project-Id-Version: Odoo Server 15.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-14 20:16+0000\n"
-"PO-Revision-Date: 2020-04-10 19:14+0000\n"
-"Last-Translator: Juan Rivero <jr@adhoc.com.ar>, 2021\n"
-"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
+"POT-Creation-Date: 2022-04-20 14:28+0000\n"
+"PO-Revision-Date: 2022-04-14 11:59+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/133229/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -27,13 +25,11 @@ msgid ""
 "(el usuario es el CUIT). Si da error en nombre de archivo entonces la clave "
 "es correcta."
 msgstr ""
-"(el usuario es el CUIT). Si da error en nombre de archivo entonces la clave "
-"es correcta."
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_arba_cot_wizard__patente_acomplado
 msgid "3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
-msgstr "3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
@@ -44,6 +40,11 @@ msgstr "<br/><strong>Referencia del cliente:</strong>"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
 msgid "<br/><strong>Declared Value:</strong>"
 msgstr "<br/><strong>Valor Declarado:</strong>"
+
+#. module: l10n_ar_stock
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
+msgid "<br/><strong>PO Number:</strong>"
+msgstr "<br/><strong>Nro. de OC:</strong>"
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
@@ -90,6 +91,18 @@ msgid "Account Chart Template"
 msgstr "Plantilla de Plan de Cuentas"
 
 #. module: l10n_ar_stock
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
+msgid "Aclaración"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,help:l10n_ar_stock.field_stock_book__report_signature_section
+msgid ""
+"Agregar al reporte una sección para añadir firma de confirmación de "
+"recepción."
+msgstr ""
+
+#. module: l10n_ar_stock
 #: model:res.groups,name:l10n_ar_stock.arba_cot_enabled
 msgid "Arba COT enabled"
 msgstr "COT de ARBA habilitado"
@@ -105,12 +118,22 @@ msgstr "Código de ARBA"
 #: model:ir.actions.act_window,name:l10n_ar_stock.action_arba_cot_wizard
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.view_arba_cot_wizard
 msgid "Asistente para Código de Operaciones de Traslado"
-msgstr "Asistente para Código de Operaciones de Traslado"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_book__report_signature_section
+msgid "Añadir sección firma"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
 msgid "Barcode"
 msgstr "Código de barras"
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_book__l10n_ar_cai
+msgid "CAI"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
@@ -120,27 +143,22 @@ msgstr "Fecha Vto. CAI:"
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
 msgid "CAI:"
-msgstr "CAI:"
-
-#. module: l10n_ar_stock
-#: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_book__l10n_ar_cai
-msgid "CAI"
-msgstr "CAI"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_picking__cot
 msgid "COT"
-msgstr "COT"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_picking__cot_numero_comprobante
 msgid "COT - Nro Comprobante"
-msgstr "COT - Nro Comprobante"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_picking__cot_numero_unico
 msgid "COT - Nro Único"
-msgstr "COT - Nro Único"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.view_arba_cot_wizard
@@ -151,18 +169,18 @@ msgstr "Cancelar"
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_res_company__arba_cot
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_res_config_settings__arba_cot
 msgid "Clave COT"
-msgstr "Clave COT"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.res_config_settings_view_form
 msgid "Clave COT ARBA"
-msgstr "Clave COT ARBA"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_res_company__arba_cot
 #: model:ir.model.fields,help:l10n_ar_stock.field_res_config_settings__arba_cot
 msgid "Clave para generación de remito electŕonico"
-msgstr "Clave para generación de remito electŕonico"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_res_company
@@ -172,12 +190,17 @@ msgstr "Compañías"
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_res_config_settings
 msgid "Config Settings"
-msgstr "Opciones de Configuración"
+msgstr "Opciones de configuración"
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.view_arba_cot_wizard
 msgid "Confirm"
 msgstr "Confirmar"
+
+#. module: l10n_ar_stock
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_book__report_partner_id
+msgid "Contacto para Encabezado"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__create_uid
@@ -188,6 +211,11 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__create_date
 msgid "Created on"
 msgstr "Creado el"
+
+#. module: l10n_ar_stock
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
+msgid "DNI"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__datetime_out
@@ -223,7 +251,7 @@ msgstr ""
 #: code:addons/l10n_ar_stock/models/product_template.py:0
 #, python-format
 msgid "El código según nomenclador de arba debe ser de 6 dígitos numéricos"
-msgstr "El código según nomenclador de arba debe ser de 6 dígitos numéricos"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
@@ -232,8 +260,6 @@ msgid ""
 "Error al presentar remito:\n"
 "%s"
 msgstr ""
-"Error al presentar remito:\n"
-"%s"
 
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
@@ -242,8 +268,6 @@ msgid ""
 "Error al presentar remito:\n"
 "* %s"
 msgstr ""
-"Error al presentar remito:\n"
-"* %s"
 
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
@@ -254,10 +278,6 @@ msgid ""
 "* Codigo Error: %s\n"
 "* Mensaje Error: %s"
 msgstr ""
-"Error al presentar remito:\n"
-"* Tipo Error: %s\n"
-"* Codigo Error: %s\n"
-"* Mensaje Error: %s"
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_arba_cot_wizard__datetime_out
@@ -265,8 +285,16 @@ msgid ""
 "Fecha de salida. No debe ser inferior a ayer ni superior a dentro de 30 "
 "días."
 msgstr ""
-"Fecha de salida. No debe ser inferior a ayer ni superior a dentro de 30 "
-"días."
+
+#. module: l10n_ar_stock
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
+msgid "Fecha: _____ / _____ / _____"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
+msgid "Firma"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__id
@@ -276,7 +304,7 @@ msgstr "ID"
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__importe
 msgid "Importe Neto"
-msgstr "Importe Neto"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.res_config_settings_view_form
@@ -284,8 +312,6 @@ msgid ""
 "Indique la clave COT utilizada para generación de remito electrónico / COT. "
 "Puede probarla intentando subir cualquier archivo en este"
 msgstr ""
-"Indique la clave COT utilizada para generación de remito electrónico / COT. "
-"Puede probarla intentando subir cualquier archivo en este"
 
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
@@ -294,8 +320,6 @@ msgid ""
 "Las provincias de origen y destino son obligatorias y deben tener un código "
 "válido"
 msgstr ""
-"Las provincias de origen y destino son obligatorias y deben tener un código "
-"válido"
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard____last_update
@@ -316,7 +340,7 @@ msgstr "Última actualización el"
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
 #, python-format
 msgid "Los remitos seleccionados deben pertenecer a la misma compañía"
-msgstr "Los remitos seleccionados deben pertenecer a la misma compañía"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_stock_production_lot
@@ -326,12 +350,12 @@ msgstr "Lote/Número de serie"
 #. module: l10n_ar_stock
 #: model:ir.model.fields.selection,name:l10n_ar_stock.selection__arba_cot_wizard__tipo_recorrido__m
 msgid "Mixto"
-msgstr "Mixto"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields.selection,name:l10n_ar_stock.selection__arba_cot_wizard__prod_no_term_dev__0
 msgid "No"
-msgstr "No"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
@@ -351,7 +375,7 @@ msgstr ""
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
 #, python-format
 msgid "No se asignó número de remito"
-msgstr "No se asignó número de remito"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
@@ -364,27 +388,27 @@ msgstr ""
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_stock_picking__cot
 msgid "Número de COT del último COT solicitado"
-msgstr "Número de COT del último COT solicitado"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_stock_picking__cot_numero_comprobante
 msgid "Número de comprobante del último COT solicitado"
-msgstr "Número de comprobante del último COT solicitado"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_stock_picking__cot_numero_unico
 msgid "Número único del último COT solicitado"
-msgstr "Número único del último COT solicitado"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.view_picking_cot_form
 msgid "Obtener COT (BETA)"
-msgstr "Obtener COT (BETA)"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.view_picking_cot_form
 msgid "Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)"
-msgstr "Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
@@ -392,14 +416,23 @@ msgid "Page: <span class=\"page\"/> / <span class=\"topage\"/>"
 msgstr "Página: <span class=\"page\"/> / <span class=\"topage\"/>"
 
 #. module: l10n_ar_stock
+#: model:ir.model.fields,help:l10n_ar_stock.field_stock_book__report_partner_id
+msgid ""
+"Para el encabezado de los remitos/comprobantes de entrega, la información a utilizar se obtendrá del primer datos definido de estos lugares:\n"
+"* Este campo\n"
+"* Dirección del Almacen de la transferencia\n"
+"* Información de la compañía de la transferencia"
+msgstr ""
+
+#. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__patente_acomplado
 msgid "Patente Acomplado"
-msgstr "Patente Acomplado"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__patente_vehiculo
 msgid "Patente Vehiculo"
-msgstr "Patente Vehiculo"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_res_config_settings__group_arba_cot_enabled
@@ -407,8 +440,6 @@ msgid ""
 "Permite generar el COT de arba una vez que se han asignado números de "
 "remitos en las entregas"
 msgstr ""
-"Permite generar el COT de arba una vez que se han asignado números de "
-"remitos en las entregas"
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.res_config_settings_view_form
@@ -416,14 +447,12 @@ msgid ""
 "Permite generar el COT de arba una vez que se han asignado números de "
 "remitos en las entregas."
 msgstr ""
-"Permite generar el COT de arba una vez que se han asignado números de "
-"remitos en las entregas."
 
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
 #, python-format
 msgid "Picking has no \"Document type\" linked (Id: %s)"
-msgstr "Picking has no \"Document type\" linked (Id: %s)"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_product_template
@@ -433,23 +462,28 @@ msgstr "Plantilla de producto"
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_uom_uom
 msgid "Product Unit of Measure"
-msgstr "Unidad de Medida de Producto"
+msgstr "Unidad de medida del producto"
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__prod_no_term_dev
 msgid "Productos no terminados / devoluciones"
-msgstr "Productos no terminados / devoluciones"
+msgstr ""
+
+#. module: l10n_ar_stock
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
+msgid "Recibí conforme:"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
 #, python-format
 msgid "Remito Electrónico Solicitado"
-msgstr "Remito Electrónico Solicitado"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.view_picking_cot_form
 msgid "Remito electrónico (COT)"
-msgstr "Remito electrónico (COT)"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_arba_cot_wizard__patente_vehiculo
@@ -457,18 +491,16 @@ msgid ""
 "Requerido si CUIT Transportista = CUIT Compañía\n"
 "3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
 msgstr ""
-"Requerido si CUIT Transportista = CUIT Compañía\n"
-"3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields.selection,name:l10n_ar_stock.selection__arba_cot_wizard__tipo_recorrido__r
 msgid "Rural"
-msgstr "Rural"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields.selection,name:l10n_ar_stock.selection__arba_cot_wizard__prod_no_term_dev__1
 msgid "Si"
-msgstr "Si"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_stock_picking__dispatch_number
@@ -476,8 +508,6 @@ msgid ""
 "Si define un número de despacho, al validar la transferencia, el mismo será "
 "asociado a los lotes sin número de despacho vinculados a la transferencia."
 msgstr ""
-"Si define un número de despacho, al validar la transferencia, el mismo será "
-"asociado a los lotes sin número de despacho vinculados a la transferencia."
 
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/stock_picking.py:0
@@ -486,14 +516,12 @@ msgid ""
 "Si el CUIT de la compañía y el cuit del transportista son el mismo, se debe "
 "informar la patente del vehículo."
 msgstr ""
-"Si el CUIT de la compañía y el cuit del transportista son el mismo, se debe "
-"informar la patente del vehículo."
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,help:l10n_ar_stock.field_stock_book__l10n_ar_cai
 #: model:ir.model.fields,help:l10n_ar_stock.field_stock_book__l10n_ar_cai_due
 msgid "Solo complete este dato si es auto-impresor"
-msgstr "Solo complete este dato si es auto-impresor"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_stock_book
@@ -503,7 +531,7 @@ msgstr "Talonario de Remitos"
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__tipo_recorrido
 msgid "Tipo Recorrido"
-msgstr "Tipo Recorrido"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_stock_picking
@@ -513,32 +541,34 @@ msgstr "Albarán"
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__partner_id
 msgid "Transportista"
-msgstr "Transportista"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields.selection,name:l10n_ar_stock.selection__arba_cot_wizard__tipo_recorrido__u
 msgid "Urbano"
-msgstr "Urbano"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_res_config_settings__group_arba_cot_enabled
 msgid "Usar COT de ARBA?"
-msgstr "Usar COT de ARBA?"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_stock_book__l10n_ar_cai_due
 msgid "Vencimiento CAI"
-msgstr "Vencimiento CAI"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.product_template_form_view
 msgid "Ver Nomenclador"
-msgstr "Ver Nomenclador"
+msgstr ""
 
 #. module: l10n_ar_stock
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock.product_uom_categ_form_view
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.product_uom_form_view
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock.product_uom_tree_view
 msgid "Ver códigos"
-msgstr "Ver códigos"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: code:addons/l10n_ar_stock/models/res_company.py:0
@@ -549,9 +579,9 @@ msgstr "Tiene que configurar COT de ARBA en la empresa %s"
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_arba_cot_wizard
 msgid "arba.cot.wizard"
-msgstr "arba.cot.wizard"
+msgstr ""
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.res_config_settings_view_form
 msgid "link"
-msgstr "link"
+msgstr ""
