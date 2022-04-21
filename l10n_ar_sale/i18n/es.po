@@ -135,8 +135,9 @@ msgstr "Creado en"
 #: code:addons/l10n_ar_sale/models/sale_order_line.py:0
 #, python-format
 msgid ""
-"Debe haber un único impuesto IVA por línea, agréguelo a \"%s\". En "
-"caso de tenerlo, revise la configuración del impuesto."
+"Debe haber un único impuesto del grupo de impuestos \"IVA\" por línea, agréguelo a \"%s\". "
+"En caso de tenerlo, revise la configuración del impuesto, en opciones avanzadas, "
+"en el campo correspondiente \"Grupo de Impuestos\"."
 msgstr ""
 
 #. module: l10n_ar_sale
