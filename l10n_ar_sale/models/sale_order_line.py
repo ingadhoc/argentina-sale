@@ -121,8 +121,9 @@ class SaleOrderLine(models.Model):
                 lambda x: x.tax_group_id.l10n_ar_vat_afip_code)
             if len(vat_taxes) != 1:
                 raise UserError(_(
-                    'Debe haber un único impuesto IVA por línea, agréguelo a "%s". '
-                    'En caso de tenerlo, revise la configuración del impuesto.' % (
+                    'Debe haber un único impuesto del grupo de impuestos "IVA" por línea, agréguelo a "%s". '
+                    'En caso de tenerlo, revise la configuración del impuesto, en opciones avanzadas, '
+                    'en el campo correspondiente "Grupo de Impuestos".' % (
                         rec.product_id.name)))
 
     def write(self, vals):
