@@ -94,9 +94,9 @@
                         <strong>Order:</strong>
                         <span t-field="o.origin"/>
                     </t>
-                    <t t-if="o._fields.get('purchase_order_number') and o.purchase_order_number">
+                    <t t-if="o._fields.get('purchase_order_number') and o.sudo().purchase_order_number">
                       <br/><strong>PO Number:</strong>
-                      <span t-field="o.purchase_order_number"/>
+                      <span t-field="o.sudo().purchase_order_number"/>
                     </t>
                     <t t-if="o._fields.get('sale_id') and o.sudo().sale_id.client_order_ref">
                         <br/><strong>Customer Reference:</strong>
