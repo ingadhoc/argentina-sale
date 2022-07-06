@@ -61,6 +61,14 @@ class SaleOrder(models.Model):
         return super(SaleOrder, self).create(vals)
 
     def _compute_tax_totals_json(self):
+        # usamos mismo approach que teniamos para facturas en v13, es decir, con esto sabemos si se está solicitando el
+        # json desde reporte o qweb y en esos casos vemos de incluir impuestos, pero en backend siempre discriminamos
+        # eventualmente podemos usar mismo approach de facturas en v15 donde ya no se hace asi, si no que cambiamos
+        # el reporte de facturas usando nuevo metodo _l10n_ar_get_invoice_totals_for_report
+        report_or_portal_view = 'commit_assetsbundle' in self.env.context or \
+            not self.env.context.get('params', {}).get('view_type') == 'form'
+        if not report_or_portal_view:
+            return super()._compute_tax_totals_json()
         for order in self:
             # Hacemos esto para disponer de fecha del pedido y cia para calcular
             # impuesto con código python (por ej. para ARBA).
