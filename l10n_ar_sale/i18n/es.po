@@ -217,10 +217,6 @@ msgstr "Factura Pro-Forma"
 msgid "Quotation"
 msgstr "Presupuesto"
 
-#. module: l10n_ar_sale
-#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order__report_amount_untaxed
-msgid "Report Amount Untaxed"
-msgstr "Informe del Valor sin Impuestos"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__report_partner_id

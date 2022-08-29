@@ -11,9 +11,6 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    report_amount_untaxed = fields.Monetary(
-        compute='_compute_report_report_amount_untaxed'
-    )
     vat_discriminated = fields.Boolean(
         compute='_compute_vat_discriminated',
     )
