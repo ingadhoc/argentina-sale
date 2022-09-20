@@ -57,7 +57,12 @@
         </t>
 
         <!-- remove default partner address -->
-        <div name="div_incoming_address" position="replace"/>
+        <t t-set="address" position="attributes">
+          <attribute name="t-value">False</attribute>
+        </t>
+        <t t-set="information_block" position="attributes">
+          <attribute name="t-value">False</attribute>
+        </t>
 
         <!-- remove default document title -->
         <h2 position="replace"/>
