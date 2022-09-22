@@ -74,7 +74,7 @@ class StockPicking(models.Model):
             raise UserError(_(
                 'Los remitos seleccionados deben pertenecer a la misma '
                 'compañía'))
-        cuit = company.partner_id.ensure_vat()
+        cuit = self._context.get('force_arba_cuit') or company.partner_id.ensure_vat()
         cuit_carrier = carrier_partner.ensure_vat()
 
         if cuit_carrier == cuit and not patente_vehiculo:
@@ -248,7 +248,7 @@ class StockPicking(models.Model):
                 cuit,
 
                 # ORIGEN_RAZON_SOCIAL
-                company.name[:50],
+                self._context.get('force_arba_name') or company.name[:50],
 
                 # EMISOR_TENEDOR: 0=no, 1=si
                 # TODO implementar

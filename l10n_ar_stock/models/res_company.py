@@ -33,7 +33,7 @@ class ResCompany(models.Model):
         Method to be called
         """
         self.ensure_one()
-        cuit = self.partner_id.ensure_vat()
+        cuit = self._context.get('force_arba_cuit') or self.partner_id.ensure_vat()
 
         if not self.arba_cot:
             raise UserError(_(
@@ -51,7 +51,7 @@ class ResCompany(models.Model):
         # wrapper=None, cacert=None, trace=False, testing=""
         arba_cot_url = self.get_arba_cot_login_url(environment_type)
         ws.Usuario = cuit
-        ws.Password = self.arba_cot
+        ws.Password = self._context.get('force_arba_password') or self.arba_cot
         ws.Conectar(url=arba_cot_url)
         _logger.info(
             'Connection getted to ARBA COT with url "%s" and CUIT %s' % (
