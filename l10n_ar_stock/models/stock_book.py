@@ -32,3 +32,7 @@ class StockBook(models.Model):
         help="Agregar al reporte una sección para añadir firma de confirmación de recepción.",
         default=False,
     )
+    arba_cot = fields.Char(
+        'Clave COT',
+        help='Si no está definido, se utilizará el valor del COT de a compañía',
+    )
