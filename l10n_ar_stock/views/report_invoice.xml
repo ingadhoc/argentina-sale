@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- TODO re-enable when stock_picking_invoice_link re-added -->
-    <!-- <template id="report_invoice_document" inherit_id="l10n_ar.report_invoice_document">
+    <template id="report_invoice_document" inherit_id="l10n_ar.report_invoice_document">
 
         <div name="comment" position="after">
             <p t-if="any(x.lot_id.dispatch_number for x in o.mapped('invoice_line_ids.move_line_ids.move_line_ids'))" name="dispach">
@@ -16,6 +15,6 @@
                 <span t-out="', '.join(o.picking_ids.mapped('voucher_ids.display_name')) or ''"/>
             </t>
         </t>
-    </template> -->
+    </template>
 
 </odoo>
