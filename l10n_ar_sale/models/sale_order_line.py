@@ -96,7 +96,7 @@ class SaleOrderLine(models.Model):
             line.report_price_net = report_price_net
             line.report_tax_id = not_included_taxes
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         rec = super(SaleOrderLine, self).create(vals)
         rec.check_vat_tax()

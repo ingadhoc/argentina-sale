@@ -25,7 +25,6 @@ class SaleCheckbook(models.Model):
             ('no', 'No'),
             ('according_to_partner', 'According to partner VAT responsibility')
         ],
-        string='Discriminate taxes?',
         default='according_to_partner',
         required=True,
     )
@@ -53,7 +52,7 @@ class SaleCheckbook(models.Model):
         'res.partner',
     )
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         rec = super(SaleCheckbook, self).create(vals)
         if not rec.sequence_id:
