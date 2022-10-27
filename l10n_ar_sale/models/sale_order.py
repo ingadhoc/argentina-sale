@@ -46,15 +46,16 @@ class SaleOrder(models.Model):
         else:
             self.sale_checkbook_id = False
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
-        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
-            vals.get('name', _('New')) == _('New') and \
-                vals.get('sale_checkbook_id'):
-            sale_checkbook = self.env['sale.checkbook'].browse(
-                vals.get('sale_checkbook_id'))
-            vals['name'] = sale_checkbook.sequence_id and\
-                sale_checkbook.sequence_id._next() or _('New')
+        for val in vals:
+            if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
+                val.get('name', _('New')) == _('New') and \
+                    val.get('sale_checkbook_id'):
+                sale_checkbook = self.env['sale.checkbook'].browse(
+                    val.get('sale_checkbook_id'))
+                val['name'] = sale_checkbook.sequence_id and\
+                    sale_checkbook.sequence_id._next() or _('New')
         return super(SaleOrder, self).create(vals)
 
     def _compute_tax_totals_json(self):
