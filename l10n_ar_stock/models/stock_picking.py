@@ -56,7 +56,7 @@ class StockPicking(models.Model):
 
     def get_arba_file_data(
             self, datetime_out, tipo_recorrido, carrier_partner,
-            patente_vehiculo, patente_acomplado, prod_no_term_dev, importe):
+            patente_vehiculo, patente_acoplado, prod_no_term_dev, importe):
         """
         NOTA: esta implementado como para soportar seleccionar varios remitos
         y mandarlos juntos pero por ahora no le estamos dando uso.
@@ -307,7 +307,7 @@ class StockPicking(models.Model):
                 patente_vehiculo or '',
 
                 # PATENTE_ACOPLADO: 3 letras y 3 números
-                patente_acomplado or '',
+                patente_acoplado or '',
 
                 # PRODUCTO_NO_TERM_DEV: 0=No, 1=Si (devoluciones)
                 prod_no_term_dev,
@@ -380,7 +380,7 @@ class StockPicking(models.Model):
 
     def do_pyafipws_presentar_remito(
             self, datetime_out, tipo_recorrido, carrier_partner,
-            patente_vehiculo, patente_acomplado, prod_no_term_dev, importe):
+            patente_vehiculo, patente_acoplado, prod_no_term_dev, importe):
         self.ensure_one()
 
         COT = self.company_id.arba_cot_connect()
@@ -391,7 +391,7 @@ class StockPicking(models.Model):
                 ' seleccionada o elegir otra forma de envío')
         content, filename = self.get_arba_file_data(
             datetime_out, tipo_recorrido, carrier_partner,
-            patente_vehiculo, patente_acomplado,
+            patente_vehiculo, patente_acoplado,
             prod_no_term_dev, importe)
 
         # NO podemos usar tmp porque agrega un sufijo distinto y arba exije

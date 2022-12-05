@@ -29,7 +29,7 @@ class ArbaCotWizard(models.TransientModel):
         help='Requerido si CUIT Transportista = CUIT Compañía\n'
         '3 letras y 3 numeros o 2 letras, 3 números y 2 letras'
     )
-    patente_acomplado = fields.Char(
+    patente_acoplado = fields.Char(
         help='3 letras y 3 numeros o 2 letras, 3 números y 2 letras'
     )
     prod_no_term_dev = fields.Selection(
@@ -52,4 +52,4 @@ class ArbaCotWizard(models.TransientModel):
         pickings.do_pyafipws_presentar_remito(
             fields.Date.from_string(self.datetime_out), self.tipo_recorrido,
             self.partner_id, self.patente_vehiculo,
-            self.patente_acomplado, self.prod_no_term_dev, self.importe)
+            self.patente_acoplado, self.prod_no_term_dev, self.importe)

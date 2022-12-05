@@ -16,7 +16,7 @@
                         <field name="tipo_recorrido"/>
                         <field name="partner_id"/>
                         <field name="patente_vehiculo"/>
-                        <field name="patente_acomplado"/>
+                        <field name="patente_acoplado"/>
                      </group>
                 </group>
                 <footer>

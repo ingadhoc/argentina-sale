@@ -7,5 +7,5 @@ from . import stock_book
 from . import stock_picking
 from . import product_template
 from . import uom_uom
-from . import stock_production_lot
+from . import stock_lot
 from . import account_chart_template
