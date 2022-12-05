@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_stock
-#: model:ir.model.fields,help:l10n_ar_stock.field_arba_cot_wizard__patente_acomplado
+#: model:ir.model.fields,help:l10n_ar_stock.field_arba_cot_wizard__acoplado
 msgid "3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
 msgstr ""
 
@@ -361,8 +361,8 @@ msgid "Page: <span class=\"page\"/> / <span class=\"topage\"/>"
 msgstr ""
 
 #. module: l10n_ar_stock
-#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__patente_acomplado
-msgid "Patente Acomplado"
+#: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__patente_acoplado
+msgid "Patente Acoplado"
 msgstr ""
 
 #. module: l10n_ar_stock

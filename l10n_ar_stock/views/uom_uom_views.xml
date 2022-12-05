@@ -23,7 +23,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="arba_code" optional="show"/>
-                <button name="action_arba_codes" type="object" help="Ver códigos" icon="fa-external-link"/>
+                <button name="action_arba_codes" type="object" title="Ver códigos" icon="fa-external-link"/>
             </tree>
         </field>
     </record>
@@ -35,7 +35,7 @@
         <field name="arch" type="xml">
             <field name="rounding" position="after">
                 <field name="arba_code" optional="show"/>
-                <button name="action_arba_codes" type="object" help="Ver códigos" icon="fa-external-link"/>
+                <button name="action_arba_codes" type="object" title="Ver códigos" icon="fa-external-link"/>
             </field>
         </field>
     </record>
