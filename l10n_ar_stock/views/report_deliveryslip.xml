@@ -40,6 +40,32 @@
                 <div class="row">
                     <div name="footer_left_column" class="col-8 text-center">
                         <img t-if="o.l10n_ar_afip_barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;humanreadable=1' % ('I2of5', o.l10n_ar_afip_barcode)" alt="Barcode"  style="height:80px"/>
+                        <t t-if="o.book_id.report_signature_section and not o.l10n_ar_afip_barcode">
+                            <table class="table table-borderless table-sm">
+                                <thead>
+                                    <tr>
+                                        <th width="25%">Recibí conforme:</th>
+                                        <th width="25%"></th>
+                                        <th width="25%"></th>
+                                        <th width="25%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th style="text-align: center;">____ / ____ / ____</th>
+                                        <td><hr style="border: 1px solid #000000;"/></td>
+                                        <td><hr style="border: 1px solid #000000;"/></td>
+                                        <td><hr style="border: 1px solid #000000;"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center;">Fecha</th>
+                                        <th style="text-align: center;">DNI</th>
+                                        <th style="text-align: center;">Firma</th>
+                                        <th style="text-align: center;">Aclaración</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
                     </div>
                     <div name="footer_right_column" class="col-4 text-right">
                         <div t-if="not o.book_id.lines_per_voucher and o.book_id.l10n_ar_cai">
@@ -121,10 +147,8 @@
         </div>
 
         <table name="stock_move_line_table" position="after">
-            <t t-if="o.book_id.report_signature_section">
-                <br/>
-                <br/>
-                <table class="table table-borderless">
+            <t t-if="o.book_id.report_signature_section and o.l10n_ar_afip_barcode">
+                <table class="table table-borderless table-sm">
                     <thead>
                         <tr>
                             <th width="25%">Recibí conforme:</th>
@@ -135,7 +159,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th width="25%">Fecha: _____ / _____ / _____</th>
+                            <th width="25%">Fecha: ____ / ____ / ____</th>
                             <td><hr style="border: 1px solid #000000;"/></td>
                             <td><hr style="border: 1px solid #000000;"/></td>
                             <td><hr style="border: 1px solid #000000;"/></td>
