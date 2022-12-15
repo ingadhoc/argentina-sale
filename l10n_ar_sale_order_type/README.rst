@@ -15,7 +15,7 @@
 Argentinian Sale Compatibility with Sale Order Type
 ===================================================
 
-Add fields report partner in sale checkbook to use this partner in the reports.
+Create Many2one field sale_checkbook_id in sales order type template. Add field sale_checkbook_id (sales checkbook) in form view of the sales order type model.
 
 Installation
 ============
