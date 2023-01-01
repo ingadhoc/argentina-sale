@@ -138,6 +138,5 @@ class SaleOrderLine(models.Model):
         """ Ver descripcion en modificacion en sale.order._amount_by_group
         """
         for line in self:
-            date_order = line.order_id.date_order or fields.Date.context_today(line)
-            line = line.with_context(invoice_date=date_order)
+            line = line.with_context(invoice_date=line.order_id.date_order)
             super(SaleOrderLine, line)._compute_amount()
