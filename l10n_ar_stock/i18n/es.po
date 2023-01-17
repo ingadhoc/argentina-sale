@@ -47,6 +47,11 @@ msgstr "<br/><strong>Valor Declarado:</strong>"
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
+msgid "<br/><strong>PO Number:</strong>"
+msgstr "<br/><strong>Nro. de OC:</strong>"
+
+#. module: l10n_ar_stock
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
 msgid "<br/><strong>Packages Qty:</strong>"
 msgstr "<br/><strong>Cant. Bultos:</strong>"
 
