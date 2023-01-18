@@ -1,6 +1,12 @@
 {
     'name': 'Remitos, COT y demas ajustes de stock para Argentina',
+<<<<<<< HEAD
     'version': "15.0.1.4.0",
+||||||| parent of 15a7b15... temp
+    'version': '13.0.1.21.0',
+=======
+    'version': '13.0.1.22.0',
+>>>>>>> 15a7b15... temp
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
