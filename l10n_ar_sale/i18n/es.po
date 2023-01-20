@@ -3,21 +3,21 @@
 # 	* l10n_ar_sale
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 15.0+e\n"
+"Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-25 15:29+0000\n"
-"PO-Revision-Date: 2022-04-14 11:59+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022\n"
-"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/133229/es/)\n"
+"POT-Creation-Date: 2023-01-13 13:50+0000\n"
+"PO-Revision-Date: 2023-01-13 13:50+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Language: es\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -87,6 +87,15 @@ msgid "Actual Next Number"
 msgstr "Número siguiente real"
 
 #. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_account_chart_template__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__algolia_search
+msgid "Algolia Search"
+msgstr ""
+
+#. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "Amount"
 msgstr "Importe"
@@ -112,17 +121,19 @@ msgid "Created on"
 msgstr "Creado en"
 
 #. module: l10n_ar_sale
+#. odoo-python
 #: code:addons/l10n_ar_sale/models/sale_order_line.py:0
 #, python-format
 msgid ""
-"Debe haber un único impuesto del grupo de impuestos \"IVA\" por línea, agréguelo a \"%s\". "
-"En caso de tenerlo, revise la configuración del impuesto, en opciones avanzadas, "
-"en el campo correspondiente \"Grupo de Impuestos\"."
+"Debe haber un único impuesto del grupo de impuestos \"IVA\" por línea, "
+"agréguelo a \"%s\". En caso de tenerlo, revise la configuración del "
+"impuesto, en opciones avanzadas, en el campo correspondiente \"Grupo de "
+"Impuestos\"."
 msgstr ""
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__discriminate_taxes
-msgid "Discriminate taxes?"
+msgid "Discriminate Taxes"
 msgstr "¿Discriminar impuestos?"
 
 #. module: l10n_ar_sale
@@ -138,7 +149,7 @@ msgstr "Secuencia de Asiento"
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__id
 msgid "ID"
-msgstr "ID"
+msgstr "ID (identificación)"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -166,6 +177,7 @@ msgid "Name"
 msgstr "Nombre"
 
 #. module: l10n_ar_sale
+#. odoo-python
 #: code:addons/l10n_ar_sale/models/sale_order.py:0
 #: code:addons/l10n_ar_sale/models/sale_order.py:0
 #: code:addons/l10n_ar_sale/models/sale_order.py:0
@@ -188,6 +200,7 @@ msgid "No"
 msgstr ""
 
 #. module: l10n_ar_sale
+#. odoo-python
 #: code:addons/l10n_ar_sale/models/sale_order_line.py:0
 #, python-format
 msgid "Only one vat tax allowed per line"
@@ -217,7 +230,6 @@ msgstr "Factura Pro-Forma"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "Quotation"
 msgstr "Presupuesto"
-
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__report_partner_id
