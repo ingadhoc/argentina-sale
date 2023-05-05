@@ -69,9 +69,9 @@
             <attribute name="t-value">current_subtotal + line.report_price_subtotal</attribute>
         </t>
 
-        <t groups="account.group_show_line_subtotals_tax_included" position="replace">
-            <t groups="account.group_show_line_subtotals_tax_included">Amount</t>
-        </t>
+        <span groups="account.group_show_line_subtotals_tax_included" position="replace">
+            <span groups="account.group_show_line_subtotals_tax_included">Amount</span>
+        </span>
 
         <span t-field="line.price_subtotal" position="attributes">
             <attribute name="t-field">line.report_price_subtotal</attribute>
