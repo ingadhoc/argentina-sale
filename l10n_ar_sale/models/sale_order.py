@@ -106,3 +106,15 @@ class SaleOrder(models.Model):
         if self.company_id.country_id.code == 'AR':
             return 'l10n_ar_sale.report_saleorder_document'
         return report_xml_id
+
+    def _l10n_ar_include_vat(self):
+        self.ensure_one()
+        discriminate_taxes = self.sale_checkbook_id.discriminate_taxes
+        if discriminate_taxes == 'yes':
+            return True
+        elif discriminate_taxes == 'no':
+            return False
+        else:
+            return not (
+                self.company_id.l10n_ar_company_requires_vat and
+                self.partner_id.l10n_ar_afip_responsibility_type_id.code in ['1'] or False)
