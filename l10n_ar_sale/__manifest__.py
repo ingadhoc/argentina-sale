@@ -28,4 +28,6 @@
     'installable': True,
     'auto_install': False,
     'application': False,
+
+    Esto es una prueba
 }
