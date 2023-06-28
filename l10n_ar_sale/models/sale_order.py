@@ -118,3 +118,20 @@ class SaleOrder(models.Model):
             return not (
                 self.company_id.l10n_ar_company_requires_vat and
                 self.partner_id.l10n_ar_afip_responsibility_type_id.code in ['1'] or False)
+
+    def _create_invoices(self, grouped=False, final=False, date=None):
+        """ Por alguna razon cuando voy a crear la factura a traves de una devolucion, no me esta permitiendo crearla
+        y validarla porque resulta el campo tipo de documento esta quedando vacio. Este campo se llena y computa
+        automaticamente al generar al modificar el diaro de una factura.
+        
+        Si hacemos la prueba funcional desde la interfaz funciona, si intento importar la factura con el importador de
+        Odoo funciona, pero si la voy a crear desde la devolucion inventario no se rellena dicho campo.
+        
+        Para solventar decimos si tenemos facturas que usan documentos y que no tienen un tipo de documento, intentamos
+        computarlo y asignarlo, esto aplica para cuando generamos una factura desde una orden de venta o suscripcion """
+        invoices = super()._create_invoices(grouped=grouped, final=final, date=date)
+        
+        # Intentamos Completar el dato tipo de documento si no seteado 
+        to_fix = invoices.filtered(lambda x: x.l10n_latam_use_documents and not x.l10n_latam_document_type_id)
+        to_fix._compute_l10n_latam_available_document_types()
+        return invoices
