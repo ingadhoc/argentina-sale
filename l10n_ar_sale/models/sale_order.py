@@ -111,9 +111,9 @@ class SaleOrder(models.Model):
         self.ensure_one()
         discriminate_taxes = self.sale_checkbook_id.discriminate_taxes
         if discriminate_taxes == 'yes':
-            return True
-        elif discriminate_taxes == 'no':
             return False
+        elif discriminate_taxes == 'no':
+            return True
         else:
             return not (
                 self.company_id.l10n_ar_company_requires_vat and
