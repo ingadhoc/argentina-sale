@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+    <!-- Crear un picking de ejemplo -->
+            <record id="l10n_ar_stock_demo_1" model="stock.picking">
+            <field name="picking_type_id" ref="stock.picking_type_out"/>
+            <field name="origin">outgoing shipment</field>
+            <field name="user_id"></field>
+            <field name="partner_id" ref="base.res_partner_1"/>
+            <field name="scheduled_date" eval="DateTime.today()"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="location_dest_id" ref="stock.stock_location_customers"/>
+            <field name="move_ids" model="stock.move" eval="[(0, 0, {
+                'name': obj().env.ref('product.product_product_27').name,
+                'product_id': ref('product.product_product_27'),
+                'product_uom': ref('uom.product_uom_unit'),
+                'product_uom_qty': 15.0,
+                'picking_type_id': ref('stock.picking_type_out'),
+                'location_id': ref('stock.stock_location_stock'),
+                'location_dest_id': ref('stock.stock_location_customers'),
+            })]"/>
+            <field name="dispatch_number">12345</field>
+            <field name="cot_numero_unico">ABC123</field>
+            <field name="cot_numero_comprobante">000001</field>
+            <field name="cot">COT-001</field>
+            <field name="partner_id" ref="base.res_partner_1"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="location_dest_id" ref="stock.stock_location_customers"/>
+            <field name="scheduled_date">2023-05-31 10:00:00</field>
+            <field name="picking_type_id" ref="stock.picking_type_out"/>
+
+        </record>
+
+        <record id="l10n_ar_stock_demo_2" model="stock.picking">
+            <field name="picking_type_id" ref="stock.picking_type_out"/>
+            <field name="origin">outgoing shipment</field>
+            <field name="user_id"></field>
+            <field name="partner_id" ref="base.res_partner_1"/>
+            <field name="scheduled_date" eval="DateTime.today() - timedelta(days=15)"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="location_dest_id" ref="stock.stock_location_customers"/>
+            <field name="move_ids" model="stock.move" eval="[(0, 0, {
+                'name': obj().env.ref('product.product_product_6').name,
+                'product_id': ref('product.product_product_6'),
+                'product_uom': ref('uom.product_uom_unit'),
+                'product_uom_qty': 180.0,
+                'picking_type_id': ref('stock.picking_type_out'),
+                'location_id': ref('stock.stock_location_stock'),
+                'location_dest_id': ref('stock.stock_location_customers'),
+            })]"/>
+            <field name="dispatch_number">45843</field>
+            <field name="cot_numero_unico">ABC123</field>
+            <field name="cot_numero_comprobante">000001</field>
+            <field name="cot">COT-001</field>
+            <field name="partner_id" ref="base.res_partner_1"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="location_dest_id" ref="stock.stock_location_customers"/>
+            <field name="scheduled_date">2021-05-31 10:00:00</field>
+            <field name="picking_type_id" ref="stock.picking_type_out"/>
+        </record>
+    </data>
+</odoo>

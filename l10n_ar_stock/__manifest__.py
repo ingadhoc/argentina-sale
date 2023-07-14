@@ -1,6 +1,6 @@
 {
     'name': 'Remitos, COT y demas ajustes de stock para Argentina',
-    'version': "16.0.1.1.0",
+    'version': "16.0.1.2.0",
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -28,6 +28,8 @@
         'security/ir.model.access.csv',
     ],
     'demo': [
+        'demo/stock_book_demo.xml',
+        'demo/stock_picking_demo.xml',
     ],
     'installable': True,
     'auto_install': False,

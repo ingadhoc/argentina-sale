@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Crear un documento de ejemplo -->
+        <record id="l10n_ar.dc_r_r" model="l10n_latam.document.type">
+            <field name="active" eval="True"/>
+            <field name="report_name">DOCUMENTO DE EJEMPLO</field>
+        </record>
+
+        <!-- Crear un registro de StockBook de demostración -->
+        <record id="demo_stock_book" model="stock.book">
+             <field name="name">Comprobante de Entrega</field>
+            <!-- <field name="sequence_id" ref="stock_book_sequence_1"/> -->
+            <field name="l10n_ar_cai">CAI123456</field>
+            <field name="l10n_ar_cai_due">2023-05-31</field>
+            <!-- <field name="report_partner_id" ref="base.partner_admin"/> -->
+            <field name="report_signature_section" eval="True"/>
+            <field name="sequence_id" ref="stock_voucher.stock_book_sequence_1"/>
+            <field name="lines_per_voucher" eval="0"/>
+        </record>
+    </data>
+</odoo>
