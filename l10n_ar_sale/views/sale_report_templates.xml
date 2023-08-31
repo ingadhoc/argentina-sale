@@ -139,9 +139,6 @@
 
             </div>
         </div>
-        <t t-call="account.document_tax_totals" position="attributes">
-            <attribute name="t-call">l10n_ar_sale.document_tax_totals</attribute>
-        </t>
 
     </template>
     <template id="sale_order_portal_content_discount" inherit_id="sale.sale_order_portal_content">

@@ -38,13 +38,5 @@
         </td>
 
     </template>
-    
-    <template id="document_tax_totals" inherit_id="account.document_tax_totals" name="document_tax_totals" primary="True">
-
-        <xpath expr="//t[@t-foreach]" position="attributes">
-            <attribute name="t-if">not doc._l10n_ar_include_vat()</attribute>
-        </xpath>
-
-    </template>
 
 </odoo>
