@@ -5,9 +5,9 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <field name="fiscal_position_id" position="after">
+            <group name="sale_info">
                 <field name="vat_discriminated"/>
-            </field>
+            </group>
             <xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']" position="after">
                 <field name="price_unit_with_tax" groups="l10n_ar_sale.sale_price_unit_with_tax" widget="monetary"/>
                 <!-- <field name="currency_id" invisible="1"/> -->

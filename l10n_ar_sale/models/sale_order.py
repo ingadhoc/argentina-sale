@@ -64,6 +64,24 @@ class SaleOrder(models.Model):
         for rec in self:
             rec = rec.with_context(invoice_date=rec.date_order)
             super(SaleOrder, rec)._compute_tax_totals()
+        # discriminamos o no impuestos solo en pdf y portal. En backend siempre los mostramos. Para esto evaluamos:
+        # commit_assetsbundle viene cuando sacamos pdf
+        # portal_view lo mandamos cuando mostramos campo en portal
+        report_or_portal_view = 'commit_assetsbundle' in self.env.context or 'from_portal_view' in self.env.context
+        if not report_or_portal_view:
+            return
+
+        for order in self.filtered(lambda x: not x.vat_discriminated):
+            tax_groups = order.order_line.mapped('tax_id.tax_group_id')
+            if not tax_groups:
+                continue
+            to_remove_ids = tax_groups.filtered(lambda x: x.l10n_ar_vat_afip_code).ids
+            tax_group_name = list(order.tax_totals['groups_by_subtotal'].keys())[0]
+            tax_group_vals = order.tax_totals['groups_by_subtotal'].get(tax_group_name)
+            updated_tax_group_vals = list(filter(lambda x: x.get('tax_group_id') not in to_remove_ids, tax_group_vals))
+            new_totals = order.tax_totals
+            new_totals['groups_by_subtotal'].update({tax_group_name: updated_tax_group_vals})
+            order.tax_totals = new_totals
 
     def _get_name_sale_report(self, report_xml_id):
         """ Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document

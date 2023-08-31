@@ -139,6 +139,9 @@
 
             </div>
         </div>
+        <t t-call="account.document_tax_totals" position="attributes">
+            <attribute name="t-call">l10n_ar_sale.document_tax_totals</attribute>
+        </t>
 
     </template>
     <template id="sale_order_portal_content_discount" inherit_id="sale.sale_order_portal_content">
@@ -149,11 +152,26 @@
 
     </template>
 
+    <!-- Solo mostramos el "amount untaxed"" si corresponde discriminar iva. Probamos hacer esto directamente editando el computo de tax_totals pero no fue tan directo porque luego en la vista odoo se fija en esa key para terminar agregando impuestos y otras complicaciones (vista document_tax_totals)-->
     <template id="document_tax_totals" inherit_id="account.document_tax_totals" primary="True">
         <xpath expr="//t[@t-foreach]/tr" position="attributes">
-            <!-- Solo mostramos el importe sin impuestos si corresponde discriminar iva -->
             <attribute name="t-if">doc.vat_discriminated</attribute>
         </xpath>
+    </template>
+
+    <template id="sale_order_portal_content_totals_table" inherit_id="sale.sale_order_portal_content_totals_table" priority="99">
+        <t t-set="tax_totals" position="attributes">
+            <!-- agregamos key para saber que estamos en la vista poral y queremos evaluar incluir o no los impuestos -->
+            <attribute name="t-value">sale_order.with_context(from_portal_view=True).tax_totals</attribute>
+        </t>
+        <!-- mandamos la variable doc para que nuestro custom "document_tax_totals" discrimine o no el subtotal. Tmb cambiamos para que la vista portal
+        llame a nuestro propio "l10n_ar_sale.document_tax_totals" (no importa filtrar por localizacion o pais porque vat_discriminated define el comportamiento) -->
+        <t t-set="tax_totals" position="after">
+            <t t-set="doc" t-value="sale_order"/>
+        </t>
+        <t t-call="account.document_tax_totals" position="attributes">
+            <attribute name="t-call">l10n_ar_sale.document_tax_totals</attribute>
+        </t>
     </template>
 
 </odoo>
