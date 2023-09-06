@@ -12,3 +12,7 @@ class ResConfigSettings(models.TransientModel):
         "Use Sale Checkbook in Sales",
         implied_group='l10n_ar_sale.use_sale_checkbook',
     )
+    group_delivery_date = fields.Boolean(
+        "Show Delivery Date in Quotations report and online budget",
+        implied_group='l10n_ar_sale.group_delivery_date_on_report_online'
+    )

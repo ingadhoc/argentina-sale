@@ -126,6 +126,11 @@
                         <span t-field="doc.validity_date"/>
                     </t>
 
+                    <t groups="l10n_ar_sale.group_delivery_date_on_report_online">
+                        <br/><strong>Delivery Date: </strong>
+                        <span t-out="doc.commitment_date or doc.date_order" t-options='{"widget": "date"}'/>
+                    </t>
+
                     <t t-if="doc.payment_term_id" name="payment_term">
                         <br/><strong>Payment Terms: </strong><span t-field="doc.payment_term_id.name"/>
                     </t>
