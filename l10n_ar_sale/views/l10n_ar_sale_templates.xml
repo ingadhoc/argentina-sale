@@ -37,6 +37,12 @@
             </td>
         </td>
 
+        <xpath expr="//div[@id='shipping_address']" position="before">
+            <div class="mb-3 col-6" groups="l10n_ar_sale.group_delivery_date_on_report_online">
+                <strong>Delivery Date:</strong> <span t-field="sale_order.commitment_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+            </div>
+        </xpath>
+
     </template>
 
 </odoo>
