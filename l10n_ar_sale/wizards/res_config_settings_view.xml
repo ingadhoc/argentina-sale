@@ -31,6 +31,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-xs-12 col-md-6 o_setting_box">
+                    <div class="o_setting_left_pane">
+                        <field name="group_delivery_date"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="group_delivery_date"/>
+                        <div class="text-muted">
+                            Shows the delivery date field in the budget report and in the online budget.
+                        </div>
+                    </div>
+                </div>
             </div>
         </field>
     </record>

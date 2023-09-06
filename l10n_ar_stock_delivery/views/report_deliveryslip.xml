@@ -22,6 +22,12 @@
                 <span t-field="o.carrier_id.partner_id" t-options="{'widget': 'contact', 'fields': ['address'], 'no_marker': true, 'no_tag_br': True}"/>
             </t>
         </t>
+        <t t-if="o.picking_type_id.code == 'outgoing' and o.carrier_id" position="after">
+            <t t-if="o.cot">
+                <br/><strong>COT:</strong>
+                <span t-field="o.cot"/>
+            </t>
+        </t>
 
     </template>
 
