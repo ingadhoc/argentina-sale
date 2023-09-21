@@ -139,5 +139,9 @@ class SaleOrderLine(models.Model):
         """
         for line in self:
             date_order = line.order_id.date_order or fields.Date.context_today(line)
-            line = line.with_context(invoice_date=date_order)
+            # si queremos calcular la percepción en una orden de venta
+            # tenemos que tener en cuenta la alícuota del partner de la orden de venta
+            # y no la alícuota de la compañía matriz de la dirección de entrega
+            # por eso pasamos por contexto el partner de la orden de venta
+            line = line.with_context(invoice_date=date_order, sale_order_commercial_partner_id=line.order_id.partner_id.commercial_partner_id)
             super(SaleOrderLine, line)._compute_amount()
