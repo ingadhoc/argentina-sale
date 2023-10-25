@@ -31,7 +31,7 @@
         'demo/stock_book_demo.xml',
         'demo/stock_picking_demo.xml',
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'application': False,
 }
