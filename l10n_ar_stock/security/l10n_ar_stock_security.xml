@@ -4,6 +4,7 @@
     <record id="arba_cot_enabled" model="res.groups">
         <field name="name">Arba COT enabled</field>
         <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="category_id" ref="base.module_category_hidden"/>
     </record>
 
 </odoo>
