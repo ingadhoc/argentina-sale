@@ -1,6 +1,7 @@
 from odoo import models, fields
 
-
+# prueba para casos de curso de git
+# otro comentario
 class StockBook(models.Model):
     _inherit = 'stock.book'
 
