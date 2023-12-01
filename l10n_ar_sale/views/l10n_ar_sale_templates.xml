@@ -15,7 +15,12 @@
             <attribute name="t-field">line.report_price_subtotal</attribute>
         </xpath>
         <span groups="account.group_show_line_subtotals_tax_included" position="replace">
-            <span groups="account.group_show_line_subtotals_tax_included">Amount</span>
+            <t t-if="sale_order.with_context(from_portal_view=True).vat_discriminated">
+                <span groups="account.group_show_line_subtotals_tax_included">Subtotal</span>
+            </t>
+            <t t-else="">
+                <span groups="account.group_show_line_subtotals_tax_included">Total</span>
+            </t>
         </span>
         <xpath expr="//span[@t-field='line.price_total']" position="attributes">
             <attribute name="t-field">line.report_price_subtotal</attribute>

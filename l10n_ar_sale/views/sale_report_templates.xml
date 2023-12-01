@@ -70,7 +70,12 @@
         </t>
 
         <span groups="account.group_show_line_subtotals_tax_included" position="replace">
-            <span groups="account.group_show_line_subtotals_tax_included">Amount</span>
+            <t t-if="doc.vat_discriminated">
+                <span groups="account.group_show_line_subtotals_tax_included">Subtotal</span>
+            </t>
+            <t t-else="">
+                <span groups="account.group_show_line_subtotals_tax_included">Total</span>
+            </t>
         </span>
 
         <span t-field="line.price_subtotal" position="attributes">
