@@ -4,9 +4,6 @@
         <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" position="attributes">
             <attribute name="t-value">current_subtotal + line.report_price_subtotal</attribute>
         </t>
-        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" position="attributes">
-            <attribute name="t-value">current_subtotal + line.report_price_subtotal</attribute>
-        </t>
 
         <xpath expr="//div[@t-field='line.price_unit']" position="attributes">
             <attribute name="t-field">line.report_price_unit</attribute>
@@ -14,12 +11,7 @@
         <xpath expr="//span[@t-field='line.price_subtotal']" position="attributes">
             <attribute name="t-field">line.report_price_subtotal</attribute>
         </xpath>
-        <span groups="account.group_show_line_subtotals_tax_included" position="replace">
-            <span groups="account.group_show_line_subtotals_tax_included">Amount</span>
-        </span>
-        <xpath expr="//span[@t-field='line.price_total']" position="attributes">
-            <attribute name="t-field">line.report_price_subtotal</attribute>
-        </xpath>
+
         <xpath expr="//span[contains(@t-out, 'line.tax_id')]" position="attributes">
             <attribute name="t-out">', '.join(map(lambda x: (x.description or x.name), line.report_tax_id))</attribute>
         </xpath>
@@ -37,7 +29,7 @@
             </td>
         </td>
 
-        <xpath expr="//div[@id='shipping_address']" position="before">
+        <xpath expr="//span[@id='shipping_address']" position="before">
             <div class="mb-3 col-6" groups="l10n_ar_sale.group_delivery_date_on_report_online">
                 <strong>Delivery Date:</strong> <span t-field="sale_order.commitment_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
             </div>

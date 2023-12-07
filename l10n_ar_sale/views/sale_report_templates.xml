@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="report_saleorder" inherit_id="sale.report_saleorder">
+    <template id="report_saleorder_raw" inherit_id="sale.report_saleorder_raw">
         <t t-call="sale.report_saleorder_document" position="attributes">
             <attribute name="t-call">#{ doc._get_name_sale_report('sale.report_saleorder_document') }</attribute>
         </t>
@@ -65,19 +65,7 @@
             <attribute name="t-value">current_subtotal + line.report_price_subtotal</attribute>
         </t>
 
-        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" position="attributes">
-            <attribute name="t-value">current_subtotal + line.report_price_subtotal</attribute>
-        </t>
-
-        <span groups="account.group_show_line_subtotals_tax_included" position="replace">
-            <span groups="account.group_show_line_subtotals_tax_included">Amount</span>
-        </span>
-
         <span t-field="line.price_subtotal" position="attributes">
-            <attribute name="t-field">line.report_price_subtotal</attribute>
-        </span>
-
-        <span t-field="line.price_total" position="attributes">
             <attribute name="t-field">line.report_price_subtotal</attribute>
         </span>
 
@@ -91,6 +79,15 @@
                 <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)))" id="line_tax_ids"/>
             </td>
         </td>
+        <!-- We change the name of the column depending on the tax discrimination -->
+        <th name="th_subtotal" class="text-end" position="replace">
+            <td t-if="doc.vat_discriminated" class="text-end" >
+                <span>SubTotal</span>
+            </td>
+            <td t-else="" class="text-end">
+                <span>Total</span>
+            </td>
+        </th>
 
         <div id="informations" position="replace">
             <div id="informations" class="row mt8 mb8">
@@ -144,7 +141,7 @@
 
             </div>
         </div>
-        <t t-call="account.document_tax_totals" position="attributes">
+        <t t-call="sale.document_tax_totals" position="attributes">
             <attribute name="t-call">l10n_ar_sale.document_tax_totals</attribute>
         </t>
 
@@ -159,7 +156,7 @@
 
     <!-- Solo mostramos el "amount untaxed"" si corresponde discriminar iva. Probamos hacer esto directamente editando el computo de tax_totals pero no fue tan directo porque luego en la vista odoo se fija en esa key para terminar agregando impuestos y otras complicaciones (vista document_tax_totals)-->
     <template id="document_tax_totals" inherit_id="account.document_tax_totals" primary="True">
-        <xpath expr="//t[@t-foreach]/tr" position="attributes">
+        <xpath expr="//t[@t-foreach]" position="attributes">
             <attribute name="t-if">doc.vat_discriminated</attribute>
         </xpath>
     </template>
@@ -174,9 +171,7 @@
         <t t-set="tax_totals" position="after">
             <t t-set="doc" t-value="sale_order"/>
         </t>
-        <t t-call="account.document_tax_totals" position="attributes">
-            <attribute name="t-call">l10n_ar_sale.document_tax_totals</attribute>
-        </t>
+
     </template>
 
 </odoo>
