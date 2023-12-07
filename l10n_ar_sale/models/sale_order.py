@@ -17,7 +17,6 @@ class SaleOrder(models.Model):
     sale_checkbook_id = fields.Many2one(
         'sale.checkbook',
         readonly=True,
-        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
     )
 
     @api.depends(

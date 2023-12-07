@@ -1,6 +1,6 @@
 {
     'name': 'Argentinian Sale Total Fields',
-    'version': "16.0.1.5.0",
+    'version': "17.0.1.0.0",
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -24,7 +24,7 @@
     ],
     'demo': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
 }

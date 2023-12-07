@@ -3,20 +3,15 @@
 # directory
 ##############################################################################
 from odoo import models, api
+from odoo.addons.account.models.chart_template import template
 
-
-class AccountChartTemplate(models.Model):
+class AccountChartTemplate(models.AbstractModel):
     _inherit = 'account.chart.template'
 
-    def _load_template(
-            self, company, code_digits=None,
-            account_ref=None, taxes_ref=None):
-        self.ensure_one()
+    def _load(self, template_code, company, install_demo):
         if company.country_id == self.env.ref('base.ar'):
             self.generate_sale_checkbook(company)
-        return super(AccountChartTemplate, self)._load_template(
-            company, code_digits,
-            account_ref, taxes_ref)
+        return super(AccountChartTemplate, self)._load(template_code, company, install_demo)
 
     @api.model
     def generate_sale_checkbook(
