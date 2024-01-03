@@ -26,7 +26,7 @@ class ResCompany(models.Model):
                 'SeguridadCliente/presentarRemitos.do')
         else:
             arba_login_url = (
-                'http://cot.test.arba.gov.ar/TransporteBienes/'
+                'https://cot.test.arba.gov.ar/TransporteBienes/'
                 'SeguridadCliente/presentarRemitos.do')
         return arba_login_url
 

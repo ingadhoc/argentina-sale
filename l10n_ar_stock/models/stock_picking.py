@@ -310,7 +310,7 @@ class StockPicking(models.Model):
                 patente_acoplado or '',
 
                 # PRODUCTO_NO_TERM_DEV: 0=No, 1=Si (devoluciones)
-                prod_no_term_dev,
+                str(prod_no_term_dev),
 
                 # IMPORTE: formato 8 enteros 2 decimales,
                 str(int(round(importe * 100.0)))[-14:],
