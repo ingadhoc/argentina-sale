@@ -16,6 +16,7 @@ class ResCompany(models.Model):
     arba_cot = fields.Char(
         'Clave COT',
         help='Clave para generación de remito electŕonico',
+        help='Clave para generación de remito electŕonico',
     )
 
     @api.model
