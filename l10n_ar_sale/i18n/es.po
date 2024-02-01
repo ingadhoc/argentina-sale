@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-12 10:50+0000\n"
+"POT-Creation-Date: 2024-01-23 15:20+0000\n"
 "PO-Revision-Date: 2023-01-13 13:50+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -22,7 +22,7 @@ msgstr ""
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "<br/><strong>Delivery Date: </strong>"
-msgstr "Fecha de entrega"
+msgstr "<br/><strong>Fecha de entrega: </strong>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -68,7 +68,7 @@ msgstr "<strong>Cliente: </strong>"
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.sale_order_portal_content
 msgid "<strong>Delivery Date:</strong>"
-msgstr "Fecha de entrega"
+msgstr "<strong>Fecha de entrega: </strong>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
