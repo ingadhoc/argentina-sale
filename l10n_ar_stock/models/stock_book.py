@@ -6,7 +6,7 @@ class StockBook(models.Model):
 
     document_type_id = fields.Many2one(
         'l10n_latam.document.type',
-        'Document Type',
+        'Document Type (AR)',
     )
     # TODO when CAE addded by afip for remitos, we should add a selector
     # so that we can use with autoimpresores and electronic remitos

@@ -7,8 +7,8 @@
         <field name="arch" type="xml">
             <field name="next_number" position="after">
                 <field name="document_type_id"/>
-                <field name="l10n_ar_cai" attrs="{'invisible': [('lines_per_voucher', '!=', 0)]}"/>
-                <field name="l10n_ar_cai_due" attrs="{'invisible': [('lines_per_voucher', '!=', 0)]}"/>
+                <field name="l10n_ar_cai" invisible="lines_per_voucher != 0"/>
+                <field name="l10n_ar_cai_due" invisible="lines_per_voucher != 0"/>
                 <field name="report_partner_id"/>
                 <field name="report_signature_section"/>
             </field>
