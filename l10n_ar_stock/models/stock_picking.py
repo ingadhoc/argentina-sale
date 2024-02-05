@@ -16,7 +16,6 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     dispatch_number = fields.Char(
-        states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
         help='Si define un número de despacho, al validar la transferencia, '
         'el mismo será asociado a los lotes sin número de despacho vinculados '
         'a la transferencia.'

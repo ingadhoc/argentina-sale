@@ -16,6 +16,7 @@ Integración del módulo de stock a requerimientos argentinos
 
 #. Remito electrónico Argentino
 #. Número de despacho en lotes
+#. Crea libro de stock en caso de que no exista
 
 Sobre remito electrónico
 ------------------------

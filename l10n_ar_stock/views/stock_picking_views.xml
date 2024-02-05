@@ -8,10 +8,9 @@
             <button name="do_print_picking" position="after">
                 <button name="%(action_arba_cot_wizard)d" string="Obtener COT (BETA)"
                     help="Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)"
-                    type="action" attrs="{'invisible': ['|',('book_id','=',False),'|', ('picking_type_code','=','incoming'), ('state','!=','done')]}"
+                    type="action" invisible="not book_id or picking_type_code == 'incoming' or state != 'done'"
                     context="{'default_importe': declared_value}"
-                    groups="l10n_ar_stock.arba_cot_enabled"
-                />
+                    groups="l10n_ar_stock.arba_cot_enabled"/>
             </button>
             <group name="other_infos" position="after">
                 <group string="Remito electrónico (COT)" name="cot" groups="l10n_ar_stock.arba_cot_enabled">
@@ -21,7 +20,7 @@
                 </group>
             </group>
             <field name="partner_id" position="after">
-                <field name="dispatch_number" attrs="{'invisible': [('picking_type_code', '!=','incoming')]}"/>
+                <field name="dispatch_number" invisible="picking_type_code != 'incoming'" readonly="state in ['cancel', 'done']"/>
             </field>
         </field>
     </record>
