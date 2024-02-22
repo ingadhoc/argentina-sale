@@ -64,6 +64,9 @@ class SaleOrder(models.Model):
         for rec in self:
             rec = rec.with_context(invoice_date=rec.date_order)
             super(SaleOrder, rec)._compute_tax_totals()
+            # Agregamos esto porque necesitamos que también se recompute el campo amount_total si llega a cambiarse
+            # alguna alícuota en el partner para cálculo de percepciones, ejemplo: arba
+            rec._compute_amounts()
         # discriminamos o no impuestos solo en pdf y portal. En backend siempre los mostramos. Para esto evaluamos:
         # commit_assetsbundle viene cuando sacamos pdf
         # portal_view lo mandamos cuando mostramos campo en portal
