@@ -40,10 +40,17 @@ class SaleOrder(models.Model):
     def set_sale_checkbook(self):
         if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
            self.company_id:
-            self.sale_checkbook_id = self.env['sale.checkbook'].search(
-                [('company_id', 'in', [self.company_id.id, False])], limit=1)
+            self.sale_checkbook_id = self._get_sale_checkbook()
         else:
             self.sale_checkbook_id = False
+
+    def _get_sale_checkbook(self):
+        return (
+            self.env['ir.default'].get('sale.order', 'sale_checkbook_id', company_id=self.company_id.id, user_id=self.env.user.id) or
+            self.env['ir.default'].get('sale.order', 'sale_checkbook_id', user_id=self.env.user.id) or
+            self.env['ir.default'].get('sale.order', 'sale_checkbook_id') or
+            self.env['sale.checkbook'].search([('company_id', 'in', [self.company_id.id, False])], limit=1)
+        )
 
     @api.model_create_multi
     def create(self, vals):
