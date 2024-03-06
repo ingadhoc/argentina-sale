@@ -15,7 +15,7 @@
 Argentinian Sale Compatibility with Sale Order Type
 ===================================================
 
-Create Many2one field sale_checkbook_id in sales order type template. Add field sale_checkbook_id (sales checkbook) in form view of the sales order type model.
+Check the sequences of the checkbook that has the type of sale and compare it with the sale checkbook, if they are different, place the sequence of the sales checkbook
 
 Installation
 ============
