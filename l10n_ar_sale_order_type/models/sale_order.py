@@ -2,7 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import models, api
+from odoo import models, api, _
 
 
 class SaleOrder(models.Model):
@@ -14,7 +14,6 @@ class SaleOrder(models.Model):
             self.sale_checkbook_id = self.type_id.sale_checkbook_id
         else:
             return super(SaleOrder, self).set_sale_checkbook()
-
 
     def write(self, vals):
         """A sale checkbook could have a different order sequence, so we could

@@ -57,9 +57,9 @@
             <attribute name="t-field">line.report_price_unit</attribute>
         </xpath>
 
-        <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id))" position="attributes">
-            <attribute name="t-out">', '.join(map(lambda x: (x.description or x.name), line.report_tax_id))</attribute>
-        </span>
+        <t t-value="', '.join([(tax.invoice_label or tax.name) for tax in line.tax_id])" position="attributes">
+            <attribute name="t-value">', '.join([(tax.invoice_label or tax.name) for tax in line.report_tax_id])</attribute>
+        </t>
 
         <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" position="attributes">
             <attribute name="t-value">current_subtotal + line.report_price_subtotal</attribute>
