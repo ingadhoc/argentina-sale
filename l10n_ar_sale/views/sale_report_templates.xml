@@ -86,6 +86,24 @@
             <attribute name="t-field">line.report_price_subtotal</attribute>
         </span>
 
+        <xpath expr="//div[@t-field='option.price_unit']" position="replace">
+            <div t-if="not option.order_id.vat_discriminated">
+                <t t-set="order_tax" t-value="option.order_id.order_line.tax_id.amount"/>
+                <span
+                    t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}' 
+                    t-att-class="keep_class_attribute"
+                    t-att-style="keep_style_attribute"
+                    t-esc="(((order_tax / 100.0) * option.price_unit) + option.price_unit)">
+                </span>
+            </div>
+            <div t-else="">
+                <div t-field='option.price_unit'
+                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                t-att-style="option.discount and 'text-decoration: line-through' or None"
+                t-att-class="option.discount and 'text-danger' or None"/>
+            </div>
+        </xpath>
+
         <!-- use column vat instead of taxes and only if vat discriminated -->
         <th name="th_taxes" position="replace">
             <th t-if="doc.vat_discriminated" name="th_taxes" t-attf-class="text-left {{ 'd-md-table-cell' if report_type == 'html' else '' }}"><span>% VAT</span></th>
