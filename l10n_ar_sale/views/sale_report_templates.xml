@@ -137,6 +137,10 @@
                         <span t-field="doc.client_order_ref"/>
                     </t>
 
+                    <t t-if="doc.incoterm">
+                        <br/><strong>Incoterm:</strong><span t-field="doc.incoterm.name"/>
+                    </t>
+
                 </div>
 
             </div>
