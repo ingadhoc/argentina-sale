@@ -46,9 +46,9 @@ class SaleOrder(models.Model):
 
     def _get_sale_checkbook(self):
         return (
-            self.env['ir.default'].get('sale.order', 'sale_checkbook_id', company_id=self.company_id.id, user_id=self.env.user.id) or
-            self.env['ir.default'].get('sale.order', 'sale_checkbook_id', user_id=self.env.user.id) or
-            self.env['ir.default'].get('sale.order', 'sale_checkbook_id') or
+            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id', company_id=self.company_id.id, user_id=self.env.user.id) or
+            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id', user_id=self.env.user.id) or
+            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id') or
             self.env['sale.checkbook'].search([('company_id', 'in', [self.company_id.id, False])], limit=1)
         )
 
