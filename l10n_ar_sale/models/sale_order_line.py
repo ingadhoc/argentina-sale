@@ -99,6 +99,10 @@ class SaleOrderLine(models.Model):
     @api.model_create_multi
     def create(self, vals):
         rec = super(SaleOrderLine, self).create(vals)
+        company_id = rec.company_id.id
+        product_tax = rec.product_id.taxes_id.filtered(lambda x: x.company_id.id == company_id)
+        if not rec.tax_id and product_tax:
+            rec.tax_id = product_tax
         rec.check_vat_tax()
         return rec
 
@@ -129,6 +133,10 @@ class SaleOrderLine(models.Model):
     def write(self, vals):
         res = super(SaleOrderLine, self).write(vals)
         # for performance we only check if tax or company is on vals
+        company_id = self.company_id.id
+        product_tax = self.product_id.taxes_id.filtered(lambda x: x.company_id.id == company_id)
+        if not self.tax_id and product_tax:
+            self.tax_id = product_tax
         if 'tax_id' in vals or 'company_id' in vals:
             self.check_vat_tax()
         return res
