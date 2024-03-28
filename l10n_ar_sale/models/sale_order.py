@@ -53,17 +53,14 @@ class SaleOrder(models.Model):
             self.env['sale.checkbook'].search([('company_id', 'in', [self.company_id.id, False])], limit=1)
         )
 
-    @api.model_create_multi
-    def create(self, vals):
-        for val in vals:
-            if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
-                val.get('name', _('New')) == _('New') and \
-                    val.get('sale_checkbook_id'):
+    @api.onchange('partner_id', 'sale_checkbook_id')
+    def set_order_sequence(self):
+        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
+            self.sale_checkbook_id:  
                 sale_checkbook = self.env['sale.checkbook'].browse(
-                    val.get('sale_checkbook_id'))
-                val['name'] = sale_checkbook.sequence_id and\
-                    sale_checkbook.sequence_id._next() or _('New')
-        return super(SaleOrder, self).create(vals)
+                    self.sale_checkbook_id.id)
+                self.name = sale_checkbook.sequence_id and\
+                    sale_checkbook.sequence_id or _('New')
 
     def _compute_tax_totals(self):
         """ Mandamos en contexto el invoice_date para calculo de impuesto con partner aliquot
