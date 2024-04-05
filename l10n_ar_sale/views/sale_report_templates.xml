@@ -57,9 +57,9 @@
             <attribute name="t-field">line.report_price_unit</attribute>
         </xpath>
 
-        <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id))" position="attributes">
-            <attribute name="t-out">', '.join(map(lambda x: (x.description or x.name), line.report_tax_id))</attribute>
-        </span>
+        <t t-set="taxes" position="attributes">
+            <attribute name="t-value">', '.join([(tax.description or tax.name) for tax in line.report_tax_id])</attribute>
+        </t>
 
         <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" position="attributes">
             <attribute name="t-value">current_subtotal + line.report_price_subtotal</attribute>
@@ -91,7 +91,7 @@
             <th t-if="doc.vat_discriminated" name="th_taxes" t-attf-class="text-left {{ 'd-md-table-cell' if report_type == 'html' else '' }}"><span>% VAT</span></th>
         </th>
         <!-- use column vat instead of taxes and only list vat taxes-->
-        <td name="td_taxes" class="text-end" position="replace">
+        <td name="td_taxes" position="replace">
             <td t-if="doc.vat_discriminated" name="td_taxes" class="text-right">
                 <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)))" id="line_tax_ids"/>
             </td>
