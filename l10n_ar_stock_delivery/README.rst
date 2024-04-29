@@ -14,7 +14,7 @@
 Integracion entre modulo delivery y localización argentina
 ==========================================================
 
-#. Agregado de datos de deliveery al comprobante de entrega
+#. Agregado de datos de delivery al comprobante de entrega
 #. Uso de carrier en wizard para cot
 
 Installation
