@@ -458,7 +458,8 @@ class StockPicking(models.Model):
         self.message_post(
             body=body,
             subject=_('Remito Electrónico Solicitado'),
-            attachments=attachments)
+            attachments=attachments,
+            body_is_html=True)
 
         return True
 
