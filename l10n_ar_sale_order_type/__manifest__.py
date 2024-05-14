@@ -1,5 +1,5 @@
 {
-    'name': 'Argentinian Sale with Sale Order Type',
+    'name': 'Argentinian Sale with Sale Order Type ',
     'version': "17.0.1.0.0",
     'category': 'Localization/Argentina',
     'sequence': 14,
