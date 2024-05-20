@@ -46,8 +46,9 @@ class StockPicking(models.Model):
                     and rec.book_id.l10n_ar_cai and not rec.book_id.lines_per_voucher:
                 cae_due = rec.book_id.l10n_ar_cai_due.strftime('%Y%m%d')
                 pos_number = int(re.sub('[^0-9]', '', rec.book_id.sequence_id.prefix))
+                contact_for_header = rec.book_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat
                 barcode = ''.join([
-                    str(rec.company_id.partner_id.l10n_ar_vat),
+                    str(contact_for_header),
                     "%03d" % int(rec.book_id.document_type_id.code),
                     "%05d" % pos_number,
                     rec.book_id.l10n_ar_cai,
