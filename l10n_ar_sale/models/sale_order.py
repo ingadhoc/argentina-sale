@@ -53,18 +53,22 @@ class SaleOrder(models.Model):
             self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id') or
             self.env['sale.checkbook'].search([('company_id', 'in', [self.company_id.id, False])], limit=1)
         )
-
     @api.model_create_multi
-    def create(self, vals):
-        for val in vals:
+    def create(self, vals_list):
+        for vals in vals_list:
             if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
-                val.get('name', _('New')) == _('New') and \
-                    val.get('sale_checkbook_id'):
-                sale_checkbook = self.env['sale.checkbook'].browse(
-                    val.get('sale_checkbook_id'))
-                val['name'] = sale_checkbook.sequence_id and\
-                    sale_checkbook.sequence_id._next() or _('New')
-        return super(SaleOrder, self).create(vals)
+                vals.get('sale_checkbook_id'):
+                sale_checkbook = self.env['sale.checkbook'].browse(val.get('sale_checkbook_id'))
+                number_next = sale_checkbook.sequence_id.number_next_actual
+                vals['name'] = sale_checkbook.sequence_id.get_next_char(number_next) or _('New')
+        return super(SaleOrder, self).create(vals_list)
+
+    def action_confirm(self):
+        #Consumimos un numero de la secuencia solamente cuando confirmamos la orden de venta
+        if self.sale_checkbook_id:
+            self.name = self.sale_checkbook_id.sequence_id._next()
+
+        return super().action_confirm()
 
     def _compute_tax_totals(self):
         """ Mandamos en contexto el invoice_date para calculo de impuesto con partner aliquot
