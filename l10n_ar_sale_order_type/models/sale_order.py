@@ -29,8 +29,9 @@ class SaleOrder(models.Model):
                         record.state in {"draft", "sent"}
                         and record.type_id.sequence_id != sale_checkbook.sequence_id
                     ):
+                        number_next = sale_checkbook.sequence_id.number_next_actual
                         new_vals = vals.copy()
-                        new_vals["name"] = sale_checkbook.sequence_id._next() or _('New')
+                        new_vals["name"] = sale_checkbook.sequence_id.get_next_char(number_next)
                         super(SaleOrder, record).write(new_vals)
                     else:
                         super(SaleOrder, record).write(vals)
