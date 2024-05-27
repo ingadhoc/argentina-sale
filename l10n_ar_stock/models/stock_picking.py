@@ -46,7 +46,7 @@ class StockPicking(models.Model):
                 cae_due = rec.book_id.l10n_ar_cai_due.strftime('%Y%m%d')
                 pos_number = int(re.sub('[^0-9]', '', rec.book_id.sequence_id.prefix))
                 barcode = ''.join([
-                    str(rec.company_id.partner_id.l10n_ar_vat),
+                    str(rec.book_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
                     "%03d" % int(rec.book_id.document_type_id.code),
                     "%05d" % pos_number,
                     rec.book_id.l10n_ar_cai,
