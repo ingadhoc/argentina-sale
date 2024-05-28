@@ -116,3 +116,10 @@ class SaleOrder(models.Model):
         to_fix = invoices.filtered(lambda x: x.l10n_latam_use_documents and not x.l10n_latam_document_type_id)
         to_fix._compute_l10n_latam_available_document_types()
         return invoices
+
+    def is_module_installed(self, module):
+        module_installed = self.env['ir.module.module'].search([
+            ('name', '=', module),
+            ('state', '=', 'installed'),
+        ])
+        return True if module_installed else False
