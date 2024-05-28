@@ -135,7 +135,7 @@
                         <span t-field="doc.client_order_ref"/>
                     </t>
 
-                    <t t-if="doc.incoterm">
+                    <t t-if="doc.is_module_installed('sale_stock')">
                         <br/><strong>Incoterm:</strong><span t-field="doc.incoterm.name"/>
                     </t>
 
