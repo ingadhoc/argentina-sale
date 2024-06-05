@@ -125,7 +125,7 @@
                     <strong>Deliver to: </strong>
                     <span t-field="partner.name"/>
                 </span>
-                <span t-out="partner" t-options='{"widget": "contact", "fields": ["address", "phone", "mobile"], "no_marker": False, "no_tag_br": True}'/>
+                <span t-out="partner" t-options='{"widget": "contact", "fields": ["address", "phone", "mobile"], "no_marker": False}'/>
 
                 <!-- (16) Responsabilidad AFIP -->
                 <strong>VAT Cond: </strong>
