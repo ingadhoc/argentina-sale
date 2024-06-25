@@ -17,6 +17,8 @@ class SaleOrder(models.Model):
     sale_checkbook_id = fields.Many2one(
         'sale.checkbook',
         readonly=True,
+        compute="_compute_sale_checkbook",
+        store=True
     )
 
     @api.depends(
@@ -36,13 +38,13 @@ class SaleOrder(models.Model):
                     rec.partner_id.l10n_ar_afip_responsibility_type_id.code in ['1'] or False
             rec.vat_discriminated = vat_discriminated
 
-    @api.onchange('company_id')
-    def set_sale_checkbook(self):
-        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
-           self.company_id:
-            self.sale_checkbook_id = self._get_sale_checkbook()
-        else:
-            self.sale_checkbook_id = False
+    @api.depends('company_id')
+    def _compute_sale_checkbook(self):
+        for rec in self:
+            if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and rec.company_id:
+                rec.sale_checkbook_id = rec._get_sale_checkbook()
+            else:
+                rec.sale_checkbook_id = False
 
     def _get_sale_checkbook(self):
         return (
