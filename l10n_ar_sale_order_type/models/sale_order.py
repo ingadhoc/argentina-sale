@@ -8,13 +8,15 @@ from odoo import models, api
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    @api.onchange('company_id', 'type_id')
-    def set_sale_checkbook(self):
-        if self.type_id.sale_checkbook_id:
-            self.sale_checkbook_id = self.type_id.sale_checkbook_id
-        else:
-            return super(SaleOrder, self).set_sale_checkbook()
+    def _compute_sale_checkbook(self):
+        super()._compute_sale_checkbook()
+        for order in self.filtered(lambda x: x.type_id and x.type_id.sale_checkbook_id):
+            order.sale_checkbook_id = order.type_id.sale_checkbook_id
 
+    @api.onchange('type_id')
+    def _onchange_sale_checkbook_id(self):
+        if self.type_id and self.type_id.sale_checkbook_id:
+            self.sale_checkbook_id = self.type_id.sale_checkbook_id
 
     def write(self, vals):
         """A sale checkbook could have a different order sequence, so we could
