@@ -106,78 +106,86 @@
     <!-- remove default document title -->
     <h2 position="replace"/>
 
-    <div class="row mt32 mb32" position="replace">
-        <div id="informations" class="row mt8 mb8">
-            <div class="col-6">
-                <t t-set="partner" t-value="o.partner_id or (o.move_ids and o.move_ids[0].partner_id)"/>
-                <t t-set="commercial_partner" t-value="partner.commercial_partner_id"/>
 
-                <!-- IDENTIFICACION (ADQUIRIENTE-LOCATARIO-PRESTARIO) -->
-
-                <!-- (14) Apellido uy Nombre: Denominicacion o Razon Soclial -->
-                <strong>Customer: </strong>
-                <span t-field="commercial_partner.name"/>
-
-                <!-- (15) Domicilio Comercial -->
-                <br/>
-
-                <span t-if="commercial_partner != partner">
-                    <strong>Deliver to: </strong>
-                    <span t-field="partner.name"/>
-                </span>
-                <span t-out="partner" t-options='{"widget": "contact", "fields": ["address", "phone", "mobile"], "no_marker": False, "no_tag_br": True}'/>
-
-                <!-- (16) Responsabilidad AFIP -->
-                <strong>VAT Cond: </strong>
-                <span t-field="partner.l10n_ar_afip_responsibility_type_id"/>
-
-                <!-- (17) CUIT -->
-                <t t-if="partner.vat and partner.l10n_latam_identification_type_id.name and partner.l10n_latam_identification_type_id.name != 'Sigd'">
-                    <br/>
-                    <strong>
-                        <t t-out="partner.l10n_latam_identification_type_id.name or o.company_id.country_id.vat_label" id="inv_tax_id_label"/>
-:</strong>
-                    <span t-out="partner.l10n_ar_formatted_vat or partner.vat"/>
-                </t>
-
-            </div>
-            <div class="col-6">
-
-                <t>
-                    <strong>Order:</strong>
-                    <span t-field="o.origin"/>
-                </t>
-                <t position="after">
-                    <t t-if="o.cot">
-                        <br/>
-                        <strong>COT:</strong>
-                        <span t-field="o.cot"/>
-                    </t>
-                </t>
-                <t t-if="o._fields.get('purchase_order_number') and o.sudo().purchase_order_number">
-                    <br/>
-                    <strong>PO Number:</strong>
-                    <span t-field="o.sudo().purchase_order_number"/>
-                </t>
-                <t t-if="o._fields.get('sale_id') and o.sudo().sale_id.client_order_ref">
-                    <br/>
-                    <strong>Customer Reference:</strong>
-                    <span t-field="o.sudo().sale_id.client_order_ref"/>
-                </t>
-                <t t-if="o.declared_value">
-                    <br/>
-                    <strong>Declared Value:</strong>
-                    <span t-field="o.declared_value"/>
-                </t>
-                <t t-if="o.number_of_packages">
-                    <br/>
-                    <strong>Packages Qty:</strong>
-                    <span t-field="o.number_of_packages"/>
-                </t>
-            </div>
-
+    <div class="row mt-4 mb-4" position="after">
+        <div t-if="0" id="l10n_ar_stock_div_hide">
         </div>
     </div>
+    <div id="l10n_ar_stock_div_hide" position="inside">
+        <div class="row mt-4 mb-4" position="move">
+            <div id="informations" class="row mt8 mb8">
+                <div class="col-6">
+                    <t t-set="partner" t-value="o.partner_id or (o.move_ids and o.move_ids[0].partner_id)"/>
+                    <t t-set="commercial_partner" t-value="partner.commercial_partner_id"/>
+
+                    <!-- IDENTIFICACION (ADQUIRIENTE-LOCATARIO-PRESTARIO) -->
+
+                    <!-- (14) Apellido uy Nombre: Denominicacion o Razon Soclial -->
+                    <strong>Customer: </strong>
+                    <span t-field="commercial_partner.name"/>
+
+                    <!-- (15) Domicilio Comercial -->
+                    <br/>
+
+                    <span t-if="commercial_partner != partner">
+                        <strong>Deliver to: </strong>
+                        <span t-field="partner.name"/>
+                    </span>
+                    <span t-out="partner" t-options='{"widget": "contact", "fields": ["address", "phone", "mobile"], "no_marker": False, "no_tag_br": True}'/>
+
+                    <!-- (16) Responsabilidad AFIP -->
+                    <strong>VAT Cond: </strong>
+                    <span t-field="partner.l10n_ar_afip_responsibility_type_id"/>
+
+                    <!-- (17) CUIT -->
+                    <t t-if="partner.vat and partner.l10n_latam_identification_type_id.name and partner.l10n_latam_identification_type_id.name != 'Sigd'">
+                        <br/>
+                        <strong>
+                            <t t-out="partner.l10n_latam_identification_type_id.name or o.company_id.country_id.vat_label" id="inv_tax_id_label"/>
+:</strong>
+                        <span t-out="partner.l10n_ar_formatted_vat or partner.vat"/>
+                    </t>
+
+                </div>
+                <div class="col-6">
+
+                    <t>
+                        <strong>Order:</strong>
+                        <span t-field="o.origin"/>
+                    </t>
+                    <t position="after">
+                        <t t-if="o.cot">
+                            <br/>
+                            <strong>COT:</strong>
+                            <span t-field="o.cot"/>
+                        </t>
+                    </t>
+                    <t t-if="o._fields.get('purchase_order_number') and o.sudo().purchase_order_number">
+                        <br/>
+                        <strong>PO Number:</strong>
+                        <span t-field="o.sudo().purchase_order_number"/>
+                    </t>
+                    <t t-if="o._fields.get('sale_id') and o.sudo().sale_id.client_order_ref">
+                        <br/>
+                        <strong>Customer Reference:</strong>
+                        <span t-field="o.sudo().sale_id.client_order_ref"/>
+                    </t>
+                    <t t-if="o.declared_value">
+                        <br/>
+                        <strong>Declared Value:</strong>
+                        <span t-field="o.declared_value"/>
+                    </t>
+                    <t t-if="o.number_of_packages">
+                        <br/>
+                        <strong>Packages Qty:</strong>
+                        <span t-field="o.number_of_packages"/>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <table name="stock_move_line_table" position="after">
         <t t-if="o.book_id.report_signature_section and o.l10n_ar_afip_barcode">
