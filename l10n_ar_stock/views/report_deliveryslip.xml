@@ -106,7 +106,7 @@
     <!-- remove default document title -->
     <h2 position="replace"/>
 
-    <div class="row mt32 mb32" position="replace">
+    <div class="row mt-4 mb-4" position="replace">
         <div id="informations" class="row mt8 mb8">
             <div class="col-6">
                 <t t-set="partner" t-value="o.partner_id or (o.move_ids and o.move_ids[0].partner_id)"/>
