@@ -3,16 +3,16 @@
 # 	* l10n_ar_sale
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0+e\n"
+"Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 13:50+0000\n"
-"PO-Revision-Date: 2023-01-13 13:50+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023\n"
-"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
+"POT-Creation-Date: 2024-08-02 19:43+0000\n"
+"PO-Revision-Date: 2024-03-06 14:06+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
+"Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -21,8 +21,18 @@ msgstr ""
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
+msgid "<br/><strong>Delivery Date: </strong>"
+msgstr ""
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "<br/><strong>Expiration: </strong>"
 msgstr "<br/><strong>Vencimiento: </strong>"
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
+msgid "<br/><strong>Incoterm:</strong>"
+msgstr ""
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -35,17 +45,6 @@ msgid "<br/><strong>Your Reference:</strong>"
 msgstr "<br/><strong>Su referencia:</strong>"
 
 #. module: l10n_ar_sale
-#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.sale_order_portal_content
-msgid ""
-"<span groups=\"account.group_show_line_subtotals_tax_included\" position=\"replace\">\n"
-"            <span groups=\"account.group_show_line_subtotals_tax_included\">Amount</span>\n"
-"        </span>"
-msgstr ""
-"<span groups=\"account.group_show_line_subtotals_tax_included\" position=\"replace\">\n"
-"            Cantidad\n"
-"        </span>"
-
-#. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.sale_order_portal_content
 msgid "<span>% VAT</span>"
@@ -53,8 +52,23 @@ msgstr "<span>% IVA</span>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
+msgid "<span>SubTotal</span>"
+msgstr ""
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
+msgid "<span>Total</span>"
+msgstr ""
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "<strong>Customer: </strong>"
 msgstr "<strong>Cliente: </strong>"
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.sale_order_portal_content
+msgid "<strong>Delivery Date:</strong>"
+msgstr ""
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -74,7 +88,7 @@ msgstr "De acuerdo a la responsabilidad de IVA"
 #. module: l10n_ar_sale
 #: model:ir.model,name:l10n_ar_sale.model_account_chart_template
 msgid "Account Chart Template"
-msgstr "Plantilla de Plan de Cuentas"
+msgstr "Plantilla de plan contable"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__active
@@ -87,20 +101,6 @@ msgid "Actual Next Number"
 msgstr "Número siguiente real"
 
 #. module: l10n_ar_sale
-#: model:ir.model.fields,field_description:l10n_ar_sale.field_account_chart_template__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__algolia_search
-msgid "Algolia Search"
-msgstr ""
-
-#. module: l10n_ar_sale
-#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
-msgid "Amount"
-msgstr "Importe"
-
-#. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__company_id
 msgid "Company"
 msgstr "Compañía"
@@ -108,7 +108,7 @@ msgstr "Compañía"
 #. module: l10n_ar_sale
 #: model:ir.model,name:l10n_ar_sale.model_res_config_settings
 msgid "Config Settings"
-msgstr "Opciones de configuración"
+msgstr "Ajustes de configuración"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__create_uid
@@ -155,11 +155,6 @@ msgstr "ID (identificación)"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "Invalid document as invoice"
 msgstr "Doc. no válido como factura"
-
-#. module: l10n_ar_sale
-#: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook____last_update
-msgid "Last Modified on"
-msgstr "Última modificación en"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_checkbook__write_uid
@@ -297,10 +292,27 @@ msgid "Show Checkbook in Sale Order."
 msgstr "Mostrar Talonario de Ventas en los Pedidos de Venta"
 
 #. module: l10n_ar_sale
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__group_delivery_date
+#: model:res.groups,name:l10n_ar_sale.group_delivery_date_on_report_online
+msgid "Show Delivery Date in Quotations report and online budget"
+msgstr ""
+
+#. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
 msgid "Show Unit Price with Taxes included On sale Order Lines"
 msgstr ""
 "Mostrar precio unitario con impuestos incluidos en las líneas de venta"
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
+msgid "Show Unit Price with Taxes included On sale Order Lines."
+msgstr ""
+
+#. module: l10n_ar_sale
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
+msgid ""
+"Shows the delivery date field in the budget report and in the online budget."
+msgstr ""
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,help:l10n_ar_sale.field_sale_checkbook__sequence_id
