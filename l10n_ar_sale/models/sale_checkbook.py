@@ -61,7 +61,7 @@ class SaleCheckbook(models.Model):
                 'code': 'sale.checkbook',
                 'implementation': 'no_gap',
                 'padding': 8,
-                'number_increment': 1,
+                'number_increment': 2,
                 'company_id': rec.company_id.id,
             }).id
         return rec
