@@ -41,7 +41,7 @@ class SaleOrder(models.Model):
 
     @api.depends('company_id')
     def _compute_sale_checkbook(self):
-        for rec in self:
+        for rec in self.filtered(lambda x: not x.sale_checkbook_id):
             if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and rec.company_id:
                 rec.sale_checkbook_id = rec._get_sale_checkbook()
             else:
@@ -57,15 +57,42 @@ class SaleOrder(models.Model):
 
     @api.model_create_multi
     def create(self, vals):
+        """"
+        En caso de la creacion de una OV totalmente nueva consumimos el numero de la secuencia
+        """
         for val in vals:
             if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
-                val.get('name', _('New')) == _('New') and \
-                    val.get('sale_checkbook_id'):
-                sale_checkbook = self.env['sale.checkbook'].browse(
-                    val.get('sale_checkbook_id'))
-                val['name'] = sale_checkbook.sequence_id and\
-                    sale_checkbook.sequence_id._next() or _('New')
+                val.get('sale_checkbook_id'):
+                sale_checkbook = self.env['sale.checkbook'].browse(val.get('sale_checkbook_id'))
+                if val.get('name', _('New')) == _('New'):
+                    val['name'] = sale_checkbook.sequence_id._next()
+                else:
+                    number_next = sale_checkbook.sequence_id.number_next_actual
+                    val['name'] = sale_checkbook.sequence_id.get_next_char(number_next)
         return super(SaleOrder, self).create(vals)
+
+    def write(self, vals):
+        """A sale checkbook could have a different order sequence, so we could
+        need to change it accordingly"""
+        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and vals.get('sale_checkbook_id'):
+            sale_checkbook = self.env['sale.checkbook'].browse(vals['sale_checkbook_id'])
+            if sale_checkbook.sequence_id:
+                for record in self:
+                    if record.sale_checkbook_id != sale_checkbook and record.state in {"draft", "sent"}:
+                        if not record.name or record.name == _('Nuevo'):
+                            record.name = sale_checkbook.sequence_id._next()
+                        else:
+                            number_next = sale_checkbook.sequence_id.number_next_actual
+                            vals['name'] = sale_checkbook.sequence_id.get_next_char(number_next)
+                    return super(SaleOrder, record).write(vals)
+        return super().write(vals)
+
+    def copy(self, default=None):
+        """Necesitamos que cuando duplicamos la OV mantenga el sale_checkbook_id"""
+        default = dict(default or {})
+        if self.sale_checkbook_id:
+            default['sale_checkbook_id'] = self.sale_checkbook_id.id
+        return super().copy(default)
 
     def _compute_tax_totals(self):
         """ Mandamos en contexto el invoice_date para calculo de impuesto con partner aliquot
