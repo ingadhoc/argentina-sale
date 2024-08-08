@@ -17,7 +17,7 @@
                 <!-- <field name="currency_id" invisible="1"/> -->
             </xpath>
             <field name="payment_term_id" position="before">
-                <field name="sale_checkbook_id" domain="[('company_id','in', [company_id, False])]" groups="l10n_ar_sale.use_sale_checkbook" readonly="state not in ['draft', 'sent']"/>
+                <field name="sale_checkbook_id" domain="[('company_id','in', [company_id, False])]" groups="l10n_ar_sale.use_sale_checkbook" readonly="state not in ['draft', 'sent']" force_save="1"/>
             </field>
         </field>
     </record>
