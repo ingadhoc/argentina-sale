@@ -42,10 +42,17 @@ class SaleOrder(models.Model):
     @api.depends('company_id')
     def _compute_sale_checkbook(self):
         for rec in self:
+            if rec.sale_checkbook_id:
+                continue
             if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and rec.company_id:
                 rec.sale_checkbook_id = rec._get_sale_checkbook()
             else:
                 rec.sale_checkbook_id = False
+
+    @api.onchange("company_id")
+    def _onchange_sale_checkbook(self):
+        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and self.company_id:
+            self.sale_checkbook_id = self._get_sale_checkbook()
 
     def _get_sale_checkbook(self):
         return (
