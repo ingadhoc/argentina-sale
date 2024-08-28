@@ -19,7 +19,8 @@ class SaleOrder(models.Model):
         readonly=True,
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
         compute="_compute_sale_checkbook",
-        store=True
+        store=True,
+        copy=True,
     )
 
     @api.depends(
@@ -41,8 +42,8 @@ class SaleOrder(models.Model):
 
     @api.depends('company_id')
     def _compute_sale_checkbook(self):
-        for rec in self:
-            if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and rec.company_id:
+        for rec in self.filtered(lambda x: not x.sale_checkbook_id):
+            if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and rec.company_id != rec._origin.company_id:
                 rec.sale_checkbook_id = rec._get_sale_checkbook()
             else:
                 rec.sale_checkbook_id = False
@@ -66,6 +67,17 @@ class SaleOrder(models.Model):
                 val['name'] = sale_checkbook.sequence_id and\
                     sale_checkbook.sequence_id._next() or _('New')
         return super(SaleOrder, self).create(vals)
+
+    def write(self, vals):
+        """A sale checkbook could have a different order sequence, so we could
+        need to change it accordingly"""
+        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and vals.get('sale_checkbook_id'):
+            sale_checkbook = self.env['sale.checkbook'].browse(vals['sale_checkbook_id'])
+            if sale_checkbook.sequence_id:
+                for record in self:
+                    if record.sale_checkbook_id.sequence_id != sale_checkbook.sequence_id and record.state in {"draft", "sent"}:
+                        record.name = sale_checkbook.sequence_id._next()
+        return super().write(vals)
 
     def _compute_tax_totals(self):
         """ Mandamos en contexto el invoice_date para calculo de impuesto con partner aliquot
