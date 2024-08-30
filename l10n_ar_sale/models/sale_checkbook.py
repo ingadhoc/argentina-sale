@@ -58,7 +58,7 @@ class SaleCheckbook(models.Model):
         if not rec.sequence_id:
             rec.sequence_id = self.env['ir.sequence'].sudo().create({
                 'name': rec.name,
-                'code': 'sale.checkbook',
+                'code': 'sale.order',
                 'implementation': 'no_gap',
                 'padding': 8,
                 'number_increment': 1,
