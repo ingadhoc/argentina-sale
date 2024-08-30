@@ -19,7 +19,6 @@ class SaleOrder(models.Model):
         readonly=True,
         compute="_compute_sale_checkbook",
         store=True,
-        copy=True,
         precompute=True,
     )
 
