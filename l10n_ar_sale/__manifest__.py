@@ -6,6 +6,8 @@
     'author': 'ADHOC SA',
     'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
+    'license': 'AGPL-3',
+    'license': 'AGPL-3',
     'summary': '',
     'depends': [
         'sale',
