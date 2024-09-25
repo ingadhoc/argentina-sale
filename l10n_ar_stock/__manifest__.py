@@ -1,5 +1,5 @@
 {
-    'name': 'Remitos, COT y demas ajustes de stock para Argentina',
+    'name': 'Remitos, COT y demas ajustes de stock para Argentina edit',
     'version': "17.0.1.2.0",
     'category': 'Localization/Argentina',
     'sequence': 14,
