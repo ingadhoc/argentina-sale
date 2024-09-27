@@ -78,7 +78,7 @@ class StockPicking(models.Model):
 
         if cuit_carrier == cuit and not patente_vehiculo:
             raise UserError(_(
-                'Si el CUIT de la compañía y el cuit del transportista son el '
+                'Si el CUIT de la compañía y el CUIT del transportista son el '
                 'mismo, se debe informar la patente del vehículo.'))
 
         # ej. nombre archivo TB_30111111118_003002_20060716_000183.txt
