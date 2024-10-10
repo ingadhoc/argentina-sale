@@ -15,16 +15,16 @@
     </record>
 
     <record id="view_sale_checkbook_tree" model="ir.ui.view">
-        <field name="name">sale.checkbook.tree</field>
+        <field name="name">sale.checkbook.list</field>
         <field name="model">sale.checkbook</field>
         <field name="arch" type="xml">
-            <tree string="Sale Checkbook">
+            <list string="Sale Checkbook">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="discriminate_taxes"/>
                 <field name="report_partner_id"/>
                 <field name="company_id" widget="selection" groups="base.group_multi_company"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -55,7 +55,7 @@
     <record id="action_checkbook_form" model="ir.actions.act_window">
         <field name="name">Sale Checkbook</field>
         <field name="res_model">sale.checkbook</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_sale_checkbook_search"/>
     </record>
 

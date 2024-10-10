@@ -49,10 +49,6 @@
         <!-- remove default partner address -->
         <t t-set="address" position="replace"/>
 
-        <!-- remove default document title -->
-        <h2 position="replace"/>
-
-
         <xpath expr="//span[@t-field='line.price_unit']" position="attributes">
             <attribute name="t-field">line.report_price_unit</attribute>
         </xpath>
