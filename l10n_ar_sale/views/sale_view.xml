@@ -8,7 +8,7 @@
             <group name="sale_info">
                 <field name="vat_discriminated"/>
             </group>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']" position="after">
+            <xpath expr="//field[@name='order_line']/list//field[@name='tax_id']" position="after">
                 <field name="price_unit_with_tax" groups="l10n_ar_sale.sale_price_unit_with_tax" widget="monetary"/>
                 <!-- <field name="currency_id" invisible="1"/> -->
             </xpath>
