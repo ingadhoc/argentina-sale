@@ -82,11 +82,7 @@ class SaleOrder(models.Model):
         return super().write(vals)
 
     def _compute_tax_totals(self):
-        """ Mandamos en contexto el invoice_date para calculo de impuesto con partner aliquot
-        ver módulo l10n_ar_account_withholding. """
-        for rec in self:
-            rec = rec.with_context(invoice_date=rec.date_order)
-            super(SaleOrder, rec)._compute_tax_totals()
+        super()._compute_tax_totals()
         # discriminamos o no impuestos solo en pdf y portal. En backend siempre los mostramos. Para esto evaluamos:
         # commit_assetsbundle viene cuando sacamos pdf
         # portal_view lo mandamos cuando mostramos campo en portal

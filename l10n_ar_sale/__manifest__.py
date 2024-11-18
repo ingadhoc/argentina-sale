@@ -9,7 +9,7 @@
     'summary': '',
     'depends': [
         'sale',
-        'l10n_ar',
+        'l10n_ar_tax',
     ],
     'external_dependencies': {
     },

@@ -133,10 +133,10 @@ class SaleOrderLine(models.Model):
             self.check_vat_tax()
         return res
 
-    @api.depends('order_id.date_order')
-    def _compute_amount(self):
-        """ Ver descripcion en modificacion en sale.order._amount_by_group
-        """
-        for line in self:
-            line = line.with_context(invoice_date=line.order_id.date_order)
-            super(SaleOrderLine, line)._compute_amount()
+    def _compute_tax_id(self):
+        """ Agregado de taxes de modulo l10n_ar_tax segun fiscal position """
+        super()._compute_tax_id()
+
+        for rec in self.filtered('order_id.fiscal_position_id.l10n_ar_tax_ids'):
+            date = rec.order_id.date_order
+            rec.tax_id += rec.order_id.fiscal_position_id._l10n_ar_add_taxes(rec.order_partner_id, rec.company_id, date, 'perception')
