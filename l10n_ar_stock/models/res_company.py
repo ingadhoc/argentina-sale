@@ -1,4 +1,4 @@
-from odoo import models, api, fields, _
+from odoo import models, api, fields
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 try:
@@ -20,15 +20,11 @@ class ResCompany(models.Model):
 
     @api.model
     def get_arba_cot_login_url(self, environment_type):
-        if environment_type == 'production':
-            arba_login_url = (
-                'https://cot.arba.gov.ar/TransporteBienes/'
-                'SeguridadCliente/presentarRemitos.do')
-        else:
-            arba_login_url = (
-                'https://cot.test.arba.gov.ar/TransporteBienes/'
-                'SeguridadCliente/presentarRemitos.do')
-        return arba_login_url
+        base_url = 'https://cot.arba.gov.ar/TransporteBienes/SeguridadCliente/presentarRemitos.do'
+        if environment_type != 'production':
+            base_url = base_url.replace('cot.arba.gov.ar', 'cot.test.arba.gov.ar')
+        return base_url
+
 
     def arba_cot_connect(self):
         """
@@ -38,9 +34,7 @@ class ResCompany(models.Model):
         cuit = self.partner_id.ensure_vat()
 
         if not self.arba_cot:
-            raise UserError(_(
-                'You must configure ARBA COT on company %s') % (
-                    self.name))
+            raise UserError(self.env._('You must configure ARBA COT on company %s', self.name))
 
         ws = COT()
         # en este caso si deberia andar cot en test y es más critico que para

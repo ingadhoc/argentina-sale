@@ -1,4 +1,4 @@
-from odoo import models, fields, _
+from odoo import models, fields
 import re
 import datetime
 try:
@@ -70,14 +70,14 @@ class StockPicking(models.Model):
 
         company = self.mapped('company_id')
         if len(company) > 1:
-            raise UserError(_(
+            raise UserError(self.env._(
                 'Los remitos seleccionados deben pertenecer a la misma '
                 'compañía'))
         cuit = company.partner_id.ensure_vat()
         cuit_carrier = carrier_partner.ensure_vat()
 
         if cuit_carrier == cuit and not patente_vehiculo:
-            raise UserError(_(
+            raise UserError(self.env._(
                 'Si el CUIT de la compañía y el cuit del transportista son el '
                 'mismo, se debe informar la patente del vehículo.'))
 
@@ -87,9 +87,9 @@ class StockPicking(models.Model):
         nro_puerta = '000'
         nro_secuencial = self.env['ir.sequence'].with_company(company).next_by_code('arba.cot.file')
         if not nro_secuencial:
-            raise UserError(_(
+            raise UserError(self.env._(
                 'No sequence found for COT files (code = "arba.cot.file") on '
-                'company "%s') % (company.name))
+                'company "%s', company.name))
 
         filename = "TB_%s_%s%s_%s_%s.txt" % (
             cuit,
@@ -102,18 +102,14 @@ class StockPicking(models.Model):
         HEADER = ["01", cuit]
 
         # 04 - FOOTER (Pie): TIPO_REGISTRO: 04 & CANTIDAD_TOTAL_REMITOS
-        # TODO que tome 10 caracteres
         FOOTER = ["04", str(len(self))]
 
         # TODO, si interesa se puede repetir esto para cada uno
         REMITOS_PRODUCTOS = []
 
-        # recorremos cada voucher number de cada remito
-        # for voucher in self.mapped('voucher_ids'):
-        #     rec = voucher.picking_id
         for rec in self:
             if not rec.voucher_ids:
-                raise UserError(_('No se asignó número de remito'))
+                raise UserError(self.env._('No se asignó número de remito'))
             voucher = rec.voucher_ids[0]
             dest_partner = rec.partner_id
             source_partner = rec.picking_type_id.warehouse_id.partner_id or\
@@ -122,21 +118,19 @@ class StockPicking(models.Model):
 
             if not source_partner.state_id.code or \
                     not dest_partner.state_id.code:
-                raise UserError(_(
+                raise UserError(self.env._(
                     'Las provincias de origen y destino son obligatorias y '
                     'deben tener un código válido'))
 
             if not rec.document_type_id:
-                raise UserError(_(
-                    'Picking has no "Document type" linked (Id: %s)') % (
-                    rec.id))
+                raise UserError(self.env._('Picking has no "Document type" linked (Id: %s)', rec.id))
             CODIGO_DGI = rec.document_type_id.code
             CODIGO_DGI = CODIGO_DGI.rjust(3, '0')
             letter = rec.document_type_id.l10n_ar_letter
             if not CODIGO_DGI or not letter:
-                raise UserError(_(
+                raise UserError(self.env._(
                     'Document type has no validator, code or letter configured'
-                    ' (Id: %s') % (rec.document_type_id.id))
+                    ' (Id: %s', rec.document_type_id.id))
 
             # TODO ver de hacer uno por número de remito?
             document_parts = self.env['account.move']._l10n_ar_get_document_number_parts(voucher.name, CODIGO_DGI)
@@ -144,9 +138,6 @@ class StockPicking(models.Model):
             NUMERO = str(document_parts['invoice_number'])
             PREFIJO = PREFIJO.rjust(5, '0')
             NUMERO = NUMERO.rjust(8, '0')
-
-            # rellenar y truncar a 2
-            # TIPO = '{:>2.2}'.format(letter.name)
 
             # si nro doc y tipo en ‘DNI’, ‘LC’, ‘LE’, ‘PAS’, ‘CI’ y doc
             doc_categ_id = commercial_partner.l10n_latam_identification_type_id
@@ -167,7 +158,6 @@ class StockPicking(models.Model):
                 "02",  # TIPO_REGISTRO
 
                 # FECHA_EMISION
-                # fields.Date.from_string(self.date_done).strftime('%Y%m%d').
                 datetime.date.today().strftime('%Y%m%d'),
 
                 # CODIGO_UNICO formato (CODIGO_DGI, TIPO, PREFIJO, NUMERO)
@@ -328,19 +318,19 @@ class StockPicking(models.Model):
                             line.product_uom.category_id.id),
                         ('arba_code', '!=', False)], limit=1)
                     if not uom_arba_with_code:
-                        raise UserError(_(
-                            'No arba code for uom "%s" (Id: %s) or any uom in '
-                            'category "%s"') % (
-                            line.product_uom.name, line.product_uom.id,
-                            line.product_uom.category_id.name))
+                        raise UserError(self.env._(
+                            'No arba code for uom "%(uom)s" (Id: %(id)s) or any uom in '
+                            'category "%(category)s"',
+                            uom=line.product_uom.name, id=line.product_uom.id,
+                            category=line.product_uom.category_id.name))
 
                     product_qty = line.product_uom._compute_quantity(
                         product_qty, uom_arba_with_code)
 
                 if not line.product_id.arba_code:
-                    raise UserError(_(
-                        'No arba code for product "%s" (Id: %s)') % (
-                        line.product_id.name, line.product_id.id))
+                    raise UserError(self.env._(
+                        'No arba code for product "%(product)s" (Id: %(id)s)', 
+                        product=line.product_id.name, id=line.product_id.id))
 
                 REMITOS_PRODUCTOS.append([
                     # TIPO_REGISTRO: 03
@@ -393,13 +383,6 @@ class StockPicking(models.Model):
             patente_vehiculo, patente_acoplado,
             prod_no_term_dev, importe)
 
-        # NO podemos usar tmp porque agrega un sufijo distinto y arba exije
-        # que sea tal cual el nombre del archivo
-        # with tempfile.NamedTemporaryFile(
-        #         prefix=filename, suffix='.txt') as file:
-        #     file.write(content.encode('utf-8'))
-        #     COT.PresentarRemito(file.name, testing="")
-
         filename = '/tmp/%s' % filename
         file = open(filename, 'w')
         file.write(content)
@@ -409,16 +392,16 @@ class StockPicking(models.Model):
         os.remove(filename)
 
         if COT.TipoError:
-            msg = _(
+            msg = self.env._(
                 'Error al presentar remito:\n'
-                '* Tipo Error: %s\n'
-                '* Codigo Error: %s\n'
-                '* Mensaje Error: %s') % (
-                    COT.TipoError, COT.CodigoError, COT.MensajeError)
+                '* Tipo Error: %(tipo)s\n'
+                '* Codigo Error: %(cod)s\n'
+                '* Mensaje Error: %(msj)s',
+                tipo=COT.TipoError, cod=COT.CodigoError, msj=COT.MensajeError)
             _logger.warning(msg)
             raise UserError(msg)
         elif COT.Excepcion:
-            msg = _('Error al presentar remito:\n* %s') % COT.Excepcion
+            msg = self.env._('Error al presentar remito:\n* %s', COT.Excepcion)
             _logger.warning(msg)
             raise UserError(msg)
 
@@ -431,14 +414,13 @@ class StockPicking(models.Model):
                     COT.MensajeError, COT.TipoError, COT.CodigoError))
 
         if errors:
-            raise UserError(_(
-                "Error al presentar remito:\n%s") % '\n'.join(errors))
+            raise UserError(self.env._(
+                "Error al presentar remito:\n%s", '\n'.join(errors)))
 
-        # TODO deberiamos tratar de usar este archivo y no generar el de arriba
         attachments = [(filename, content)]
         body = """
 <p>
-    Resultado solictud COT:
+    Resultado solicitud COT:
     <ul>
         <li>Número Comprobante: %s</li>
         <li>Codigo Integridad: %s</li>
@@ -457,7 +439,7 @@ class StockPicking(models.Model):
         })
         self.message_post(
             body=body,
-            subject=_('Remito Electrónico Solicitado'),
+            subject=self.env._('Remito Electrónico Solicitado'),
             attachments=attachments,
             body_is_html=True)
 

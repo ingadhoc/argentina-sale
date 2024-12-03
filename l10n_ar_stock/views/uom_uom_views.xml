@@ -17,14 +17,14 @@
     </record>
 
     <record id="product_uom_tree_view" model="ir.ui.view">
-        <field name="name">uom.uom.tree</field>
+        <field name="name">uom.uom.list</field>
         <field name="model">uom.uom</field>
         <field name="inherit_id" ref="uom.product_uom_tree_view"/>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="arba_code" optional="show"/>
                 <button name="action_arba_codes" type="object" title="Ver códigos" icon="fa-external-link"/>
-            </tree>
+            </list>
         </field>
     </record>
 

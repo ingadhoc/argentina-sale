@@ -8,5 +8,4 @@ from odoo import models, fields
 class StockLot(models.Model):
     _inherit = 'stock.lot'
 
-    dispatch_number = fields.Char(
-    )
+    dispatch_number = fields.Char()

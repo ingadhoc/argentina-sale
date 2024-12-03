@@ -3,14 +3,13 @@
 # directory
 ##############################################################################
 from odoo import models, api
-from odoo.addons.account.models.chart_template import template
 
 
 class AccountChartTemplate(models.AbstractModel):
     _inherit = 'account.chart.template'
 
     def _load(self, template_code, company, install_demo):
-        if company.country_id == self.env.ref('base.ar'):
+        if template_code in ('ar_base', 'ar_ex', 'ar_ri'):
             self.generate_stock_book(company)
         return super(AccountChartTemplate, self)._load(template_code, company, install_demo)
 

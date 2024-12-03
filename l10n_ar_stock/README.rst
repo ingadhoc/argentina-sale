@@ -14,16 +14,16 @@
 Integración del módulo de stock a requerimientos argentinos
 ===========================================================
 
-#. Remito electrónico Argentino
+#. Remito Argentino (no electrónico) a través de Talonarios de Remitos
+#. Implementacion de la generación del COT via Web Service y se suma al remito
 #. Número de despacho en lotes
-#. Crea libro de stock en caso de que no exista
+#. Crea Talonarios de Remitos en caso de que no exista
 
-Sobre remito electrónico
-------------------------
+Sobre COT
+---------
 
 PENDIENTE:
 
-* validaciones formato patentes (3 letras y 3 números ó 2 letras, 3 números y 2 letras)
 * parsear datetime_out y validar fecha >= hoy-1 y menor= a hoy mas 30 (no tan necesario, ya lo valida la respuesta, por ahora en el help)
 * Implementar, si es necesario, nro_planta y nro_puerta
 * Si es necesario o mejor imprimir el número obtenido en el remito, entonces tenemos que ver que las dos cosas se hagan en el mismo momento (reporte de remito y solicitud de cot)
@@ -33,14 +33,17 @@ IMPORTANTE: por ahora está implementado para stock.picking pero no seria muy di
 
 Por ahora implementados ARBA y Santa Fe.
 
-* Tabla de códigos (Según arba): http://www.arba.gov.ar/bajadas/Fiscalizacion/Operativos/TransporteBienes/Documentacion/20080701-TB-TablasDeValidacion.pdf
-* Tablas de códigos (Según santa fe): https://www.santafe.gov.ar/index.php/content/download/72020/349107/file/Descargar (igual a la de arba)
-* Tabla en sistemas ágiles: http://www.sistemasagiles.com.ar/trac/wiki/RemitoElectronicoCotArba?format=pdf
-* Especificación archivo txt (viejo): http://www.arba.gov.ar/Transporte_Bienes/VerPDF.asp?param=DA
-* Nuevo diseño archivo txt: https://www.arba.gov.ar/archivos/Publicaciones/nuevodiseniodearchivotxt.pdf
-* Sobre nuevo diseño: https://www.arba.gov.ar/Apartados/Agentes/AgenteCot.asp?apartado=IIBB&Lugar=E
-* Instructivo: https://www.arba.gov.ar/archivos/Publicaciones/especificacionesparalaaplicacioncliente.pdf
+Links Importantes:
+
+* Tabla de códigos (Según arba - aplican igual para Santa Fe): http://www.arba.gov.ar/bajadas/Fiscalizacion/Operativos/TransporteBienes/Documentacion/20080701-TB-TablasDeValidacion.pdf
 * Nomenclador productos: https://www.arba.gov.ar/Aplicaciones/NomencladorTB/NomencladorTB.asp
+
+Links Devs:
+
+* Nuevo diseño archivo txt: https://www.arba.gov.ar/archivos/Publicaciones/nuevodiseniodearchivotxt.pdf (vigencia desde el 05/08/2019)
+* Instructivo: https://www.arba.gov.ar/archivos/Publicaciones/especificacionesparalaaplicacioncliente.pdf (actualizado el 24/04/2019)
+* Especificación archivo txt (viejo): http://www.arba.gov.ar/Transporte_Bienes/VerPDF.asp?param=DA (desde el 17/8/2011)
+* Tabla en sistemas ágiles: http://www.sistemasagiles.com.ar/trac/wiki/RemitoElectronicoCotArba?format=pdf
 
 Installation
 ============
