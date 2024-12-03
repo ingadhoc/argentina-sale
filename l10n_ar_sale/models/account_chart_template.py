@@ -30,7 +30,7 @@ class AccountChartTemplate(models.AbstractModel):
             ('name', '=', checkbook_vals['name']),
             ('company_id', '=', company.id)])
         if not checkbook:
-            checkbook.create(checkbook_vals)
+            checkbook.sudo().create(checkbook_vals)
         return True
 
     @api.model
