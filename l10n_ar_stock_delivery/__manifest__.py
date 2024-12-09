@@ -1,6 +1,6 @@
 {
     'name': 'Integracion entre modulo delivery y localización argentina',
-    'version': "17.0.1.0.0",
+    'version': "18.0.1.0.0",
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -15,7 +15,7 @@
     ],
     'demo': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': True,
     'application': False,
 }
