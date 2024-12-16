@@ -77,6 +77,10 @@
         <td name="td_taxes" position="attributes">
             <attribute name="t-if">doc.vat_discriminated</attribute>
         </td>
+        <t t-set="taxes" position="attributes">
+            <attribute name="t-value">', '.join([(tax.invoice_label or tax.name) for tax in line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)])</attribute>
+        </t>
+
         <!-- We change the name of the column depending on the tax discrimination -->
         <th name="th_subtotal" class="text-end" position="replace">
             <td t-if="doc.vat_discriminated" class="text-end" >
