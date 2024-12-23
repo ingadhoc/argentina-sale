@@ -1,12 +1,6 @@
 {
     'name': 'Argentinian Sale Total Fields',
-<<<<<<< HEAD
     'version': "18.0.1.0.0",
-||||||| parent of f8802e6 (temp)
-    'version': "17.0.1.2.0",
-=======
-    'version': "17.0.1.3.0",
->>>>>>> f8802e6 (temp)
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
