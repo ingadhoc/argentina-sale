@@ -11,11 +11,13 @@
    :alt: License: AGPL-3
 
 
-===================================================
-Argentinian Sale Compatibility with Sale Order Type
-===================================================
+==================================================
+Sale Order Type Extended for Argentinean Use Cases
+==================================================
 
-Check the sequences of the checkbook that has the type of sale and compare it with the sale checkbook, if they are different, place the sequence of the sales checkbook
+Extended functionalities for sale order types in Argentinean sales:
+#. Enable the option to force the inclusion or exclusion of VAT
+#. Allow the option to set a different partner, distinct from the company's, for the sale order report header
 
 Installation
 ============

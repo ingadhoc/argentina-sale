@@ -106,8 +106,6 @@ class SaleOrderLine(models.Model):
         """For recs of argentinian companies with l10n_ar_company_requires_vat (that
         comes from the responsability), we ensure one and only one vat tax is
         configured
-        TODO: we could also integrate with so_type invoice journal id or
-        with sale_checkbook_id
         """
         # por ahora, para no romper el install de sale_timesheet lo
         # desactivamos en la instalacion

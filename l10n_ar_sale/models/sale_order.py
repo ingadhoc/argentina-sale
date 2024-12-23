@@ -14,72 +14,14 @@ class SaleOrder(models.Model):
     vat_discriminated = fields.Boolean(
         compute='_compute_vat_discriminated',
     )
-    sale_checkbook_id = fields.Many2one(
-        'sale.checkbook',
-        readonly=True,
-        compute="_compute_sale_checkbook",
-        store=True,
-        precompute=True,
-    )
 
     @api.depends(
         'partner_id.l10n_ar_afip_responsibility_type_id',
         'company_id.l10n_ar_company_requires_vat',)
     def _compute_vat_discriminated(self):
         for rec in self:
-            # si tiene checkbook y discrimna en funcion al partner pero no tiene responsabilidad seteada,
-            # dejamos comportamiento nativo de odoo de discriminar impuestos
-            discriminate_taxes = rec.sale_checkbook_id.discriminate_taxes
-            if discriminate_taxes == 'yes':
-                vat_discriminated = True
-            elif discriminate_taxes == 'no':
-                vat_discriminated = False
-            else:
-                vat_discriminated = rec.company_id.l10n_ar_company_requires_vat and \
-                    rec.partner_id.l10n_ar_afip_responsibility_type_id.code in ['1'] or False
-            rec.vat_discriminated = vat_discriminated
-
-    @api.depends('company_id')
-    def _compute_sale_checkbook(self):
-        for rec in self:
-            if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook'):
-                # solo recalculamos si no habia checkbook o si la compañía no es compatible
-                if not rec.sale_checkbook_id or (
-                        rec.sale_checkbook_id.company_id and rec.sale_checkbook_id.company_id != rec.company_id):
-                    rec.sale_checkbook_id = rec._get_sale_checkbook()
-            else:
-                rec.sale_checkbook_id = False
-
-    def _get_sale_checkbook(self):
-        return (
-            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id', company_id=self.company_id.id, user_id=self.env.user.id) or
-            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id', user_id=self.env.user.id) or
-            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id') or
-            self.env['sale.checkbook'].search([('company_id', 'in', [self.company_id.id, False])], limit=1)
-        )
-
-    @api.model_create_multi
-    def create(self, vals):
-        for val in vals:
-            if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
-                val.get('name', _('New')) == _('New') and \
-                    val.get('sale_checkbook_id'):
-                sale_checkbook = self.env['sale.checkbook'].browse(
-                    val.get('sale_checkbook_id'))
-                val['name'] = sale_checkbook.sequence_id and\
-                    sale_checkbook.sequence_id._next() or _('New')
-        return super(SaleOrder, self).create(vals)
-
-    def write(self, vals):
-        """A sale checkbook could have a different order sequence, so we could
-        need to change it accordingly"""
-        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and vals.get('sale_checkbook_id'):
-            sale_checkbook = self.env['sale.checkbook'].browse(vals['sale_checkbook_id'])
-            if sale_checkbook.sequence_id:
-                for record in self:
-                    if record.sale_checkbook_id.sequence_id != sale_checkbook.sequence_id and record.state in {"draft", "sent"}:
-                        record.name = sale_checkbook.sequence_id._next()
-        return super().write(vals)
+            rec.vat_discriminated = rec.company_id.l10n_ar_company_requires_vat and \
+                rec.partner_id.l10n_ar_afip_responsibility_type_id.code in ['1'] or False
 
     def _compute_tax_totals(self):
         super()._compute_tax_totals()
@@ -97,6 +39,7 @@ class SaleOrder(models.Model):
             to_remove_ids = tax_groups.filtered(lambda x: x.l10n_ar_vat_afip_code).ids
             tax_group_name = list(order.tax_totals['groups_by_subtotal'].keys())[0]
             tax_group_vals = order.tax_totals['groups_by_subtotal'].get(tax_group_name)
+            # TODO revisar si es discriminar / no discrminar
             updated_tax_group_vals = list(filter(lambda x: x.get('tax_group_id') not in to_remove_ids, tax_group_vals))
             new_totals = order.tax_totals
             new_totals['groups_by_subtotal'].update({tax_group_name: updated_tax_group_vals})

@@ -6,7 +6,8 @@
         <field name="inherit_id" ref="sale_order_type.sot_sale_order_type_form_view"/>
         <field name="arch" type="xml">
             <field name="sequence_id" position="after">
-                <field name="sale_checkbook_id" groups="l10n_ar_sale.use_sale_checkbook"/>
+                <field name="discriminate_taxes" invisible="'AR'not in fiscal_country_codes"/>
+                <field name="report_partner_id" invisible="'AR'not in fiscal_country_codes"/>
             </field>
         </field>
     </record>

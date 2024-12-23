@@ -2,21 +2,26 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class SaleOrderType(models.Model):
     _inherit = "sale.order.type"
 
-    sale_checkbook_id = fields.Many2one(
-        'sale.checkbook',
-        check_company=True,
-        help='Si se define un checkbook se usara este para este type. Si no se define se dejara el que se tome por '
-        'defecto.'
+    discriminate_taxes = fields.Selection(
+        [
+            ('yes', 'Yes'),
+            ('no', 'No'),
+        ],
     )
+    report_partner_id = fields.Many2one(
+        'res.partner',
+    )
+    fiscal_country_codes = fields.Char(compute='_compute_fiscal_country_codes')
 
-    _sql_constraints = [
-        ('only_one_sequence_on_sale_order',
-          'CHECK((sequence_id IS null) OR (sale_checkbook_id IS null))',
-            'No pueden estar seteada una secuencia de entrada y un talonario de ventas al mismo tiempo')
-    ]
+    @api.depends('company_id')
+    @api.depends_context('allowed_company_ids')
+    def _compute_fiscal_country_codes(self):
+        for record in self:
+            allowed_companies = record.company_id or self.env.companies
+            record.fiscal_country_codes = ",".join(allowed_companies.mapped('account_fiscal_country_id.code'))
