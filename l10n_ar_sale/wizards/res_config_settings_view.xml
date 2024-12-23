@@ -13,9 +13,6 @@
             </xpath>
 
             <xpath expr="//setting[@id='proforma_configuration']" position="after">
-                <setting id="group_use_sale_checkbook" help="Show Checkbook in Sale Order." title="Show Checkbook in Sale Order.">
-                    <field name="group_use_sale_checkbook"/>
-                </setting>
                 <setting id="group_delivery_date" help="Shows the delivery date field in the budget report and in the online budget." title="Shows the delivery date field in the budget report and in the online budget.">
                     <field name="group_delivery_date"/>
                 </setting>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_saleorder_document" inherit_id="l10n_ar_sale.report_saleorder_document">
+
+        <t t-set="header_address" position="attributes">
+            <attribute name="t-value">doc.type_id.report_partner_id or doc.company_id.partner_id</attribute>
+        </t>
+
+    </template>
+
+</odoo>
