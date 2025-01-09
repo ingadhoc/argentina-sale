@@ -63,21 +63,26 @@ class SaleOrder(models.Model):
     @api.model_create_multi
     def create(self, vals):
         for val in vals:
-            sale_checkbook_id = val.get('sale_checkbook_id')
-            sale_checkbook_type = val.get('type_id')
-            if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and \
-                val.get('name', _('New')) == _('New') and \
-                sale_checkbook_id:
-                sale_checkbook = self.env['sale.checkbook'].browse(
-                    sale_checkbook_id)
-                val['name'] = sale_checkbook.sequence_id and\
-                    sale_checkbook.sequence_id._next() or _('New')
-            elif sale_checkbook_type and not sale_checkbook_id:
-                sale_checkbook_from_type = self.env['sale.order.type'].browse(sale_checkbook_type).sale_checkbook_id
-                # Obtenemos el talonario asociado al tipo de venta, esto lo utilizamos si la venta viene de website
-                # O el usuario no tiene acceso a los talonarios de venta
-                val['name'] = sale_checkbook_from_type and sale_checkbook_from_type.sequence_id and\
-                    sale_checkbook_from_type.sequence_id._next() or _('New')
+            if val.get('name', _('New')) == _('New'):
+                sale_checkbook_id = val.get('sale_checkbook_id')
+                sale_order_type = val.get('type_id')
+
+                use_checkbook = self.sudo().env.ref('l10n_ar_sale.use_sale_checkbook').users
+                object_model = False
+                object_id = False
+                if use_checkbook and sale_checkbook_id:
+                    object_model = 'sale.checkbook'
+                    object_id = sale_checkbook_id
+                elif (use_checkbook and not sale_checkbook_id and sale_order_type) and \
+                     (not use_checkbook and sale_order_type):
+                    object_model = 'sale.order.type'
+                    object_id = sale_order_type
+
+                if object_model and object_id:
+                    object_record = self.env[object_model].browse(object_id)
+                    val['name'] = object_record.sequence_id and \
+                        object_record.sequence_id._next() or _('New')
+
         return super(SaleOrder, self).create(vals)
 
     def write(self, vals):
