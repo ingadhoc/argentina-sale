@@ -121,8 +121,8 @@ class SaleOrderLine(models.Model):
                 raise UserError(_(
                     'Debe haber un único impuesto del grupo de impuestos "IVA" por línea, agréguelo a "%s". '
                     'En caso de tenerlo, revise la configuración del impuesto, en opciones avanzadas, '
-                    'en el campo correspondiente "Grupo de Impuestos".' % (
-                        rec.product_id.name)))
+                    'en el campo correspondiente "Grupo de Impuestos".',
+                        rec.product_id.name))
 
     def write(self, vals):
         res = super(SaleOrderLine, self).write(vals)
