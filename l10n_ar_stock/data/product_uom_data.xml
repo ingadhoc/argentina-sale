@@ -11,7 +11,7 @@
         </record>
         <record model='uom.uom' forcecreate="False" id='uom.uom_square_meter'>
             <field name='arba_code'>4</field>
-        </record>        
+        </record>
         <record model='uom.uom' forcecreate="False" id='uom.product_uom_meter'>
             <field name='arba_code'>5</field>
         </record>
