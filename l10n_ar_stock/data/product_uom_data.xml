@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<odoo>
-    <data noupdate="True">
+<odoo noupdate="True">
         <record model='uom.uom' forcecreate="False" id='uom.product_uom_kgm'>
             <field name='arba_code'>1</field>
         </record>
@@ -20,5 +19,4 @@
             <field name='arba_code'>6</field>
         </record>
         <!-- par solo existe en l10n_cl (codigo 7 arba) -->
-    </data>
 </odoo>

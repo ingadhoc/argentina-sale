@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
         <!-- Crear un documento de ejemplo -->
         <record id="l10n_ar.dc_r_r" model="l10n_latam.document.type">
             <field name="active" eval="True"/>
@@ -16,5 +15,4 @@
             <field name="sequence_id" ref="stock_voucher.stock_book_sequence_1"/>
             <field name="lines_per_voucher" eval="0"/>
         </record>
-    </data>
 </odoo>
