@@ -1,12 +1,13 @@
 from odoo import models, api, fields
+from odoo.exceptions import UserError
+import logging
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 try:
     from pyafipws.cot import COT
 except ImportError:
     COT = None
-from odoo.exceptions import UserError
-import logging
+
 _logger = logging.getLogger(__name__)
 
 
