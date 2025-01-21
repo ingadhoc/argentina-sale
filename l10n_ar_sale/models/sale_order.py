@@ -37,13 +37,10 @@ class SaleOrder(models.Model):
             if not tax_groups:
                 continue
             to_remove_ids = tax_groups.filtered(lambda x: x.l10n_ar_vat_afip_code).ids
-            tax_group_name = list(order.tax_totals['groups_by_subtotal'].keys())[0]
-            tax_group_vals = order.tax_totals['groups_by_subtotal'].get(tax_group_name)
+            tax_group_vals = order.tax_totals['subtotals'][0]['tax_groups']
             # TODO revisar si es discriminar / no discrminar
-            updated_tax_group_vals = list(filter(lambda x: x.get('tax_group_id') not in to_remove_ids, tax_group_vals))
-            new_totals = order.tax_totals
-            new_totals['groups_by_subtotal'].update({tax_group_name: updated_tax_group_vals})
-            order.tax_totals = new_totals
+            updated_tax_group_vals = list(filter(lambda x: x.get('id') not in to_remove_ids, tax_group_vals))
+            order.tax_totals['subtotals'][0]['tax_groups'] = updated_tax_group_vals
 
     def _get_name_sale_report(self, report_xml_id):
         """ Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document
