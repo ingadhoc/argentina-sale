@@ -22,11 +22,157 @@ class SaleOrder(models.Model):
     )
     def _compute_vat_discriminated(self):
         for rec in self:
+<<<<<<< HEAD
             rec.vat_discriminated = (
                 rec.company_id.l10n_ar_company_requires_vat
                 and rec.partner_id.l10n_ar_afip_responsibility_type_id.code in ["1"]
                 or False
             )
+||||||| parent of 0d765ba (temp)
+            # si tiene checkbook y discrimna en funcion al partner pero no tiene responsabilidad seteada,
+            # dejamos comportamiento nativo de odoo de discriminar impuestos
+            discriminate_taxes = rec.sale_checkbook_id.discriminate_taxes
+            if discriminate_taxes == 'yes':
+                vat_discriminated = True
+            elif discriminate_taxes == 'no':
+                vat_discriminated = False
+            else:
+                vat_discriminated = rec.company_id.l10n_ar_company_requires_vat and \
+                    rec.partner_id.l10n_ar_afip_responsibility_type_id.code in ['1'] or False
+            rec.vat_discriminated = vat_discriminated
+
+    @api.depends('company_id')
+    def _compute_sale_checkbook(self):
+        for rec in self:
+            if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook'):
+                # solo recalculamos si no habia checkbook o si la compañía no es compatible
+                if not rec.sale_checkbook_id or (
+                        rec.sale_checkbook_id.company_id and rec.sale_checkbook_id.company_id != rec.company_id):
+                    rec.sale_checkbook_id = rec._get_sale_checkbook()
+            else:
+                rec.sale_checkbook_id = False
+
+    def _get_sale_checkbook(self):
+        return (
+            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id', company_id=self.company_id.id, user_id=self.env.user.id) or
+            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id', user_id=self.env.user.id) or
+            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id') or
+            self.env['sale.checkbook'].search([('company_id', 'in', [self.company_id.id, False])], limit=1)
+        )
+
+    @api.model_create_multi
+    def create(self, vals):
+        for val in vals:
+            if val.get('name', _('New')) == _('New'):
+                sale_checkbook_id = val.get('sale_checkbook_id')
+                sale_order_type = val.get('type_id')
+
+                use_checkbook = self.sudo().env.ref('l10n_ar_sale.use_sale_checkbook').users
+                object_model = False
+                object_id = False
+                if use_checkbook and sale_checkbook_id:
+                    object_model = 'sale.checkbook'
+                    object_id = sale_checkbook_id
+                elif (use_checkbook and not sale_checkbook_id and sale_order_type) and \
+                     (not use_checkbook and sale_order_type):
+                    object_model = 'sale.order.type'
+                    object_id = sale_order_type
+
+                if object_model and object_id:
+                    object_record = self.env[object_model].browse(object_id)
+                    val['name'] = object_record.sequence_id and \
+                        object_record.sequence_id._next() or _('New')
+
+        return super(SaleOrder, self).create(vals)
+
+    def write(self, vals):
+        """A sale checkbook could have a different order sequence, so we could
+        need to change it accordingly"""
+        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and vals.get('sale_checkbook_id'):
+            sale_checkbook = self.env['sale.checkbook'].browse(vals['sale_checkbook_id'])
+            if sale_checkbook.sequence_id:
+                for record in self:
+                    if record.sale_checkbook_id.sequence_id != sale_checkbook.sequence_id and record.state in {"draft", "sent"}:
+                        record.name = sale_checkbook.sequence_id._next()
+        return super().write(vals)
+=======
+            # si tiene checkbook y discrimna en funcion al partner pero no tiene responsabilidad seteada,
+            # dejamos comportamiento nativo de odoo de discriminar impuestos
+            discriminate_taxes = rec.sale_checkbook_id.discriminate_taxes
+            if discriminate_taxes == 'yes':
+                vat_discriminated = True
+            elif discriminate_taxes == 'no':
+                vat_discriminated = False
+            else:
+                vat_discriminated = rec.company_id.l10n_ar_company_requires_vat and \
+                    rec.partner_id.l10n_ar_afip_responsibility_type_id.code in ['1'] or False
+            rec.vat_discriminated = vat_discriminated
+
+    @api.depends('company_id')
+    def _compute_sale_checkbook(self):
+        for rec in self:
+            if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook'):
+                # solo recalculamos si no habia checkbook o si la compañía no es compatible
+                if not rec.sale_checkbook_id or (
+                        rec.sale_checkbook_id.company_id and rec.sale_checkbook_id.company_id != rec.company_id):
+                    rec.sale_checkbook_id = rec._get_sale_checkbook()
+            else:
+                rec.sale_checkbook_id = False
+
+    def _get_sale_checkbook(self):
+        return (
+            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id', company_id=self.company_id.id, user_id=self.env.user.id) or
+            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id', user_id=self.env.user.id) or
+            self.env['ir.default'].sudo()._get('sale.order', 'sale_checkbook_id') or
+            self.env['sale.checkbook'].search([('company_id', 'in', [self.company_id.id, False])], limit=1)
+        )
+
+    @api.model_create_multi
+    def create(self, vals):
+        """ Elegimos la secuencia que va usar el pedido de ventas, Si la orden de venta se crea por interfaz funciona
+        ok, pero cuando viene de otro lado tipo creado por ML parece que no todos los campos o datos estan llenos o
+        se calculan como deberian, Para evitar que suceda eso seguimos esta logica:
+
+        1. Si usa talonario de ventas
+            1.1 Si tiene talonario de ventasy tiene secuencia usa esa
+            1.2 Si el anterior no se cump,e y usa tipo de venta y dentro hay un talonario con secuencia usa esa.
+        2. Si no se cumplen las anteriores y tiene tipo de venta intenta obtener si tiene secuencia.
+        3. Si no consigue secuencia deja el name como New y utiliza la secuencia por defecto para las ventas """
+
+        for val in vals:
+            if val.get('name', _('New')) == _('New'):
+                sale_checkbook = self.env["sale.checkbook"].browse(val.get('sale_checkbook_id')) \
+                    if val.get('sale_checkbook_id') else False
+                sale_order_type = self.env["sale.order.type"].browse(val.get('type_id')) \
+                    if val.get('type_id') else False
+
+                use_checkbook = self.sudo().env.ref('l10n_ar_sale.use_sale_checkbook').users
+
+                seq = False
+                if use_checkbook:
+                    if sale_checkbook:
+                        seq = sale_checkbook.sequence_id
+                    if not seq and sale_order_type and sale_order_type.sale_checkbook_id:
+                        seq = sale_order_type.sale_checkbook_id.sequence_id
+                if not seq and sale_order_type:
+                    seq = sale_order_type.sequence_id
+
+                if seq:
+                    val['name'] = seq._next() or _('New')
+
+        return super(SaleOrder, self).create(vals)
+
+    def write(self, vals):
+        """A sale checkbook could have a different order sequence, so we could
+        need to change it accordingly"""
+        if self.env.user.has_group('l10n_ar_sale.use_sale_checkbook') and vals.get('sale_checkbook_id'):
+            sale_checkbook = self.env['sale.checkbook'].browse(vals['sale_checkbook_id'])
+            if sale_checkbook.sequence_id:
+                for record in self:
+                    if record.sale_checkbook_id.sequence_id != sale_checkbook.sequence_id and record.state in {"draft", "sent"}:
+                        record.name = sale_checkbook.sequence_id._next()
+        return super().write(vals)
+>>>>>>> 0d765ba (temp)
 
     def _compute_tax_totals(self):
         super()._compute_tax_totals()
