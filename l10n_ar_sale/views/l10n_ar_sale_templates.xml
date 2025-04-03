@@ -13,7 +13,7 @@
         </xpath>
 
         <xpath expr="//span[contains(@t-out, 'line.tax_id')]" position="attributes">
-            <attribute name="t-out">', '.join(map(lambda x: (x.description or x.name), line.report_tax_id))</attribute>
+            <attribute name="t-out">', '.join(map(lambda x: (x.invoice_label or x.name), line.report_tax_id))</attribute>
         </xpath>
 
 
@@ -25,7 +25,7 @@
         <!-- use column vat instead of taxes and only list vat taxes-->
         <td t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}" position="replace">
             <td id="taxes" t-if="sale_order.vat_discriminated" t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
-                <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)))"/>
+                <span t-out="', '.join(map(lambda x: (x.invoice_label or x.name), line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)))"/>
             </td>
         </td>
 
