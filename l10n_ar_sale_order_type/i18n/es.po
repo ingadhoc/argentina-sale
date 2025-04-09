@@ -4,15 +4,14 @@
 # 
 # Translators:
 # Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
-# Marco Carrazza, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-05 16:44+0000\n"
+"POT-Creation-Date: 2024-10-02 22:20+0000\n"
 "PO-Revision-Date: 2024-03-20 19:24+0000\n"
-"Last-Translator: Marco Carrazza, 2024\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,11 +20,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #. module: l10n_ar_sale_order_type
-#. odoo-python
-#: code:addons/l10n_ar_sale_order_type/models/sale_order.py:0
-#, python-format
-msgid "New"
-msgstr "Nuevo"
+#: model:ir.model.constraint,message:l10n_ar_sale_order_type.constraint_sale_order_type_only_one_sequence_on_sale_order
+msgid ""
+"No pueden estar seteada una secuencia de entrada y un talonario de ventas al"
+" mismo tiempo"
+msgstr ""
 
 #. module: l10n_ar_sale_order_type
 #: model:ir.model.fields,field_description:l10n_ar_sale_order_type.field_sale_order_type__sale_checkbook_id
@@ -36,6 +35,13 @@ msgstr "Talonario de Ventas"
 #: model:ir.model,name:l10n_ar_sale_order_type.model_sale_order
 msgid "Sales Order"
 msgstr "Pedido de venta"
+
+#. module: l10n_ar_sale_order_type
+#: model:ir.model.fields,help:l10n_ar_sale_order_type.field_sale_order_type__sale_checkbook_id
+msgid ""
+"Si se define un checkbook se usara este para este type. Si no se define se "
+"dejara el que se tome por defecto."
+msgstr ""
 
 #. module: l10n_ar_sale_order_type
 #: model:ir.model,name:l10n_ar_sale_order_type.model_sale_order_type
