@@ -73,6 +73,16 @@ class SaleOrder(models.Model):
         # Intentamos Completar el dato tipo de documento si no seteado
         to_fix = invoices.filtered(lambda x: x.l10n_latam_use_documents and not x.l10n_latam_document_type_id)
         to_fix._compute_l10n_latam_available_document_types()
+        if self.is_module_installed("sale_subscription_ux"):
+            for invoice in invoices:
+                so = invoice.invoice_line_ids[0].sale_line_ids.order_id or False
+                if so and so.plan_id.bill_end_period:
+                    new_period_start, new_period_stop, ratio, number_of_days = so.order_line[
+                        0
+                    ]._get_invoice_line_parameters()
+                    invoice.l10n_ar_afip_service_start = new_period_start - so.plan_id.billing_period
+                    invoice.l10n_ar_afip_service_end = new_period_stop - so.plan_id.billing_period
+
         return invoices
 
     def is_module_installed(self, module):
