@@ -87,7 +87,7 @@ class StockPicking(models.Model):
 
         company = self.mapped("company_id")
         if len(company) > 1:
-            raise UserError(self.env._("Los remitos seleccionados deben pertenecer a la misma " "compañía"))
+            raise UserError(self.env._("Los remitos seleccionados deben pertenecer a la misma compañía"))
         cuit = company.partner_id.ensure_vat()
         cuit_carrier = carrier_partner.ensure_vat()
 
@@ -106,7 +106,7 @@ class StockPicking(models.Model):
         nro_secuencial = self.env["ir.sequence"].with_company(company).next_by_code("arba.cot.file")
         if not nro_secuencial:
             raise UserError(
-                self.env._('No sequence found for COT files (code = "arba.cot.file") on ' 'company "%s', company.name)
+                self.env._('No sequence found for COT files (code = "arba.cot.file") on company "%s', company.name)
             )
 
         filename = "TB_%s_%s%s_%s_%s.txt" % (
@@ -136,7 +136,7 @@ class StockPicking(models.Model):
 
             if not source_partner.state_id.code or not dest_partner.state_id.code:
                 raise UserError(
-                    self.env._("Las provincias de origen y destino son obligatorias y " "deben tener un código válido")
+                    self.env._("Las provincias de origen y destino son obligatorias y deben tener un código válido")
                 )
 
             if not rec.document_type_id:
@@ -147,7 +147,7 @@ class StockPicking(models.Model):
             if not CODIGO_DGI or not letter:
                 raise UserError(
                     self.env._(
-                        "Document type has no validator, code or letter configured" " (Id: %s", rec.document_type_id.id
+                        "Document type has no validator, code or letter configured (Id: %s", rec.document_type_id.id
                     )
                 )
 
@@ -294,7 +294,7 @@ class StockPicking(models.Model):
                     if not uom_arba_with_code:
                         raise UserError(
                             self.env._(
-                                'No arba code for uom "%(uom)s" (Id: %(id)s) or any uom in ' 'category "%(category)s"',
+                                'No arba code for uom "%(uom)s" (Id: %(id)s) or any uom in category "%(category)s"',
                                 uom=line.product_uom.name,
                                 id=line.product_uom.id,
                                 category=line.product_uom.category_id.name,
@@ -352,80 +352,89 @@ class StockPicking(models.Model):
         prod_no_term_dev,
         importe,
     ):
-        self.ensure_one()
+        # self.ensure_one()
+        for rec in self:
+            COT = rec.company_id.arba_cot_connect()
 
-        COT = self.company_id.arba_cot_connect()
-
-        if not carrier_partner:
-            raise UserError(
-                'Debe vincular una "Empresa transportista" a la forma de envío'
-                " seleccionada o elegir otra forma de envío"
-            )
-        content, filename = self.get_arba_file_data(
-            datetime_out, tipo_recorrido, carrier_partner, patente_vehiculo, patente_acoplado, prod_no_term_dev, importe
-        )
-
-        filename = "/tmp/%s" % filename
-        file = open(filename, "w")
-        file.write(content)
-        file.close()
-        _logger.info('Presentando COT con archivo "%s"' % filename)
-        COT.PresentarRemito(filename, testing="")
-        os.remove(filename)
-
-        if COT.TipoError:
-            msg = self.env._(
-                "Error al presentar remito:\n"
-                "* Tipo Error: %(tipo)s\n"
-                "* Codigo Error: %(cod)s\n"
-                "* Mensaje Error: %(msj)s",
-                tipo=COT.TipoError,
-                cod=COT.CodigoError,
-                msj=COT.MensajeError,
-            )
-            _logger.warning(msg)
-            raise UserError(msg)
-        elif COT.Excepcion:
-            msg = self.env._("Error al presentar remito:\n* %s", COT.Excepcion)
-            _logger.warning(msg)
-            raise UserError(msg)
-
-        errors = []
-        while COT.LeerErrorValidacion():
-            errors.append(
-                ("* MensajeError: %s\n" "* TipoError: %s\n" "* CodigoError: %s\n")
-                % (COT.MensajeError, COT.TipoError, COT.CodigoError)
+            if not carrier_partner:
+                raise UserError(
+                    'Debe vincular una "Empresa transportista" a la forma de envío'
+                    " seleccionada o elegir otra forma de envío"
+                )
+            content, filename = rec.get_arba_file_data(
+                datetime_out,
+                tipo_recorrido,
+                carrier_partner,
+                patente_vehiculo,
+                patente_acoplado,
+                prod_no_term_dev,
+                importe,
             )
 
-        if errors:
-            raise UserError(self.env._("Error al presentar remito:\n%s", "\n".join(errors)))
+            filename = "/tmp/%s" % filename
+            file = open(filename, "w")
+            file.write(content)
+            file.close()
+            _logger.info('Presentando COT con archivo "%s"' % filename)
+            COT.PresentarRemito(filename, testing="")
+            os.remove(filename)
 
-        attachments = [(filename, content)]
-        body = """
-<p>
-    Resultado solicitud COT:
-    <ul>
-        <li>Número Comprobante: %s</li>
-        <li>Codigo Integridad: %s</li>
-        <li>Procesado: %s</li>
-        <li>Número Único: %s</li>
-        <li>COT: %s</li>
-    </ul>
-</p>
-""" % (COT.NumeroComprobante, COT.CodigoIntegridad, COT.Procesado, COT.NumeroUnico, COT.COT)
+            if COT.TipoError:
+                msg = rec.env._(
+                    "Error al presentar remito:\n"
+                    "* Tipo Error: %(tipo)s\n"
+                    "* Codigo Error: %(cod)s\n"
+                    "* Mensaje Error: %(msj)s",
+                    tipo=COT.TipoError,
+                    cod=COT.CodigoError,
+                    msj=COT.MensajeError,
+                )
+                _logger.warning(msg)
+                raise UserError(msg)
+            elif COT.Excepcion:
+                msg = rec.env._("Error al presentar remito:\n* %s", COT.Excepcion)
+                _logger.warning(msg)
+                raise UserError(msg)
 
-        self.write(
-            {
-                "cot_numero_unico": COT.NumeroComprobante,
-                "cot_numero_comprobante": COT.NumeroUnico,
-                "cot": COT.COT,
-            }
-        )
-        self.message_post(
-            body=body, subject=self.env._("Remito Electrónico Solicitado"), attachments=attachments, body_is_html=True
-        )
+            errors = []
+            while COT.LeerErrorValidacion():
+                errors.append(
+                    ("* MensajeError: %s\n* TipoError: %s\n* CodigoError: %s\n")
+                    % (COT.MensajeError, COT.TipoError, COT.CodigoError)
+                )
 
-        return True
+            if errors:
+                raise UserError(rec.env._("Error al presentar remito:\n%s", "\n".join(errors)))
+
+            attachments = [(filename, content)]
+            body = """
+    <p>
+        Resultado solicitud COT:
+        <ul>
+            <li>Número Comprobante: %s</li>
+            <li>Codigo Integridad: %s</li>
+            <li>Procesado: %s</li>
+            <li>Número Único: %s</li>
+            <li>COT: %s</li>
+        </ul>
+    </p>
+    """ % (COT.NumeroComprobante, COT.CodigoIntegridad, COT.Procesado, COT.NumeroUnico, COT.COT)
+
+            rec.write(
+                {
+                    "cot_numero_unico": COT.NumeroComprobante,
+                    "cot_numero_comprobante": COT.NumeroUnico,
+                    "cot": COT.COT,
+                }
+            )
+            rec.message_post(
+                body=body,
+                subject=rec.env._("Remito Electrónico Solicitado"),
+                attachments=attachments,
+                body_is_html=True,
+            )
+
+            return True
 
     def _action_done(self):
         res = super()._action_done()

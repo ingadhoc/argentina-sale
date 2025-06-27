@@ -8,7 +8,7 @@
             <button name="do_print_picking" position="after">
                 <button name="%(action_arba_cot_wizard)d" string="Obtener COT (BETA)"
                     help="Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)"
-                    type="action" invisible="not book_id or picking_type_code == 'incoming' or state != 'done'"
+                    type="action" invisible="not book_id or picking_type_code == 'incoming' or state != 'done' or cot"
                     context="{'default_importe': declared_value}"
                     groups="l10n_ar_stock.arba_cot_enabled"/>
             </button>
@@ -23,6 +23,16 @@
                 <field name="dispatch_number" invisible="picking_type_code != 'incoming'" readonly="state in ['cancel', 'done']"/>
             </field>
         </field>
+    </record>
+
+    <record id="stock_picking_action_arba_cot_wizard_batch" model="ir.actions.act_window">
+        <field name="name">Obtener COT para múltiples remitos</field>
+        <field name="res_model">arba.cot.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'active_ids': active_ids, 'active_model': 'stock.picking'}</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
     </record>
 
 </odoo>

@@ -13,7 +13,7 @@ class ArbaCotWizard(models.TransientModel):
     _description = "arba.cot.wizard"
 
     datetime_out = fields.Datetime(
-        required=True, help="Fecha de salida. No debe ser inferior a ayer ni superior a " "dentro de 30 días."
+        required=True, help="Fecha de salida. No debe ser inferior a ayer ni superior a dentro de 30 días."
     )
     tipo_recorrido = fields.Selection(
         [("U", "Urbano"), ("R", "Rural"), ("M", "Mixto")],
@@ -27,7 +27,7 @@ class ArbaCotWizard(models.TransientModel):
     )
 
     patente_vehiculo = fields.Char(
-        help="Requerido si CUIT Transportista = CUIT Compañía\n" "3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
+        help="Requerido si CUIT Transportista = CUIT Compañía\n3 letras y 3 numeros o 2 letras, 3 números y 2 letras"
     )
     patente_acoplado = fields.Char(help="3 letras y 3 numeros o 2 letras, 3 números y 2 letras")
     prod_no_term_dev = fields.Selection(
@@ -71,15 +71,27 @@ class ArbaCotWizard(models.TransientModel):
 
     def confirm(self):
         self.ensure_one()
-        if self._context.get("active_model") != "stock.picking":
-            return True
-        pickings = self.env["stock.picking"].browse(self._context.get("active_ids"))
-        pickings.do_pyafipws_presentar_remito(
-            fields.Date.from_string(self.datetime_out),
-            self.tipo_recorrido,
-            self.partner_id,
-            self.patente_vehiculo,
-            self.patente_acoplado,
-            self.prod_no_term_dev,
-            self.importe,
-        )
+        ctx = self._context or {}
+        pickings = self.env["stock.picking"]
+
+        # Soporta acción desde remitos individuales o múltiples
+        if ctx.get("active_model") == "stock.picking":
+            picking_ids = ctx.get("active_ids", [])
+            pickings = self.env["stock.picking"].browse(picking_ids)
+        else:
+            # Fallback para compatibilidad
+            picking_ids = ctx.get("active_ids", [])
+            pickings = self.env["stock.picking"].browse(picking_ids)
+
+        for pick in pickings:
+            pick.do_pyafipws_presentar_remito(
+                fields.Date.from_string(self.datetime_out),
+                self.tipo_recorrido,
+                self.partner_id,
+                self.patente_vehiculo,
+                self.patente_acoplado,
+                self.prod_no_term_dev,
+                self.importe,
+            )
+
+        return True
