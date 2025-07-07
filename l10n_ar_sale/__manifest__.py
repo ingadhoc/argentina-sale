@@ -8,7 +8,7 @@
     "license": "AGPL-3",
     "summary": "",
     "depends": [
-        "sale",
+        "sale_ux",  # we make it dependent on sale_ux by setting group_delivery_date. More information in ticket 95265
         "l10n_ar_tax",
     ],
     "external_dependencies": {},

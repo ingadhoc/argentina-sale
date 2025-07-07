@@ -11,12 +11,6 @@
                     <field name="group_price_unit_with_tax"/>
                 </setting>
             </xpath>
-
-            <xpath expr="//setting[@id='proforma_configuration']" position="after">
-                <setting id="group_delivery_date" help="Shows the delivery date field in the budget report and in the online budget." title="Shows the delivery date field in the budget report and in the online budget.">
-                    <field name="group_delivery_date"/>
-                </setting>
-            </xpath>
         </field>
     </record>
 
