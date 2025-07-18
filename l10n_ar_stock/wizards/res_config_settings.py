@@ -14,3 +14,7 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.arba_cot',
         readonly=False,
     )
+    cot_product_uom_qty = fields.Boolean(
+        related='company_id.cot_product_uom_qty',
+        readonly=False,
+    )

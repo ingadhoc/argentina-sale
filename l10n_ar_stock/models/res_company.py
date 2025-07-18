@@ -17,6 +17,7 @@ class ResCompany(models.Model):
         'Clave COT',
         help='Clave para generación de remito electŕonico',
     )
+    cot_product_uom_qty = fields.Boolean('Cantidad COT', default=False)
 
     @api.model
     def get_arba_cot_login_url(self, environment_type):
