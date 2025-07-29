@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-22 11:40+0000\n"
+"POT-Creation-Date: 2025-07-28 12:47+0000\n"
 "PO-Revision-Date: 2024-11-18 15:40+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -64,11 +64,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "<strong>Customer: </strong>"
 msgstr "<strong>Cliente: </strong>"
-
-#. module: l10n_ar_sale
-#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.sale_order_portal_content
-msgid "<strong>Delivery Date:</strong>"
-msgstr "<strong>Fecha de Entrega:</strong>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -172,14 +167,6 @@ msgid "Sales Order Line"
 msgstr "Línea de pedido de venta"
 
 #. module: l10n_ar_sale
-#: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__group_delivery_date
-#: model:res.groups,name:l10n_ar_sale.group_delivery_date_on_report_online
-msgid "Show Delivery Date in Quotations report and online budget"
-msgstr ""
-"Mostrar fecha de entrega en el informe de cotizaciones y el presupuesto en "
-"línea"
-
-#. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
 msgid "Show Unit Price with Taxes included On sale Order Lines"
 msgstr ""
@@ -191,14 +178,6 @@ msgid "Show Unit Price with Taxes included On sale Order Lines."
 msgstr ""
 "Mostrar el precio unitario con impuestos incluidos en las líneas de la orden"
 " de venta."
-
-#. module: l10n_ar_sale
-#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
-msgid ""
-"Shows the delivery date field in the budget report and in the online budget."
-msgstr ""
-"Muestra el campo de fecha de entrega en el informe de presupuesto y en el "
-"presupuesto en línea."
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__group_price_unit_with_tax
