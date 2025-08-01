@@ -93,3 +93,18 @@ class SaleOrder(models.Model):
             ]
         )
         return True if module_installed else False
+
+    @api.onchange("date_order")
+    def _l10n_ar_onchange_date_order(self):
+        self.filtered(
+            lambda x: x.fiscal_position_id.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
+            and x.state not in ["cancel", "sale"]
+        )._recompute_taxes()
+
+    def copy(self, default=None):
+        """Re computamos las percepciones al duplicar una venta porque puede ser que la orden venga de otro periodo
+        o por alguna razón las percepciones hayan cambiado
+        """
+        recs = super().copy(default=default)
+        recs._l10n_ar_onchange_date_order()
+        return recs
