@@ -93,3 +93,11 @@ class SaleOrder(models.Model):
             ]
         )
         return True if module_installed else False
+
+    @api.constrains("date_order")
+    @api.onchange("date_order")
+    def _l10n_ar_onchange_date_order(self):
+        self.filtered(
+            lambda x: x.fiscal_position_id.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
+            and x.state not in ["cancel", "sale"]
+        )._recompute_taxes()
