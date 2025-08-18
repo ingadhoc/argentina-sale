@@ -352,7 +352,6 @@ class StockPicking(models.Model):
         prod_no_term_dev,
         importe,
     ):
-        # self.ensure_one()
         for rec in self:
             COT = rec.company_id.arba_cot_connect()
 
