@@ -108,3 +108,11 @@ class SaleOrder(models.Model):
         recs = super().copy(default=default)
         recs._l10n_ar_onchange_date_order()
         return recs
+
+    def create(self, vals_list):
+        """Re computamos las percepciones al crear una venta porque puede ser que la orden venga de otro periodo
+        o por alguna razón las percepciones hayan cambiado
+        """
+        recs = super().create(vals_list=vals_list)
+        recs._l10n_ar_onchange_date_order()
+        return recs
