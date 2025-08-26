@@ -53,7 +53,9 @@
         <t t-set="layout_document_title" position="replace"/>
 
         <xpath expr="//span[@t-field='line.price_unit']" position="attributes">
-            <attribute name="t-field">line.report_price_unit</attribute>
+            <attribute name="t-field"></attribute>
+            <attribute name="t-out">line.report_price_unit</attribute>
+            <attribute name="t-options">{"widget": "float", "display_currency": doc.currency_id, "decimal_precision": "Product Price"}</attribute>
         </xpath>
 
         <t t-set="taxes" position="attributes">
