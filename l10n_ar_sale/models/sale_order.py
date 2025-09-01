@@ -95,16 +95,31 @@ class SaleOrder(models.Model):
         return True if module_installed else False
 
     @api.onchange("date_order")
-    def _l10n_ar_onchange_date_order(self):
-        self.filtered(
+    def _l10n_ar_recompute_fiscal_position_taxes(self):
+        """Recalculamos las percepciones si cambiamos la fecha de la orden de venta. Para ello nos basamos en los
+        impuestos de la posicion fiscal, buscamos si hay impuestos existentes para los tax groups involucrados y los
+        reemplazamos por los nuevos impuestos.
+        """
+        for rec in self.filtered(
             lambda x: x.fiscal_position_id.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
             and x.state not in ["cancel", "sale"]
-        )._recompute_taxes()
+        ):
+            fp_tax_groups = rec.fiscal_position_id.l10n_ar_tax_ids.filtered(
+                lambda x: x.tax_type == "perception"
+            ).mapped("default_tax_id.tax_group_id")
+            date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.date_order))
+            new_taxes = rec.fiscal_position_id._l10n_ar_add_taxes(rec.partner_id, rec.company_id, date, "perception")
+            for line in rec.order_line:
+                to_unlink = line.tax_id.filtered(lambda x: x.tax_group_id in fp_tax_groups)
+                if to_unlink._origin != new_taxes:
+                    line.tax_id = [(3, tax.id) for tax in to_unlink] + [
+                        (4, tax.id) for tax in new_taxes if tax not in line.tax_id
+                    ]
 
     def copy(self, default=None):
         """Re computamos las percepciones al duplicar una venta porque puede ser que la orden venga de otro periodo
         o por alguna razón las percepciones hayan cambiado
         """
         recs = super().copy(default=default)
-        recs._l10n_ar_onchange_date_order()
+        recs._l10n_ar_recompute_fiscal_position_taxes()
         return recs
