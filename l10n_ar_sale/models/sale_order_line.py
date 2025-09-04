@@ -86,7 +86,7 @@ class SaleOrderLine(models.Model):
                     price, order.currency_id, line.product_uom_qty, line.product_id, order.partner_shipping_id
                 )["total_included"]
 
-            line.price_unit_with_tax = price_unit["total_included"]
+            line.price_unit_with_tax = price_unit["total_included"] / price_digits
             line.report_price_subtotal = report_price_subtotal
             line.report_price_unit = report_price_unit
             line.report_price_net = report_price_net
