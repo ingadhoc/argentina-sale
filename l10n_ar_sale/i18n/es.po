@@ -3,15 +3,15 @@
 # 	* l10n_ar_sale
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 12:47+0000\n"
+"POT-Creation-Date: 2025-09-03 23:52+0000\n"
 "PO-Revision-Date: 2024-11-18 15:40+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +32,7 @@ msgstr "<br/><strong>Vencimiento: </strong>"
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "<br/><strong>Incoterm:</strong>"
-msgstr ""
+msgstr "<br/><strong>Incoterm:</strong>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -53,12 +53,12 @@ msgstr "<span>% IVA</span>"
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "<span>SubTotal</span>"
-msgstr ""
+msgstr "<span>SubTotal</span>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "<span>Total</span>"
-msgstr ""
+msgstr "<span>Total</span>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -89,6 +89,10 @@ msgid ""
 "impuesto, en opciones avanzadas, en el campo correspondiente \"Grupo de "
 "Impuestos\"."
 msgstr ""
+"Debe haber un único impuesto del grupo de impuestos \"IVA\" por línea, "
+"agréguelo a \"%s\". En caso de tenerlo, revise la configuración del "
+"impuesto, en opciones avanzadas, en el campo correspondiente \"Grupo de "
+"Impuestos\"."
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
