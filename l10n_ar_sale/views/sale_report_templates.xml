@@ -84,12 +84,12 @@
 
         <!-- We change the name of the column depending on the tax discrimination -->
         <th name="th_subtotal" class="text-end" position="replace">
-            <td t-if="doc.vat_discriminated" class="text-end" >
+            <th t-if="doc.vat_discriminated" class="text-end" >
                 <span>SubTotal</span>
-            </td>
-            <td t-else="" class="text-end">
+            </th>
+            <th t-else="" class="text-end">
                 <span>Total</span>
-            </td>
+            </th>
         </th>
 
         <div id="informations" position="replace">
