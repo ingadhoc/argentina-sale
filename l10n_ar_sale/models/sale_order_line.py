@@ -111,6 +111,7 @@ class SaleOrderLine(models.Model):
             lambda x: not x.display_type
             and x.company_id.country_id == self.env.ref("base.ar")
             and x.company_id.l10n_ar_company_requires_vat
+            and x.product_type in ["consu", "service"]
         ):
             vat_taxes = rec.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)
             if len(vat_taxes) != 1:
