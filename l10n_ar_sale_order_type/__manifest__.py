@@ -16,7 +16,7 @@
         "views/sale_report_templates.xml",
     ],
     "demo": [],
-    "installable": True,
+    'installable': False,
     "auto_install": False,
     "application": False,
 }
