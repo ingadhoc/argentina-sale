@@ -6,8 +6,8 @@
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
             <field name="categ_id" position="after">
-                <label for="arba_code" groups="l10n_ar_stock.arba_cot_enabled"/>
-                <div class="oe_inline" groups="l10n_ar_stock.arba_cot_enabled">
+                <label for="arba_code" groups="l10n_ar_stock_extended.arba_cot_enabled"/>
+                <div class="oe_inline" groups="l10n_ar_stock_extended.arba_cot_enabled">
                     <field name="arba_code" class="oe_inline"/>
                      <a target="_blank" href="http://www.arba.gov.ar/Aplicaciones/NomencladorTB/NomencladorTB.asp" class="oe_edit_only oe_inline">Ver Nomenclador</a>
                 </div>

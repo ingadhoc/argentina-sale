@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="report_delivery_document" inherit_id="l10n_ar_stock.report_delivery_document">
+    <template id="report_delivery_document" inherit_id="l10n_ar_stock_extended.report_delivery_document">
 
         <t t-if="o.number_of_packages" position="after">
             <span t-if="o.number_of_packages and o.weight"> - </span>
