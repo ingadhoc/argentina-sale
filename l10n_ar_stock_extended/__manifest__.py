@@ -14,7 +14,7 @@
         "stock_picking_invoice_link",
     ],
     "data": [
-        "security/l10n_ar_stock_security.xml",
+        "security/res_groups.xml",
         "wizards/arba_cot_wizard_views.xml",
         "wizards/res_config_settings_view.xml",
         "views/stock_picking_views.xml",
