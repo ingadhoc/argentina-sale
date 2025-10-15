@@ -128,7 +128,7 @@
 
                     <t groups="sale_ux.group_delivery_date_on_report_online">
                         <br/><strong>Delivery Date: </strong>
-                        <span t-out="doc.commitment_date or doc.date_order" t-options='{"widget": "date"}'/>
+                        <span t-out="doc.commitment_date or doc.expected_date" t-options='{"widget": "date"}'/>
                     </t>
 
                     <t t-if="doc.payment_term_id" name="payment_term">
