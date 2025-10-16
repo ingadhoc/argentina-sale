@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
     <!-- Crear un picking de ejemplo -->
-            <record id="l10n_ar_stock_extended_demo_1" model="stock.picking">
+            <record id="l10n_ar_stock_ux_demo_1" model="stock.picking">
             <field name="picking_type_id" ref="stock.picking_type_out"/>
             <field name="origin">outgoing shipment</field>
             <field name="user_id"></field>
@@ -25,7 +25,7 @@
 
         </record>
 
-        <record id="l10n_ar_stock_extended_demo_2" model="stock.picking">
+        <record id="l10n_ar_stock_ux_demo_2" model="stock.picking">
             <field name="picking_type_id" ref="stock.picking_type_out"/>
             <field name="origin">outgoing shipment</field>
             <field name="user_id"></field>
