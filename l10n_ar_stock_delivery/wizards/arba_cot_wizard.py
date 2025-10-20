@@ -11,7 +11,7 @@ class ArbaCotWizard(models.TransientModel):
     @api.model
     def default_get(self, default_fields):
         vals = super().default_get(default_fields)
-        if self._context.get("active_model"):
-            picking = self.env["stock.picking"].browse(self._context.get("active_id"))
+        if self.env.context.get("active_model"):
+            picking = self.env["stock.picking"].browse(self.env.context.get("active_id"))
             vals["partner_id"] = picking.carrier_id.partner_id.id
         return vals
