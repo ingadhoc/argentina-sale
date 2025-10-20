@@ -10,32 +10,53 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-==========================================================
-Integracion entre modulo delivery y localización argentina
-==========================================================
+===================================================
+Argentina - Stock Delivery Integration
+===================================================
 
-#. Agregado de datos de delivery al comprobante de entrega
-#. Uso de carrier en wizard para cot
+This module integrates the delivery functionality with the Argentinian localization features, providing enhanced delivery slip reports and ARBA COT (Código de Operaciones de Traslado) wizard integration for stock movements.
+
+Features
+========
+
+#. **Enhanced Delivery Slip Reports**: Adds delivery-specific information to delivery documents including:
+   
+   * Package weight and weight unit of measure
+   * Carrier tracking reference numbers
+   * Detailed carrier information (name, VAT number, and address)
+   * Integration with Argentinian identification document types
+
+#. **ARBA COT Wizard Integration**: Extends the ARBA COT (Transport Operations Code) wizard to automatically pre-fill the carrier partner information when accessed from stock picking operations.
 
 Installation
 ============
 
 To install this module, you need to:
 
-#. Only need to install the module
+#. Install the module from the Apps menu
+#. The module will be automatically installed when both ``delivery_ux`` and ``l10n_ar_stock_extended`` modules are present
 
 Configuration
 =============
 
 To configure this module, you need to:
 
-#. Nothing to configure
+#. Configure your delivery carriers in Inventory > Configuration > Delivery > Delivery Methods
+#. Ensure your carriers have proper partner information including VAT numbers and addresses
+#. The module will automatically enhance delivery reports with the configured information
 
 Usage
 =====
 
-To use this module, you need to:
+To use this module:
 
+#. **Enhanced Delivery Reports**: When printing delivery slips, the reports will automatically include:
+   
+   * Weight information if configured on the picking
+   * Tracking references from the carrier
+   * Complete carrier details including identification documents
+
+#. **ARBA COT Integration**: When using the ARBA COT wizard from stock pickings, the carrier partner will be automatically selected based on the picking's carrier configuration.
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
