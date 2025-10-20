@@ -44,11 +44,11 @@ class SaleOrderLine(models.Model):
             line.report_price_reduce = price_type / line.product_uom_qty if line.product_uom_qty else 0.0
 
     @api.depends(
-        "tax_id.tax_group_id.l10n_ar_vat_afip_code",
+        "tax_ids.tax_group_id.l10n_ar_vat_afip_code",
     )
     def _compute_vat_tax_id(self):
         for rec in self:
-            vat_tax_id = rec.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)
+            vat_tax_id = rec.tax_ids.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)
             if len(vat_tax_id) > 1:
                 raise UserError(_("Only one vat tax allowed per line"))
             rec.vat_tax_id = vat_tax_id
@@ -59,17 +59,17 @@ class SaleOrderLine(models.Model):
             order = line.order_id
             taxes_included = not order.vat_discriminated
             price_digits = 10 ** self.env["decimal.precision"].precision_get("Product Price")
-            price_unit = line.tax_id.compute_all(
+            price_unit = line.tax_ids.compute_all(
                 line.price_unit * price_digits, order.currency_id, 1.0, line.product_id, order.partner_shipping_id
             )
             if not taxes_included:
                 report_price_unit = price_unit["total_excluded"] / price_digits
                 report_price_subtotal = line.price_subtotal
-                not_included_taxes = line.tax_id
+                not_included_taxes = line.tax_ids
                 report_price_net = report_price_unit * (1 - (line.discount or 0.0) / 100.0)
             else:
-                included_taxes = line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)
-                not_included_taxes = line.tax_id - included_taxes
+                included_taxes = line.tax_ids.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)
+                not_included_taxes = line.tax_ids - included_taxes
                 report_price_unit = (
                     included_taxes.compute_all(
                         line.price_unit * price_digits,
@@ -112,9 +112,8 @@ class SaleOrderLine(models.Model):
             and x.company_id.country_id == self.env.ref("base.ar")
             and x.company_id.l10n_ar_company_requires_vat
             and x.product_type in ["consu", "service"]
-            and x.product_type != "combo"
         ):
-            vat_taxes = rec.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)
+            vat_taxes = rec.tax_ids.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)
             if len(vat_taxes) != 1:
                 raise UserError(
                     _(
@@ -128,18 +127,18 @@ class SaleOrderLine(models.Model):
     def write(self, vals):
         res = super(SaleOrderLine, self).write(vals)
         # for performance we only check if tax or company is on vals
-        if "tax_id" in vals or "company_id" in vals:
+        if "tax_ids" in vals or "company_id" in vals:
             self.check_vat_tax()
         return res
 
-    def _compute_tax_id(self):
+    def _compute_tax_ids(self):
         """Agregado de taxes de modulo l10n_ar_tax segun fiscal position"""
-        super()._compute_tax_id()
+        super()._compute_tax_ids()
 
         for rec in self.with_context(tz="America/Argentina/Buenos_Aires").filtered(
             "order_id.fiscal_position_id.l10n_ar_tax_ids"
         ):
             date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.order_id.date_order))
-            rec.tax_id += rec.order_id.fiscal_position_id._l10n_ar_add_taxes(
+            rec.tax_ids += rec.order_id.fiscal_position_id._l10n_ar_add_taxes(
                 rec.order_partner_id, rec.company_id, date, "perception"
             )
