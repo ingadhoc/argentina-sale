@@ -38,7 +38,7 @@ class SaleOrder(models.Model):
             return
 
         for order in self.filtered(lambda x: not x.vat_discriminated):
-            tax_groups = order.order_line.mapped("tax_id.tax_group_id")
+            tax_groups = order.order_line.mapped("tax_ids.tax_group_id")
             if not tax_groups:
                 continue
             to_remove_ids = tax_groups.filtered(lambda x: x.l10n_ar_vat_afip_code).ids
@@ -110,10 +110,10 @@ class SaleOrder(models.Model):
             date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.date_order))
             new_taxes = rec.fiscal_position_id._l10n_ar_add_taxes(rec.partner_id, rec.company_id, date, "perception")
             for line in rec.order_line:
-                to_unlink = line.tax_id.filtered(lambda x: x.tax_group_id in fp_tax_groups)
+                to_unlink = line.tax_ids.filtered(lambda x: x.tax_group_id in fp_tax_groups)
                 if to_unlink._origin != new_taxes:
-                    line.tax_id = [(3, tax.id) for tax in to_unlink] + [
-                        (4, tax.id) for tax in new_taxes if tax not in line.tax_id
+                    line.tax_ids = [(3, tax.id) for tax in to_unlink] + [
+                        (4, tax.id) for tax in new_taxes if tax not in line.tax_ids
                     ]
 
     def copy(self, default=None):

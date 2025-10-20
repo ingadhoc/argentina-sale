@@ -62,9 +62,10 @@
             <attribute name="t-value">', '.join([(tax.invoice_label or tax.name) for tax in line.report_tax_id])</attribute>
         </t>
 
-        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" position="attributes">
+        <!-- NOTE: current_subtotal element no longer exists in Odoo 19.0, so we remove this inheritance -->
+        <!-- <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" position="attributes">
             <attribute name="t-value">current_subtotal + line.report_price_subtotal</attribute>
-        </t>
+        </t> -->
 
         <span t-field="line.price_subtotal" position="attributes">
             <attribute name="t-field">line.report_price_subtotal</attribute>
@@ -72,14 +73,14 @@
 
         <!-- use column vat instead of taxes and only if vat discriminated -->
         <th name="th_taxes" position="replace">
-            <th t-if="doc.vat_discriminated" name="th_taxes" t-attf-class="text-left {{ 'd-md-table-cell' if report_type == 'html' else '' }}"><span>% VAT</span></th>
+            <th t-if="doc.vat_discriminated" name="th_taxes" t-attf-class="text-end {{ 'd-md-table-cell' if report_type == 'html' else '' }}"><span>% VAT</span></th>
         </th>
         <!-- use column vat instead of taxes and only list vat taxes-->
-        <td name="td_taxes" position="attributes">
+        <td name="td_product_taxes" position="attributes">
             <attribute name="t-if">doc.vat_discriminated</attribute>
         </td>
         <t t-set="taxes" position="attributes">
-            <attribute name="t-value">', '.join([(tax.invoice_label or tax.name) for tax in line.tax_id.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)])</attribute>
+            <attribute name="t-value">', '.join([(tax.invoice_label or tax.name) for tax in line.tax_ids.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)])</attribute>
         </t>
 
         <!-- We change the name of the column depending on the tax discrimination -->
