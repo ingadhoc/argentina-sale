@@ -3,15 +3,16 @@
 # 	* l10n_ar_stock
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
+# ADHOC - Bot <transbot@adhoc.com.ar>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-13 17:30+0000\n"
+"POT-Creation-Date: 2025-10-28 12:16+0000\n"
 "PO-Revision-Date: 2024-12-18 18:23+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
+"Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -381,7 +382,7 @@ msgstr ""
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_stock_lot
 msgid "Lot/Serial"
-msgstr "Lote/serie "
+msgstr "Lote/serie"
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields.selection,name:l10n_ar_stock.selection__arba_cot_wizard__tipo_recorrido__m
@@ -579,7 +580,7 @@ msgstr ""
 #. module: l10n_ar_stock
 #: model:ir.model,name:l10n_ar_stock.model_stock_picking
 msgid "Transfer"
-msgstr "Traslado"
+msgstr "Transferir"
 
 #. module: l10n_ar_stock
 #: model:ir.model.fields,field_description:l10n_ar_stock.field_arba_cot_wizard__partner_id
