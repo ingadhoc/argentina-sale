@@ -6,13 +6,15 @@
         <field name="model">uom.uom</field>
         <field name="inherit_id" ref="uom.product_uom_form_view"/>
         <field name="arch" type="xml">
-            <field name="rounding" position="after">
-                <label for="arba_code"/>
-                <div class="oe_inline">
-                    <field name="arba_code" class="oe_inline"/>
-                    <button name="action_arba_codes" type="object" string="Ver códigos" class="oe_edit_only oe_inline"/>
-                </div>
-            </field>
+            <group>
+                <group name="l10n_ar_info">
+                    <label for="arba_code"/>
+                    <div class="oe_inline">
+                        <field name="arba_code" class="oe_inline"/>
+                        <button name="action_arba_codes" type="object" string="Ver códigos" class="oe_edit_only oe_inline"/>
+                    </div>
+                </group>
+            </group>
         </field>
     </record>
 
@@ -22,21 +24,8 @@
         <field name="inherit_id" ref="uom.product_uom_tree_view"/>
         <field name="arch" type="xml">
             <list>
-                <field name="arba_code" optional="show"/>
-                <button name="action_arba_codes" type="object" title="Ver códigos" icon="fa-external-link"/>
+                <field name="arba_code" optional="hide"/>
             </list>
-        </field>
-    </record>
-
-    <record id="product_uom_categ_form_view" model="ir.ui.view">
-        <field name="name">uom.category.form</field>
-        <field name="model">uom.category</field>
-        <field name="inherit_id" ref="uom.product_uom_categ_form_view"/>
-        <field name="arch" type="xml">
-            <field name="rounding" position="after">
-                <field name="arba_code" optional="show"/>
-                <button name="action_arba_codes" type="object" title="Ver códigos" icon="fa-external-link"/>
-            </field>
         </field>
     </record>
 

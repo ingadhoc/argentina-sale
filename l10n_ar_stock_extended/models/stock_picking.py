@@ -23,7 +23,7 @@ class StockPicking(models.Model):
         "el mismo será asociado a los lotes sin número de despacho vinculados "
         "a la transferencia."
     )
-    document_type_id = fields.Many2one(related="book_id.document_type_id", readonly=True)
+    document_type_id = fields.Many2one(related="picking_type_id.l10n_ar_document_type_id", readonly=True)
     cot_numero_unico = fields.Char(
         "COT - Nro Único",
         help="Número único del último COT solicitado",
@@ -36,28 +36,41 @@ class StockPicking(models.Model):
         "COT",
         help="Número de COT del último COT solicitado",
     )
+    # lo mantenemos por esta versión y re-evaluamos en próximas
     l10n_ar_afip_barcode = fields.Char(
         compute="_compute_l10n_ar_afip_barcode",
         string="AFIP Barcode",
     )
 
+    def _get_name_delivery_report(self, report_xml_id):
+        """Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document
+        Basically it allows different localizations to define it's own report
+        This method should actually go in a sale_ux module that later can be extended by different localizations
+        Another option would be to use report_substitute module and setup a subsitution with a domain
+        """
+        self.ensure_one()
+        if self.company_id.country_id.code == "AR" and self.l10n_ar_delivery_guide_number:
+            return "l10n_ar_stock_extended.report_delivery_document"
+        return report_xml_id
+
     def _compute_l10n_ar_afip_barcode(self):
         for rec in self:
             barcode = False
             if (
-                rec.book_id.sequence_id.prefix
-                and rec.book_id.l10n_ar_cai_due
-                and rec.book_id.l10n_ar_cai
-                and not rec.book_id.lines_per_voucher
+                rec.picking_type_id.l10n_ar_sequence_id.prefix
+                and rec.picking_type_id.l10n_ar_cai_expiration_date
+                and rec.picking_type_id.l10n_ar_cai_authorization_code
+                # TODO REVISAR
+                # and not rec.picking_type_id.lines_per_voucher
             ):
-                cae_due = rec.book_id.l10n_ar_cai_due.strftime("%Y%m%d")
-                pos_number = int(re.sub("[^0-9]", "", rec.book_id.sequence_id.prefix))
+                cae_due = rec.picking_type_id.l10n_ar_cai_expiration_date.strftime("%Y%m%d")
+                pos_number = int(re.sub("[^0-9]", "", rec.picking_type_id.l10n_ar_sequence_id.prefix))
                 barcode = "".join(
                     [
-                        str(rec.book_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
-                        "%03d" % int(rec.book_id.document_type_id.code),
+                        str(rec.picking_type_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
+                        "%03d" % int(rec.picking_type_id.l10n_ar_document_type_id.code),
                         "%05d" % pos_number,
-                        rec.book_id.l10n_ar_cai,
+                        rec.picking_type_id.l10n_ar_cai_authorization_code,
                         cae_due,
                     ]
                 )
@@ -127,9 +140,9 @@ class StockPicking(models.Model):
         REMITOS_PRODUCTOS = []
 
         for rec in self:
-            if not rec.voucher_ids:
+            if not rec.l10n_ar_delivery_guide_number:
                 raise UserError(self.env._("No se asignó número de remito"))
-            voucher = rec.voucher_ids[0]
+            voucher = rec.l10n_ar_delivery_guide_number
             dest_partner = rec.partner_id
             source_partner = rec.picking_type_id.warehouse_id.partner_id or rec.company_id.partner_id
             commercial_partner = dest_partner.commercial_partner_id

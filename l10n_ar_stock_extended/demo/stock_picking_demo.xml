@@ -1,50 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-    <!-- Crear un picking de ejemplo -->
-            <record id="l10n_ar_stock_extended_demo_1" model="stock.picking">
-            <field name="picking_type_id" ref="stock.picking_type_out"/>
-            <field name="origin">outgoing shipment</field>
-            <field name="user_id"></field>
-            <field name="partner_id" ref="base.res_partner_1"/>
-            <field name="scheduled_date" eval="DateTime.today()"/>
-            <field name="location_id" ref="stock.stock_location_stock"/>
-            <field name="location_dest_id" ref="stock.stock_location_customers"/>
-            <field name="move_ids" model="stock.move" eval="[(0, 0, {
-                'name': obj().env.ref('product.product_product_27').name,
-                'product_id': ref('product.product_product_27'),
-                'product_uom': ref('uom.product_uom_unit'),
-                'product_uom_qty': 15.0,
-                'picking_type_id': ref('stock.picking_type_out'),
-                'location_id': ref('stock.stock_location_stock'),
-                'location_dest_id': ref('stock.stock_location_customers'),
-            })]"/>
-            <field name="dispatch_number">12345</field>
-            <field name="cot_numero_unico">ABC123</field>
-            <field name="cot_numero_comprobante">000001</field>
-            <field name="cot">COT-001</field>
 
-        </record>
+    <record id="warehouse_company_ri" model="stock.warehouse">
+        <field name="name">(AR) Responsable Inscripto2</field>
+        <field name="code">RI2</field>
+        <field name="company_id" ref="base.company_ri"/>
+    </record>
 
-        <record id="l10n_ar_stock_extended_demo_2" model="stock.picking">
-            <field name="picking_type_id" ref="stock.picking_type_out"/>
-            <field name="origin">outgoing shipment</field>
-            <field name="user_id"></field>
-            <field name="partner_id" ref="base.res_partner_1"/>
-            <field name="scheduled_date" eval="DateTime.today() - timedelta(days=15)"/>
-            <field name="location_id" ref="stock.stock_location_stock"/>
-            <field name="location_dest_id" ref="stock.stock_location_customers"/>
-            <field name="move_ids" model="stock.move" eval="[(0, 0, {
-                'name': obj().env.ref('product.product_product_6').name,
-                'product_id': ref('product.product_product_6'),
-                'product_uom': ref('uom.product_uom_unit'),
-                'product_uom_qty': 180.0,
-                'picking_type_id': ref('stock.picking_type_out'),
-                'location_id': ref('stock.stock_location_stock'),
-                'location_dest_id': ref('stock.stock_location_customers'),
-            })]"/>
-            <field name="dispatch_number">45843</field>
-            <field name="cot_numero_unico">ABC123</field>
-            <field name="cot_numero_comprobante">000001</field>
-            <field name="cot">COT-001</field>
-        </record>
+    <record id="l10n_ar_stock_extended_demo_1" model="stock.picking" context="{'allowed_company_ids': [ref('base.company_ri')], 'restricted_picking_type_code': 'outgoing'}">
+        <!-- <field name="picking_type_id" model="stock.picking.type" search="[('code', '=', 'outgoing'), ('company_id', '=', obj().env.ref('base.company_ri').id)]"/> -->
+        <field name="origin">outgoing shipment</field>
+        <field name="user_id"></field>
+        <field name="partner_id" ref="base.res_partner_1"/>
+        <field name="scheduled_date" eval="DateTime.today()"/>
+        <field name="move_ids" model="stock.move" eval="[(0, 0, {
+            'product_id': ref('product.product_product_27'),
+            'product_uom_qty': 15.0,
+        })]"/>
+        <field name="dispatch_number">12345</field>
+        <field name="cot_numero_unico">ABC123</field>
+        <field name="cot_numero_comprobante">000001</field>
+        <field name="cot">COT-001</field>
+        <field name="state">draft</field>
+    </record>
+
+    <record id="l10n_ar_stock_extended_demo_2" model="stock.picking" context="{'allowed_company_ids': [ref('base.company_ri')], 'restricted_picking_type_code': 'outgoing'}">
+        <field name="origin">outgoing shipment</field>
+        <field name="user_id"></field>
+        <field name="partner_id" ref="base.res_partner_1"/>
+        <field name="scheduled_date" eval="DateTime.today() - timedelta(days=15)"/>
+        <field name="move_ids" model="stock.move" eval="[(0, 0, {
+            'product_id': ref('product.product_product_6'),
+            'product_uom_qty': 180.0,
+        })]"/>
+        <field name="dispatch_number">45843</field>
+        <field name="cot_numero_unico">ABC123</field>
+        <field name="cot_numero_comprobante">000001</field>
+        <field name="cot">COT-001</field>
+    </record>
+
 </odoo>

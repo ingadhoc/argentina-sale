@@ -7,9 +7,7 @@
     "website": "www.adhoc.com.ar",
     "license": "AGPL-3",
     "depends": [
-        "l10n_ar",
-        "stock",
-        "stock_voucher",  # por la clase receiptbooks y demas
+        "l10n_ar_stock",
         "l10n_ar_ux",
         "stock_picking_invoice_link",
     ],
@@ -18,7 +16,7 @@
         "wizards/arba_cot_wizard_views.xml",
         "wizards/res_config_settings_view.xml",
         "views/stock_picking_views.xml",
-        "views/stock_book_views.xml",
+        "views/stock_picking_type_views.xml",
         "views/product_template_views.xml",
         "views/uom_uom_views.xml",
         "views/stock_lot_views.xml",
@@ -28,12 +26,10 @@
         "data/product_uom_data.xml",
         "data/document_type_data.xml",
         "security/ir.model.access.csv",
-    ],
-    "demo": [
-        "demo/stock_book_demo.xml",
         "demo/stock_picking_demo.xml",
     ],
+    "demo": [],
     "installable": True,
-    "auto_install": ["stock", "l10n_ar"],
+    "auto_install": ["l10n_ar_stock"],
     "application": False,
 }
