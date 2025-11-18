@@ -23,7 +23,9 @@ class StockPicking(models.Model):
         "el mismo será asociado a los lotes sin número de despacho vinculados "
         "a la transferencia."
     )
-    document_type_id = fields.Many2one(related="picking_type_id.l10n_ar_document_type_id", readonly=True)
+    document_type_id = fields.Many2one(
+        related="picking_type_id.l10n_ar_document_type_id", readonly=True, string="Document Type (AR)"
+    )
     cot_numero_unico = fields.Char(
         "COT - Nro Único",
         help="Número único del último COT solicitado",
@@ -165,7 +167,7 @@ class StockPicking(models.Model):
                 )
 
             # TODO ver de hacer uno por número de remito?
-            document_parts = self.env["account.move"]._l10n_ar_get_document_number_parts(voucher.name, CODIGO_DGI)
+            document_parts = self.env["account.move"]._l10n_ar_get_document_number_parts(voucher, CODIGO_DGI)
             PREFIJO = str(document_parts["point_of_sale"])
             NUMERO = str(document_parts["invoice_number"])
             PREFIJO = PREFIJO.rjust(5, "0")
