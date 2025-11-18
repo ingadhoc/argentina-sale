@@ -1,0 +1,13 @@
+<odoo>
+    <record id="view_picking_type_form_inherit_l10n_ar_stock" model="ir.ui.view">
+        <field name="name">stock.picking.type.inherit.l10n_ar_stock</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.view_picking_type_form"/>
+        <field name="arch" type="xml">
+            <field name="sequence_code" position="after">
+                <field name="report_partner_id"/>
+                <field name="report_signature_section"/>
+            </field>
+        </field>
+    </record>
+</odoo>
