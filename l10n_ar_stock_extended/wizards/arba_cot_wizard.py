@@ -71,7 +71,7 @@ class ArbaCotWizard(models.TransientModel):
 
     def confirm(self):
         self.ensure_one()
-        ctx = self._context or {}
+        ctx = self.env.context or {}
         pickings = self.env["stock.picking"]
 
         # Soporta acción desde remitos individuales o múltiples
