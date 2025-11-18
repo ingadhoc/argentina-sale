@@ -25,9 +25,10 @@
         "data/ir_sequence_data.xml",
         "data/product_uom_data.xml",
         "security/ir.model.access.csv",
+    ],
+    "demo": [
         "demo/stock_picking_demo.xml",
     ],
-    "demo": [],
     "installable": True,
     "auto_install": ["l10n_ar_stock"],
     "application": False,
