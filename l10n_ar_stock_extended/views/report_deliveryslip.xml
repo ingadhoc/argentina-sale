@@ -7,34 +7,26 @@
                 <t>$0</t>
             </t>
         </t>
-    </template>
-
-    <!-- we would do something like this if we want it multilocalization compatible as in l10n_latam_invoice_document -->
-    <!-- <template id="report_saleorder" inherit_id="sale.report_saleorder">
-        <t t-call="sale.report_saleorder_document" position="attributes">
-            <attribute name="t-call">#{ o.get_custom_report('sale.report_saleorder_document') }</attribute>
+        <t t-call="stock.report_delivery_document" position="attributes">
+            <attribute name="t-call">#{ o._get_name_delivery_report('stock.report_delivery_document') }</attribute>
         </t>
     </template>
-
-    <template id="report_saleorder_pro_forma" inherit_id="sale.report_saleorder_pro_forma">
-        <t t-call="sale.report_saleorder_document" position="attributes">
-            <attribute name="t-call">#{ o.get_custom_report('sale.report_saleorder_document') }</attribute>
-        </t>
-    </template> -->
 
     <!-- we force priority greater than 20 so that it dont break inheritance with delivery view -->
-    <template id="report_delivery_document" priority="20" inherit_id="stock.report_delivery_document">
+    <!-- creamos un reporte distinto al de odoo (l10n_ar_stock.report_delivery_document) porque queremos mantener la usablidad que veníamos teniendo para reducir fricción. Re-evaluaremos en próximas versiones -->
+    <template id="report_delivery_document" priority="20" inherit_id="stock.report_delivery_document" primary="True">
 
         <!-- custom header and footer -->
         <t t-set="o" position="after">
             <t t-set="custom_header" t-value="'l10n_ar.custom_header'"/>
             <t t-set="report_date" t-value="o.date_done"/>
-            <t t-set="report_number" t-value="o.vouchers or o.name"/>
-            <t t-set="pre_printed_report" t-value="o.book_id.lines_per_voucher"/>
+            <!-- <t t-set="report_number" t-value="o.vouchers or o.name"/> -->
+            <t t-set="pre_printed_report" t-value="False"/>
+            <!-- <t t-set="pre_printed_report" t-value="o.book_id.lines_per_voucher"/> -->
             <t t-set="document_letter" t-value="o.document_type_id.l10n_ar_letter or 'X'"/>
             <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
             <t t-set="report_name" t-value="o.document_type_id.report_name or 'Comprobante de Entrega'"/>
-            <t t-set="header_address" t-value="o.book_id.report_partner_id or o.picking_type_id.warehouse_id.partner_id or o.company_id.partner_id"/>
+            <t t-set="header_address" t-value="o.picking_type_id.report_partner_id or o.picking_type_id.warehouse_id.partner_id or o.company_id.partner_id"/>
 
             <t t-set="custom_footer">
                 <div class="row">
@@ -46,7 +38,7 @@
                                 <span t-esc="o.l10n_ar_afip_barcode" style="font-size: 14px;"/>
                             </div>
                         </t>
-                        <t t-if="o.book_id.report_signature_section and not o.l10n_ar_afip_barcode">
+                        <t t-if="o.picking_type_id.report_signature_section and not o.l10n_ar_afip_barcode">
                             <table class="table table-borderless table-sm">
                                 <thead>
                                     <tr>
@@ -80,11 +72,11 @@
                         </t>
                     </div>
                     <div name="footer_right_column" class="col-4 text-right">
-                        <div t-if="not o.book_id.lines_per_voucher and o.book_id.l10n_ar_cai">
-                            CAI: <span t-field="o.book_id.l10n_ar_cai"/>
+                        <div t-if="not pre_printed_report and o.picking_type_id.l10n_ar_cai_authorization_code">
+                            CAI: <span t-field="o.picking_type_id.l10n_ar_cai_authorization_code"/>
                         </div>
-                        <div t-if="not o.book_id.lines_per_voucher and o.book_id.l10n_ar_cai_due">
-                            CAI Due Date: <span t-field="o.book_id.l10n_ar_cai_due"/>
+                        <div t-if="not pre_printed_report and o.picking_type_id.l10n_ar_cai_expiration_date">
+                            CAI Due Date: <span t-field="o.picking_type_id.l10n_ar_cai_expiration_date"/>
                         </div>
                         <div name="pager" t-if="report_type == 'pdf'">
                             Page: <span class="page"/>
@@ -131,7 +123,7 @@
                     <strong>Deliver to: </strong>
                     <span t-field="partner.name"/>
                 </span>
-                <span t-out="partner" t-options='{"widget": "contact", "fields": ["address", "phone", "mobile"], "no_marker": False}'/>
+                <span t-out="partner" t-options='{"widget": "contact", "fields": ["address", "phone", "mobile"], "no_marker": true, "no_tag_br": True}'/>
 
                 <!-- (16) Responsabilidad AFIP -->
                 <strong>VAT Cond: </strong>
@@ -170,12 +162,12 @@
                     <strong>Customer Reference:</strong>
                     <span t-field="o.sudo().sale_id.client_order_ref"/>
                 </t>
-                <t t-if="o.declared_value">
+                <t t-if="o._fields.get('declared_value') and o.declared_value">
                     <br/>
                     <strong>Declared Value:</strong>
                     <span t-field="o.declared_value"/>
                 </t>
-                <t t-if="o.number_of_packages">
+                <t t-if="o._fields.get('number_of_packages') and o.number_of_packages">
                     <br/>
                     <strong>Packages Qty:</strong>
                     <span t-field="o.number_of_packages"/>
@@ -186,7 +178,7 @@
     </div>
 
     <table name="stock_move_line_table" position="after">
-        <t t-if="o.book_id.report_signature_section and o.l10n_ar_afip_barcode">
+        <t t-if="o.picking_type_id.report_signature_section and o.l10n_ar_afip_barcode">
             <table class="table table-borderless table-sm">
                 <thead>
                     <tr>

@@ -3,9 +3,8 @@
 # directory
 ##############################################################################
 from . import res_company
-from . import stock_book
+from . import stock_picking_type
 from . import stock_picking
 from . import product_template
 from . import uom_uom
 from . import stock_lot
-from . import account_chart_template
