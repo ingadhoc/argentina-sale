@@ -50,7 +50,7 @@ class StockPicking(models.Model):
         """
         self.ensure_one()
         if self.company_id.country_id.code == "AR" and self.l10n_ar_delivery_guide_number:
-            return "l10n_ar_stock_extended.report_delivery_document"
+            return "l10n_ar_stock_ux.report_delivery_document"
         return report_xml_id
 
     def _compute_l10n_ar_afip_barcode(self):
