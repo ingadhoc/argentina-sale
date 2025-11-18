@@ -7,7 +7,7 @@
         <field name="company_id" ref="base.company_ri"/>
     </record>
 
-    <record id="l10n_ar_stock_extended_demo_1" model="stock.picking" context="{'allowed_company_ids': [ref('base.company_ri')], 'restricted_picking_type_code': 'outgoing'}">
+    <record id="l10n_ar_stock_ux_demo_1" model="stock.picking" context="{'allowed_company_ids': [ref('base.company_ri')], 'restricted_picking_type_code': 'outgoing'}">
         <!-- <field name="picking_type_id" model="stock.picking.type" search="[('code', '=', 'outgoing'), ('company_id', '=', obj().env.ref('base.company_ri').id)]"/> -->
         <field name="origin">outgoing shipment</field>
         <field name="user_id"></field>
@@ -24,7 +24,7 @@
         <field name="state">draft</field>
     </record>
 
-    <record id="l10n_ar_stock_extended_demo_2" model="stock.picking" context="{'allowed_company_ids': [ref('base.company_ri')], 'restricted_picking_type_code': 'outgoing'}">
+    <record id="l10n_ar_stock_ux_demo_2" model="stock.picking" context="{'allowed_company_ids': [ref('base.company_ri')], 'restricted_picking_type_code': 'outgoing'}">
         <field name="origin">outgoing shipment</field>
         <field name="user_id"></field>
         <field name="partner_id" ref="base.res_partner_1"/>

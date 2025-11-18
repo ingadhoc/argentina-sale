@@ -7,7 +7,7 @@ class ResConfigSettings(models.TransientModel):
     group_arba_cot_enabled = fields.Boolean(
         "Usar COT de ARBA?",
         help="Permite generar el COT de arba una vez que se han asignado " "números de remitos en las entregas",
-        implied_group="l10n_ar_stock_extended.arba_cot_enabled",
+        implied_group="l10n_ar_stock_ux.arba_cot_enabled",
     )
     arba_cot = fields.Char(
         related="company_id.arba_cot",
