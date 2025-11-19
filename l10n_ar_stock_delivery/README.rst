@@ -20,7 +20,7 @@ Features
 ========
 
 #. **Enhanced Delivery Slip Reports**: Adds delivery-specific information to delivery documents including:
-   
+
    * Package weight and weight unit of measure
    * Carrier tracking reference numbers
    * Detailed carrier information (name, VAT number, and address)
@@ -51,7 +51,7 @@ Usage
 To use this module:
 
 #. **Enhanced Delivery Reports**: When printing delivery slips, the reports will automatically include:
-   
+
    * Weight information if configured on the picking
    * Tracking references from the carrier
    * Complete carrier details including identification documents
