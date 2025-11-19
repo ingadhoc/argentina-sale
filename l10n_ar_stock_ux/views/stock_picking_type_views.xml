@@ -4,9 +4,10 @@
         <field name="model">stock.picking.type</field>
         <field name="inherit_id" ref="stock.view_picking_type_form"/>
         <field name="arch" type="xml">
-            <field name="sequence_code" position="after">
-                <field name="report_partner_id"/>
-                <field name="report_signature_section"/>
+            <field name="l10n_ar_sequence_number_end" position="after">
+                <field name="auto_assign_delivery_guide" invisible="not l10n_ar_document_type_id"/>
+                <field name="report_partner_id" invisible="not l10n_ar_document_type_id"/>
+                <field name="report_signature_section" invisible="not l10n_ar_document_type_id"/>
             </field>
         </field>
     </record>

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- odoo incorporó su propio reporte para argentina pero nosotros preferimos mantener approach de 18- por lo siguiente:
+    a) mismo reporte se comporta como argentino o no según distintos casos, no es un reporte separado
+    b) tiene un mejor look
+    c) tiene integración con otros módulos nuestros (y campos custom)
+    al reporte de odoo le sacamos binding para que no aparezca -->
+    <record id="l10n_ar_stock.action_delivery_guide_report_pdf" model="ir.actions.report">
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
     <template id="report_deliveryslip" inherit_id="stock.report_deliveryslip">
         <t t-foreach="docs" position="replace">
             <t t-foreach="l10n_ar_copies_list" t-as="copy_type">

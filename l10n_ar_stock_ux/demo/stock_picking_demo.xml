@@ -7,6 +7,16 @@
         <field name="company_id" ref="base.company_ri"/>
     </record>
 
+    <function model="stock.picking.type" name="write">
+        <value model="stock.picking.type" eval="obj().search([('code', '=', 'outgoing'), ('company_id', '=', obj().env.ref('base.company_ri').id)], limit=1).id"/>
+        <value eval="{
+            'l10n_ar_sequence_number_start': '00000001',
+            'l10n_ar_sequence_number_end': '00000999',
+            'l10n_ar_document_type_id': ref('l10n_ar.dc_r_r'),
+            'l10n_ar_cai_authorization_code': '1234567890',
+            'l10n_ar_cai_expiration_date': '2099-01-01'}"/>
+    </function>
+
     <record id="l10n_ar_stock_ux_demo_1" model="stock.picking" context="{'allowed_company_ids': [ref('base.company_ri')], 'restricted_picking_type_code': 'outgoing'}">
         <!-- <field name="picking_type_id" model="stock.picking.type" search="[('code', '=', 'outgoing'), ('company_id', '=', obj().env.ref('base.company_ri').id)]"/> -->
         <field name="origin">outgoing shipment</field>

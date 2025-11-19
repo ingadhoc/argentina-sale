@@ -1,7 +1,7 @@
 import datetime
 import re
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 try:
     from pyafipws.iibb import IIBB
@@ -43,6 +43,28 @@ class StockPicking(models.Model):
         compute="_compute_l10n_ar_afip_barcode",
         string="AFIP Barcode",
     )
+    l10n_ar_delivery_guide_number = fields.Char(
+        # lo hacemos editable para facturas de proveedor y tmb para que este disponible en acciones masivas, importaciones y demás
+        readonly=False,
+        help='Número o lista de números de remitos separadas por ",". Por ejempplo:\n'
+        "* 0001-00000001\n"
+        "* 0001-00000001,0001-00000002",
+    )
+
+    @api.onchange("l10n_ar_delivery_guide_number")
+    def _format_document_number(self):
+        if self.l10n_ar_delivery_guide_number:
+            if "," in self.l10n_ar_delivery_guide_number:
+                docs = self.l10n_ar_delivery_guide_number.split(",")
+            else:
+                docs = [self.l10n_ar_delivery_guide_number]
+            l10n_ar_delivery_guide_numbers = []
+            for doc in docs:
+                l10n_ar_delivery_guide_numbers.append(self.env.ref("l10n_ar.dc_r_r")._format_document_number(doc))
+            self.l10n_ar_delivery_guide_number = ",".join(l10n_ar_delivery_guide_numbers)
+        # # if
+        # self.l10n_ar_delivery_guide_number = self.env.ref('l10n_ar.dc_r_r')._format_document_number(
+        #     self.l10n_ar_delivery_guide_number)
 
     def _get_name_delivery_report(self, report_xml_id):
         """Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document
@@ -451,6 +473,12 @@ class StockPicking(models.Model):
             return True
 
     def _action_done(self):
+        # asignamos nro antes de validar para que el reporte que salga al enviar por correo (_send_confirmation_email)
+        # sea con look y nro argentino
+        # TODO revisar si alguien lo usa y sacar este contexto
+        if not self._context.get("do_not_assign_numbers", False):
+            for picking in self.filtered("picking_type_id.auto_assign_delivery_guide"):
+                picking.l10n_ar_action_create_delivery_guide()
         res = super()._action_done()
         for rec in self.filtered(lambda x: x.picking_type_code == "incoming" and x.dispatch_number):
             rec.move_line_ids.filtered(lambda l: l.lot_id and not l.lot_id.dispatch_number).mapped("lot_id").write(
