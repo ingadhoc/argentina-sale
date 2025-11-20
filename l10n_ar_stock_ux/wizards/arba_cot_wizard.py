@@ -84,7 +84,7 @@ class ArbaCotWizard(models.TransientModel):
             pickings = self.env["stock.picking"].browse(picking_ids)
 
         for pick in pickings:
-            pick.do_pyafipws_presentar_remito(
+            pick._arba_send_picking(
                 fields.Date.from_string(self.datetime_out),
                 self.tipo_recorrido,
                 self.partner_id,
