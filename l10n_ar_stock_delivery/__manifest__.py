@@ -6,10 +6,7 @@
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
     "license": "AGPL-3",
-    "depends": [
-        "delivery_ux",
-        "l10n_ar_stock_ux",
-    ],
+    "depends": ["delivery_ux", "l10n_ar_stock_ux"],
     "data": [
         "views/report_deliveryslip.xml",
     ],

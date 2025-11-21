@@ -19,7 +19,7 @@ class StockPicking(models.Model):
         "a la transferencia."
     )
     document_type_id = fields.Many2one(
-        related="picking_type_id.l10n_ar_document_type_id", readonly=True, string="Document Type (AR)"
+        string="Document Type (AR)", compute="_compute_document_type_id", comodel_name="l10n_latam.document.type"
     )
     cot_numero_unico = fields.Char(
         "COT - Nro Único",
@@ -72,24 +72,38 @@ class StockPicking(models.Model):
             return "l10n_ar_stock_ux.report_delivery_document"
         return report_xml_id
 
+    def _compute_document_type_id(self):
+        for rec in self:
+            if not self.l10n_ar_cai_data:
+                rec.document_type_id = False
+            else:
+                rec.document_type_id = self.env["l10n_latam.document.type"].browse(
+                    rec.l10n_ar_cai_data.get("document_type_id")
+                )
+
     def _compute_l10n_ar_afip_barcode(self):
         for rec in self:
             barcode = False
             if (
-                rec.picking_type_id.l10n_ar_sequence_id.prefix
-                and rec.picking_type_id.l10n_ar_cai_expiration_date
-                and rec.picking_type_id.l10n_ar_cai_authorization_code
+                rec.picking_type_id.l10n_ar_sequence_id.prefix and rec.l10n_ar_cai_data["cai_expiration_date"]
+                if rec.l10n_ar_cai_data
+                else rec.picking_type_id.l10n_ar_cai_expiration_date and rec.l10n_ar_cai_data["cai_authorization_code"]
+                if rec.l10n_ar_cai_data
+                else rec.picking_type_id.l10n_ar_cai_authorization_code
                 # TODO REVISAR
                 # and not rec.picking_type_id.lines_per_voucher
             ):
-                cae_due = rec.picking_type_id.l10n_ar_cai_expiration_date.strftime("%Y%m%d")
+                cae_due = rec.l10n_ar_cai_data["cai_expiration_date"].strftime("%Y%m%d")
+                pos_number = self.env["account.move"]._l10n_ar_get_document_number_parts(
+                    rec.l10n_ar_delivery_guide_number, rec.document_type_id.code
+                )["point_of_sale"]
                 pos_number = int(re.sub("[^0-9]", "", rec.picking_type_id.l10n_ar_sequence_id.prefix))
                 barcode = "".join(
                     [
                         str(rec.picking_type_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
-                        "%03d" % int(rec.picking_type_id.l10n_ar_document_type_id.code),
+                        "%03d" % int(rec.document_type_id.code),
                         "%05d" % pos_number,
-                        rec.picking_type_id.l10n_ar_cai_authorization_code,
+                        rec.l10n_ar_cai_data["cai_authorization_code"],
                         cae_due,
                     ]
                 )
@@ -138,7 +152,10 @@ class StockPicking(models.Model):
         nro_secuencial = self.env["ir.sequence"].with_company(company).next_by_code("arba.cot.file")
         if not nro_secuencial:
             raise UserError(
-                self.env._('No sequence found for COT files (code = "arba.cot.file") on company "%s', company.name)
+                self.env._(
+                    'No sequence found for COT files (code = "arba.cot.file") on company "%s',
+                    company.name,
+                )
             )
 
         filename = "TB_%s_%s%s_%s_%s.txt" % (
@@ -179,7 +196,8 @@ class StockPicking(models.Model):
             if not CODIGO_DGI or not letter:
                 raise UserError(
                     self.env._(
-                        "Document type has no validator, code or letter configured (Id: %s", rec.document_type_id.id
+                        "Document type has no validator, code or letter configured (Id: %s",
+                        rec.document_type_id.id,
                     )
                 )
 
@@ -192,7 +210,13 @@ class StockPicking(models.Model):
 
             # si nro doc y tipo en ‘DNI’, ‘LC’, ‘LE’, ‘PAS’, ‘CI’ y doc
             doc_categ_id = commercial_partner.l10n_latam_identification_type_id
-            if commercial_partner.vat and doc_categ_id.name in ["DNI", "LC", "LE", "PAS", "CI"]:
+            if commercial_partner.vat and doc_categ_id.name in [
+                "DNI",
+                "LC",
+                "LE",
+                "PAS",
+                "CI",
+            ]:
                 dest_tipo_doc = doc_categ_id.l10n_ar_afip_code
                 dest_doc = commercial_partner.vat
                 dest_cuit = ""
@@ -321,7 +345,11 @@ class StockPicking(models.Model):
                     uom_arba_with_code = line.product_uom
                 else:
                     uom_arba_with_code = line.product_uom.search(
-                        [("category_id", "=", line.product_uom.category_id.id), ("arba_code", "!=", False)], limit=1
+                        [
+                            ("category_id", "=", line.product_uom.category_id.id),
+                            ("arba_code", "!=", False),
+                        ],
+                        limit=1,
                     )
                     if not uom_arba_with_code:
                         raise UserError(
@@ -428,7 +456,12 @@ class StockPicking(models.Model):
             arba_cot_timeout = int(
                 self.env["ir.config_parameter"].sudo().get_param("l10n_ar_stock_ux.arba_cot_timeout", default=40)
             )
-            res = requests.post(login_url, data=request_data, files={"file": file}, timeout=arba_cot_timeout)
+            res = requests.post(
+                login_url,
+                data=request_data,
+                files={"file": file},
+                timeout=arba_cot_timeout,
+            )
             if res.ok:
                 cot = self._parse_arba_response(res.content)
                 attachments = [(file[0], file[1])]
@@ -436,11 +469,11 @@ class StockPicking(models.Model):
                     <p>
                         Resultado solicitud COT:
                         <ul>
-                            <li>Número Comprobante: {cot['numeroComprobante']}</li>
-                            <li>Codigo Integridad: {cot['codigoIntegridad']}</li>
-                            <li>Procesado: {cot['procesado']}</li>
-                            <li>Número Único: {cot['numeroUnico']}</li>
-                            <li>COT: {cot['cot']}</li>
+                            <li>Número Comprobante: {cot["numeroComprobante"]}</li>
+                            <li>Codigo Integridad: {cot["codigoIntegridad"]}</li>
+                            <li>Procesado: {cot["procesado"]}</li>
+                            <li>Número Único: {cot["numeroUnico"]}</li>
+                            <li>COT: {cot["cot"]}</li>
                         </ul>
                     </p>
                 """
