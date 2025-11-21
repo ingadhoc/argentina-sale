@@ -29,12 +29,12 @@
         <t t-set="o" position="after">
             <t t-set="custom_header" t-value="'l10n_ar.custom_header'"/>
             <t t-set="report_date" t-value="o.date_done"/>
-            <!-- <t t-set="report_number" t-value="o.vouchers or o.name"/> -->
+            <t t-set="report_number" t-value="o.l10n_ar_delivery_guide_number or o.name"/>
             <t t-set="pre_printed_report" t-value="False"/>
             <!-- <t t-set="pre_printed_report" t-value="o.book_id.lines_per_voucher"/> -->
-            <t t-set="document_letter" t-value="o.document_type_id.l10n_ar_letter or 'X'"/>
+            <t t-set="document_letter" t-value="(o.document_type_id and o.document_type_id.l10n_ar_letter) or 'X'"/>
             <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
-            <t t-set="report_name" t-value="o.document_type_id.report_name or 'Comprobante de Entrega'"/>
+            <t t-set="report_name" t-value="(o.document_type_id and o.document_type_id.report_name) or 'Comprobante de Entrega'"/>
             <t t-set="header_address" t-value="o.picking_type_id.report_partner_id or o.picking_type_id.warehouse_id.partner_id or o.company_id.partner_id"/>
 
             <t t-set="custom_footer">
@@ -81,11 +81,11 @@
                         </t>
                     </div>
                     <div name="footer_right_column" class="col-4 text-right">
-                        <div t-if="not pre_printed_report and o.picking_type_id.l10n_ar_cai_authorization_code">
-                            CAI: <span t-field="o.picking_type_id.l10n_ar_cai_authorization_code"/>
+                        <div t-if="not pre_printed_report and o.l10n_ar_cai_data">
+                            CAI: <span t-field="o.l10n_ar_cai_data.['l10n_ar_cai_authorization_code']"/>
                         </div>
-                        <div t-if="not pre_printed_report and o.picking_type_id.l10n_ar_cai_expiration_date">
-                            CAI Due Date: <span t-field="o.picking_type_id.l10n_ar_cai_expiration_date"/>
+                        <div t-if="not pre_printed_report and o.l10n_ar_cai_data">
+                            CAI Due Date: <span t-field="o.l10n_ar_cai_data.['l10n_ar_cai_expiration_date']"/>
                         </div>
                         <div name="pager" t-if="report_type == 'pdf'">
                             Page: <span class="page"/>
