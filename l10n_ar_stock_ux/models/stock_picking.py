@@ -41,6 +41,7 @@ class StockPicking(models.Model):
     l10n_ar_delivery_guide_number = fields.Char(
         # lo hacemos editable para facturas de proveedor y tmb para que este disponible en acciones masivas, importaciones y demás
         readonly=False,
+        tracking=True,
         help='Número o lista de números de remitos separadas por ",". Por ejempplo:\n'
         "* 0001-00000001\n"
         "* 0001-00000001,0001-00000002",

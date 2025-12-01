@@ -8,6 +8,7 @@
     al reporte de odoo le sacamos binding para que no aparezca -->
     <record id="l10n_ar_stock.action_delivery_guide_report_pdf" model="ir.actions.report">
         <field name="binding_model_id" eval="False"/>
+        <field name="name">Delivery Guide (DEPRECATED)</field>
     </record>
 
     <template id="report_deliveryslip" inherit_id="stock.report_deliveryslip">
