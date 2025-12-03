@@ -1,0 +1,58 @@
+<odoo>
+    <!-- stock.picking.batch form view -->
+    <record model="ir.ui.view" id="stock_batch_picking_form">
+        <field name="name">stock.picking.batch.form</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
+        <field name="arch" type="xml">
+            <button name="action_print" position="before">
+                <button name="l10n_ar_action_create_delivery_guide"
+                        type="object"
+                        string="Generate Delivery Guide"
+                        invisible="country_code != 'AR' or not l10n_ar_allow_generate_delivery_guide"
+                />
+            </button>
+            <group id="batch_delivery_data">
+                <field name="l10n_ar_delivery_guide_number" invisible="country_code != 'AR'"/>
+            </group>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="stock_batch_picking_tree_voucher">
+        <field name="name">stock.picking.batch.form</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="l10n_ar_delivery_guide_number"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- <record id="view_tree_inherited" model="ir.ui.view">
+        <field name="name">stock.picking.list.inherited</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock_batch_picking_ux.vpicktree"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(stock_voucher.action_stock_print_voucher)d']" position="attributes">
+                <attribute name="invisible" separator=" or " add="batch_id"/>
+            </xpath>
+        </field>
+    </record> -->
+<!--
+    <record id="view_tree_inherited2" model="ir.ui.view">
+        <field name="name">stock.picking.list.inherited2</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock_voucher.view_picking_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(stock_voucher.action_stock_print_voucher)d'][1]" position="attributes">
+                <attribute name="invisible" separator=" or " add="batch_id"/>
+            </xpath>
+            <xpath expr="//button[@name='%(stock_voucher.action_stock_print_voucher)d'][2]" position="attributes">
+                <attribute name="invisible" separator=" or " add="batch_id"/>
+            </xpath>
+        </field>
+    </record> -->
+</odoo>
