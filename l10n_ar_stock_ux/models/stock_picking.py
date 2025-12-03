@@ -63,9 +63,6 @@ class StockPicking(models.Model):
             for doc in docs:
                 l10n_ar_delivery_guide_numbers.append(self.env.ref("l10n_ar.dc_r_r")._format_document_number(doc))
             self.l10n_ar_delivery_guide_number = ",".join(l10n_ar_delivery_guide_numbers)
-        # # if
-        # self.l10n_ar_delivery_guide_number = self.env.ref('l10n_ar.dc_r_r')._format_document_number(
-        #     self.l10n_ar_delivery_guide_number)
 
     def _get_name_delivery_report(self, report_xml_id):
         """Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document
