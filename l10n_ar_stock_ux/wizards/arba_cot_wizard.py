@@ -36,7 +36,6 @@ class ArbaCotWizard(models.TransientModel):
         default="0",
         required=True,
     )
-    # TODO implementar asistente de importe
     importe = fields.Float(
         string="Importe Neto",
     )

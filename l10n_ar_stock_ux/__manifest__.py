@@ -10,6 +10,12 @@
         "l10n_ar_stock",
         "l10n_ar_ux",
         "stock_picking_invoice_link",
+        "stock_ux",
+        # esta dependencia es solo por el campo declared value para:
+        # a) reporte de remito
+        # b) mandar valor declarado a wizard de COT
+        # eventualmente se podría moer dicho campo a stock_ux y evitar esta dependencia
+        "stock_declared_value",
     ],
     "data": [
         "security/res_groups.xml",
