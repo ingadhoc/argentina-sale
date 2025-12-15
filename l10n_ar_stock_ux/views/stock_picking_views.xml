@@ -37,8 +37,9 @@
                 <attribute name="invisible">True</attribute>
             </button>
             <button name="do_print_picking" position="after">
-                <button name="%(action_arba_cot_wizard)d" string="Obtener COT (BETA)"
+                <button name="%(action_arba_cot_wizard)d" string="Obtener COT"
                     help="Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)"
+                    context="{'default_importe': declared_value}"
                     type="action"
                     invisible="not l10n_ar_allow_send_delivery_guide or picking_type_code == 'incoming' or state != 'done' or cot"
                     groups="l10n_ar_stock_ux.arba_cot_enabled"/>

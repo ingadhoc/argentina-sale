@@ -1,6 +1,5 @@
 import datetime
 import logging
-import re
 import xml.etree.ElementTree as ET
 
 import requests
@@ -86,19 +85,16 @@ class StockPicking(models.Model):
         for rec in self:
             barcode = False
             if (
-                rec.picking_type_id.l10n_ar_sequence_id.prefix and rec.l10n_ar_cai_data["cai_expiration_date"]
-                if rec.l10n_ar_cai_data
-                else rec.picking_type_id.l10n_ar_cai_expiration_date and rec.l10n_ar_cai_data["cai_authorization_code"]
-                if rec.l10n_ar_cai_data
-                else rec.picking_type_id.l10n_ar_cai_authorization_code
-                # TODO REVISAR
-                # and not rec.picking_type_id.lines_per_voucher
+                rec.l10n_ar_delivery_guide_number
+                and rec.document_type_id
+                and rec.l10n_ar_cai_data
+                and "cai_expiration_date" in rec.l10n_ar_cai_data
+                and "cai_authorization_code" in rec.l10n_ar_cai_data
             ):
                 cae_due = rec.l10n_ar_cai_data["cai_expiration_date"].strftime("%Y%m%d")
                 pos_number = self.env["account.move"]._l10n_ar_get_document_number_parts(
                     rec.l10n_ar_delivery_guide_number, rec.document_type_id.code
                 )["point_of_sale"]
-                pos_number = int(re.sub("[^0-9]", "", rec.picking_type_id.l10n_ar_sequence_id.prefix))
                 barcode = "".join(
                     [
                         str(rec.picking_type_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
