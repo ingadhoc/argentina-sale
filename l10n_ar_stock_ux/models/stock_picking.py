@@ -17,9 +17,6 @@ class StockPicking(models.Model):
         "el mismo será asociado a los lotes sin número de despacho vinculados "
         "a la transferencia."
     )
-    document_type_id = fields.Many2one(
-        string="Document Type (AR)", compute="_compute_document_type_id", comodel_name="l10n_latam.document.type"
-    )
     cot_numero_unico = fields.Char(
         "COT - Nro Único",
         help="Número único del último COT solicitado",
@@ -44,6 +41,15 @@ class StockPicking(models.Model):
         help='Número o lista de números de remitos separadas por ",". Por ejempplo:\n'
         "* 0001-00000001\n"
         "* 0001-00000001,0001-00000002",
+    )
+    # agregamos estos dos campos calculados para facilitar mucho el código
+    # el de fecha principalmente porque no hay nada facil para en qweb manipular y sacarlo en formato argentino
+    document_type_id = fields.Many2one(
+        string="Document Type (AR)", compute="_compute_cai_data", comodel_name="l10n_latam.document.type"
+    )
+    l10n_ar_cai_expiration_date = fields.Date(
+        compute="_compute_cai_data",
+        string="CAI Expiration Date",
     )
 
     @api.onchange("l10n_ar_delivery_guide_number")
@@ -72,11 +78,15 @@ class StockPicking(models.Model):
             return "l10n_ar_stock_ux.report_delivery_document"
         return report_xml_id
 
-    def _compute_document_type_id(self):
+    @api.depends("l10n_ar_cai_data")
+    def _compute_cai_data(self):
         for rec in self:
-            if not self.l10n_ar_cai_data:
+            if not rec.l10n_ar_cai_data:
                 rec.document_type_id = False
+                rec.l10n_ar_cai_expiration_date = False
             else:
+                expiration_date = rec.l10n_ar_cai_data.get("cai_expiration_date")
+                rec.l10n_ar_cai_expiration_date = fields.Date.to_date(expiration_date) if expiration_date else False
                 rec.document_type_id = self.env["l10n_latam.document.type"].browse(
                     rec.l10n_ar_cai_data.get("document_type_id")
                 )
@@ -88,10 +98,9 @@ class StockPicking(models.Model):
                 rec.l10n_ar_delivery_guide_number
                 and rec.document_type_id
                 and rec.l10n_ar_cai_data
-                and "cai_expiration_date" in rec.l10n_ar_cai_data
-                and "cai_authorization_code" in rec.l10n_ar_cai_data
+                and rec.l10n_ar_cai_expiration_date
             ):
-                cae_due = rec.l10n_ar_cai_data["cai_expiration_date"].strftime("%Y%m%d")
+                cae_due = rec.l10n_ar_cai_expiration_date.strftime("%Y%m%d")
                 pos_number = self.env["account.move"]._l10n_ar_get_document_number_parts(
                     rec.l10n_ar_delivery_guide_number, rec.document_type_id.code
                 )["point_of_sale"]
@@ -100,7 +109,7 @@ class StockPicking(models.Model):
                         str(rec.picking_type_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
                         "%03d" % int(rec.document_type_id.code),
                         "%05d" % pos_number,
-                        rec.l10n_ar_cai_data["cai_authorization_code"],
+                        rec.l10n_ar_cai_data.get("cai_authorization_code"),
                         cae_due,
                     ]
                 )
