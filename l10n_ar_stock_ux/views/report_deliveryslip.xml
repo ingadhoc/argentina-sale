@@ -81,21 +81,22 @@
                             </table>
                         </t>
                     </div>
+
                     <div name="footer_right_column" class="col-4 text-right">
                         <div t-if="not pre_printed_report and o.l10n_ar_cai_data">
-                            CAI: <span t-field="o.l10n_ar_cai_data.['l10n_ar_cai_authorization_code']"/>
+                            CAI: <span t-out="o.l10n_ar_cai_data['cai_authorization_code']"/>
                         </div>
                         <div t-if="not pre_printed_report and o.l10n_ar_cai_data">
-                            CAI Due Date: <span t-field="o.l10n_ar_cai_data.['l10n_ar_cai_expiration_date']"/>
+                            CAI Due Date: <span t-field="o.l10n_ar_cai_expiration_date"/>
                         </div>
                         <div name="pager" t-if="report_type == 'pdf'">
                             Page: <span class="page"/>
  /                        <span class="topage"/>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </t>
         </t>
-    </t>
 
     <!-- remove default partner address -->
     <t t-set="address" position="attributes">
