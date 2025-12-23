@@ -155,7 +155,7 @@
         </t>
 
     </template>
-    <template id="sale_order_portal_content_discount" inherit_id="sale.sale_order_portal_content">
+    <template id="sale_order_portal_content_discount" priority="20" inherit_id="sale.sale_order_portal_content">
 
         <xpath expr="//t[@t-out='(1-line.discount / 100.0) * line.price_unit']" position="attributes">
             <attribute name="t-out">(1-line.discount / 100.0) * line.report_price_unit</attribute>
