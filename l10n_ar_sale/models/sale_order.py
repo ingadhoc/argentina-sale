@@ -15,6 +15,8 @@ class SaleOrder(models.Model):
     vat_discriminated = fields.Boolean(
         compute="_compute_vat_discriminated",
     )
+    # Hacemos almacenado show_update_fpos para que funcione el _onchange_fpos_id_show_update_fpos
+    show_update_fpos = fields.Boolean(store=True)
 
     @api.depends(
         "partner_id.l10n_ar_afip_responsibility_type_id",
@@ -101,8 +103,10 @@ class SaleOrder(models.Model):
         reemplazamos por los nuevos impuestos.
         """
         for rec in self.filtered(
-            lambda x: x.fiscal_position_id.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
-            and x.state not in ["cancel", "sale"]
+            lambda x: (
+                x.fiscal_position_id.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
+                and x.state not in ["cancel", "sale"]
+            )
         ):
             fp_tax_groups = rec.fiscal_position_id.l10n_ar_tax_ids.filtered(
                 lambda x: x.tax_type == "perception"
@@ -112,7 +116,7 @@ class SaleOrder(models.Model):
             for line in rec.order_line:
                 to_unlink = line.tax_id.filtered(lambda x: x.tax_group_id in fp_tax_groups)
                 if to_unlink._origin != new_taxes:
-                    line.tax_ids = (line.tax_ids - to_unlink) | new_taxes
+                    line.tax_id = (line.tax_id - to_unlink) | new_taxes
 
     def copy(self, default=None):
         """Re computamos las percepciones al duplicar una venta porque puede ser que la orden venga de otro periodo
@@ -122,7 +126,7 @@ class SaleOrder(models.Model):
         recs._l10n_ar_recompute_fiscal_position_taxes()
         return recs
 
-    @api.onchange("commercial_partner_id", "fiscal_position_id")
+    @api.onchange("commercial_partner_id")
     def _onchange_fpos_id_show_update_fpos(self):
         """Si cambiamos el partner y la posicion fiscal es la misma (super no configuró show_update_fpos = True) y tiene impuestos de tipo percepcion, mostramos el boton de actualizar posicion fiscal
         ya que las alícuotas pueden ser diferentes"""
