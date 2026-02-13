@@ -15,8 +15,6 @@ class SaleOrder(models.Model):
     vat_discriminated = fields.Boolean(
         compute="_compute_vat_discriminated",
     )
-    # Hacemos almacenado show_update_fpos para que funcione el _onchange_fpos_id_show_update_fpos
-    show_update_fpos = fields.Boolean(store=True)
 
     @api.depends(
         "partner_id.l10n_ar_afip_responsibility_type_id",
@@ -96,11 +94,14 @@ class SaleOrder(models.Model):
         )
         return True if module_installed else False
 
-    @api.onchange("date_order")
+    @api.onchange("date_order", "commercial_partner_id")
     def _l10n_ar_recompute_fiscal_position_taxes(self):
-        """Recalculamos las percepciones si cambiamos la fecha de la orden de venta. Para ello nos basamos en los
-        impuestos de la posicion fiscal, buscamos si hay impuestos existentes para los tax groups involucrados y los
-        reemplazamos por los nuevos impuestos.
+        """Recalculamos las percepciones si cambiamos la fecha de la orden de venta o el commercial partner.
+                Para ello nos basamos en los impuestos de la posicion fiscal, buscamos si hay impuestos existentes para los tax groups involucrados y los
+                reemplazamos por los nuevos impuestos.
+                NO lo hacemos para el cambio de fiscal_position_id porque el onchange de fiscal_position_id implementado en sale_ux ya recomputa todos los taxes
+                NOTA: en facturas no tenemos approach exactamente igual ya que en facturas es opcional el auto update a través del módulo
+        account_invoice_fiscal_position_update
         """
         for rec in self.filtered(
             lambda x: (
@@ -125,16 +126,3 @@ class SaleOrder(models.Model):
         recs = super().copy(default=default)
         recs._l10n_ar_recompute_fiscal_position_taxes()
         return recs
-
-    @api.onchange("commercial_partner_id")
-    def _onchange_fpos_id_show_update_fpos(self):
-        """Si cambiamos el partner y la posicion fiscal es la misma (super no configuró show_update_fpos = True) y tiene impuestos de tipo percepcion, mostramos el boton de actualizar posicion fiscal
-        ya que las alícuotas pueden ser diferentes"""
-        super()._onchange_fpos_id_show_update_fpos()
-        if (
-            not self.show_update_fpos
-            and self.order_line
-            and self.commercial_partner_id != self._origin.commercial_partner_id
-            and self.fiscal_position_id.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
-        ):
-            self.show_update_fpos = True
