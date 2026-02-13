@@ -94,15 +94,20 @@ class SaleOrder(models.Model):
         )
         return True if module_installed else False
 
-    @api.onchange("date_order")
+    @api.onchange("date_order", "commercial_partner_id")
     def _l10n_ar_recompute_fiscal_position_taxes(self):
-        """Recalculamos las percepciones si cambiamos la fecha de la orden de venta. Para ello nos basamos en los
-        impuestos de la posicion fiscal, buscamos si hay impuestos existentes para los tax groups involucrados y los
-        reemplazamos por los nuevos impuestos.
+        """Recalculamos las percepciones si cambiamos la fecha de la orden de venta o el commercial partner.
+                Para ello nos basamos en los impuestos de la posicion fiscal, buscamos si hay impuestos existentes para los tax groups involucrados y los
+                reemplazamos por los nuevos impuestos.
+                NO lo hacemos para el cambio de fiscal_position_id porque el onchange de fiscal_position_id implementado en sale_ux ya recomputa todos los taxes
+                NOTA: en facturas no tenemos approach exactamente igual ya que en facturas es opcional el auto update a través del módulo
+        account_invoice_fiscal_position_update
         """
         for rec in self.filtered(
-            lambda x: x.fiscal_position_id.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
-            and x.state not in ["cancel", "sale"]
+            lambda x: (
+                x.fiscal_position_id.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
+                and x.state not in ["cancel", "sale"]
+            )
         ):
             fp_tax_groups = rec.fiscal_position_id.l10n_ar_tax_ids.filtered(
                 lambda x: x.tax_type == "perception"
@@ -112,9 +117,7 @@ class SaleOrder(models.Model):
             for line in rec.order_line:
                 to_unlink = line.tax_ids.filtered(lambda x: x.tax_group_id in fp_tax_groups)
                 if to_unlink._origin != new_taxes:
-                    line.tax_ids = [(3, tax.id) for tax in to_unlink] + [
-                        (4, tax.id) for tax in new_taxes if tax not in line.tax_ids
-                    ]
+                    line.tax_id = (line.tax_id - to_unlink) | new_taxes
 
     def copy(self, default=None):
         """Re computamos las percepciones al duplicar una venta porque puede ser que la orden venga de otro periodo
