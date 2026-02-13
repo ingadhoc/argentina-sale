@@ -3,13 +3,19 @@
 
     <template id="report_saleorder_raw" inherit_id="sale.report_saleorder_raw">
         <t t-call="sale.report_saleorder_document" position="attributes">
-            <attribute name="t-call">#{ doc._get_name_sale_report('sale.report_saleorder_document') }</attribute>
+            <attribute name="t-if" add="doc.company_id.country_code != 'AR'" separator="and"/>
+        </t>
+        <t t-call="sale.report_saleorder_document" position="after">
+            <t t-call="l10n_ar_sale.report_saleorder_document" t-if="doc.company_id.country_code == 'AR'"/>
         </t>
     </template>
 
     <template id="report_saleorder_pro_forma" inherit_id="sale.report_saleorder_pro_forma">
         <t t-call="sale.report_saleorder_document" position="attributes">
-            <attribute name="t-call">#{ doc._get_name_sale_report('sale.report_saleorder_document') }</attribute>
+            <attribute name="t-if" add="doc.company_id.country_code != 'AR'" separator="and"/>
+        </t>
+        <t t-call="sale.report_saleorder_document" position="after">
+            <t t-call="l10n_ar_sale.report_saleorder_document" t-if="doc.company_id.country_code == 'AR'"/>
         </t>
     </template>
 
