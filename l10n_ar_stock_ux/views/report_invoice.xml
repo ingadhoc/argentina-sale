@@ -12,7 +12,7 @@
             <t t-if="o.picking_ids">
                 <br/>
                 <strong>Remitos:</strong>
-                <span t-out="', '.join(o.picking_ids.mapped('voucher_ids.display_name')) or ''"/>
+                <span t-out="', '.join(o.picking_ids.filtered('l10n_ar_delivery_guide_number').mapped('l10n_ar_delivery_guide_number')) or ''"/>
             </t>
         </t>
     </template>
