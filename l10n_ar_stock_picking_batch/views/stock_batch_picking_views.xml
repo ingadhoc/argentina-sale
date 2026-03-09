@@ -1,4 +1,17 @@
 <odoo>
+    <!-- Server Action for Generate Delivery Guide from List View -->
+    <record id="action_batch_generate_delivery_guide" model="ir.actions.server">
+        <field name="name">Generate Delivery Guide</field>
+        <field name="model_id" ref="stock_picking_batch.model_stock_picking_batch"/>
+        <field name="binding_model_id" ref="stock_picking_batch.model_stock_picking_batch"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.l10n_ar_action_create_delivery_guide()
+        </field>
+    </record>
+
     <!-- stock.picking.batch form view -->
     <record model="ir.ui.view" id="stock_batch_picking_form">
         <field name="name">stock.picking.batch.form</field>

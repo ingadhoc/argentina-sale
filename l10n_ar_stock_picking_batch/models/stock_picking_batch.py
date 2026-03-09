@@ -47,16 +47,15 @@ class StockPickingBatch(models.Model):
         """
         Assign delivery guid info to related pickings
         """
-        self.ensure_one()
-
-        if not self.l10n_ar_delivery_guide_number:
-            self.picking_ids[:1].l10n_ar_action_create_delivery_guide()
-            self.picking_ids[1:].write(
-                {
-                    "l10n_ar_delivery_guide_number": self.picking_ids[0].l10n_ar_delivery_guide_number,
-                    "l10n_ar_cai_data": self.picking_ids[0].l10n_ar_cai_data,
-                }
-            )
+        for batch in self:
+            if not batch.l10n_ar_delivery_guide_number:
+                batch.picking_ids[:1].l10n_ar_action_create_delivery_guide()
+                batch.picking_ids[1:].write(
+                    {
+                        "l10n_ar_delivery_guide_number": batch.picking_ids[0].l10n_ar_delivery_guide_number,
+                        "l10n_ar_cai_data": batch.picking_ids[0].l10n_ar_cai_data,
+                    }
+                )
 
     @api.onchange("l10n_ar_delivery_guide_number")
     def _format_document_number(self):
