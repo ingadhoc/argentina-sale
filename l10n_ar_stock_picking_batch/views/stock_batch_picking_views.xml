@@ -25,14 +25,14 @@ if records:
                         invisible="country_code != 'AR' or not l10n_ar_allow_generate_delivery_guide"
                 />
             </button>
-            <group id="batch_delivery_data">
+            <field name="number_of_packages" position="after">
                 <field name="l10n_ar_delivery_guide_number" invisible="country_code != 'AR'"/>
-            </group>
+            </field>
         </field>
     </record>
 
     <record model="ir.ui.view" id="stock_batch_picking_tree_voucher">
-        <field name="name">stock.picking.batch.form</field>
+        <field name="name">stock.picking.batch.tree</field>
         <field name="model">stock.picking.batch</field>
         <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_tree"/>
         <field name="arch" type="xml">
