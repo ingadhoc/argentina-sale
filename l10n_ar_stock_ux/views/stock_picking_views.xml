@@ -30,6 +30,8 @@
         <field name="arch" type="xml">
             <field name="l10n_ar_delivery_guide_number" position="attributes">
                 <attribute name="readonly">False</attribute>
+                <!-- usamos label del field y no el que definen en la vista en l10n_ar_stock así entra en una línea y además queda unificado -->
+                <attribute name="string">Delivery Guide No.</attribute>
             </field>
 
             <!-- por ahora ocultamos este boton de enviar por email. es una funcionalidad que no teníamos y no se pedía y además el método de odoo está bastante hardcodeado y parece feo. Por ahora creemos que va a doler menos ocultarlo. Si hay necesidad de tener botones para enviar por email podría ser feature de stock_us -->
