@@ -32,7 +32,6 @@
         "l10n_ar_stock_ux",
     ],
     "data": [
-        # "report/batch_picking_preprinted_data.xml",
         "views/stock_batch_picking_views.xml",
         "views/stock_picking_views.xml",
         "report/report_batch_deliveryslip.xml",
