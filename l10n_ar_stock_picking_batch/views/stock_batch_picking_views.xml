@@ -43,30 +43,4 @@ if records:
         </field>
     </record>
 
-    <!-- <record id="view_tree_inherited" model="ir.ui.view">
-        <field name="name">stock.picking.list.inherited</field>
-        <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock_batch_picking_ux.vpicktree"/>
-        <field name="priority">99</field>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='%(stock_voucher.action_stock_print_voucher)d']" position="attributes">
-                <attribute name="invisible" separator=" or " add="batch_id"/>
-            </xpath>
-        </field>
-    </record> -->
-<!--
-    <record id="view_tree_inherited2" model="ir.ui.view">
-        <field name="name">stock.picking.list.inherited2</field>
-        <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock_voucher.view_picking_form"/>
-        <field name="priority">99</field>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='%(stock_voucher.action_stock_print_voucher)d'][1]" position="attributes">
-                <attribute name="invisible" separator=" or " add="batch_id"/>
-            </xpath>
-            <xpath expr="//button[@name='%(stock_voucher.action_stock_print_voucher)d'][2]" position="attributes">
-                <attribute name="invisible" separator=" or " add="batch_id"/>
-            </xpath>
-        </field>
-    </record> -->
 </odoo>
