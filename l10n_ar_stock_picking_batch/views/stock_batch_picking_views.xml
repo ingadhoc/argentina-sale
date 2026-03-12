@@ -22,11 +22,12 @@ if records:
                 <button name="l10n_ar_action_create_delivery_guide"
                         type="object"
                         string="Generate Delivery Guide"
-                        invisible="country_code != 'AR' or not l10n_ar_allow_generate_delivery_guide"
+                        invisible="country_code != 'AR' or not l10n_ar_allow_generate_delivery_guide or not partner_id"
                 />
             </button>
             <field name="number_of_packages" position="after">
-                <field name="l10n_ar_delivery_guide_number" invisible="country_code != 'AR'"/>
+                <field name="l10n_ar_delivery_guide_number" invisible="country_code != 'AR' or not partner_id"/>
+                <field name="declared_value" invisible="country_code != 'AR' or not partner_id"/>
             </field>
         </field>
     </record>
@@ -37,7 +38,7 @@ if records:
         <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_tree"/>
         <field name="arch" type="xml">
             <field name="name" position="after">
-                <field name="l10n_ar_delivery_guide_number"/>
+                <field name="l10n_ar_delivery_guide_number" optional="hide"/>
             </field>
         </field>
     </record>

@@ -10,6 +10,15 @@
                     <strong>Advertencia:</strong> La asignación de remitos se hace desde el lote de traslados, si quiere hacerlos desde este traslado cancele el lote o separe el traslado del mismo
                 </div>
             </sheet>
+            <field name="l10n_ar_delivery_guide_number" position="attributes">
+                <attribute name="readonly">batch_id</attribute>
+            </field>
+            <field name="number_of_packages" position="attributes">
+                <attribute name="invisible">batch_id</attribute>
+            </field>
+            <field name="declared_value" position="attributes">
+                <attribute name="invisible">batch_id</attribute>
+            </field>
         </field>
     </record>
 </odoo>
