@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Argentine batch delivery document.
+        Primary template that inherits from the generic batch report defined in
+        stock_batch_picking_ux and adds the Argentine look (custom header/footer,
+        AFIP barcode, CAI data, customer identification, COT, etc.).
+
+        Mirrors what l10n_ar_stock_ux does for stock.report_delivery_document:
+          l10n_ar_stock_ux.report_delivery_document
+              inherit_id="stock.report_delivery_document" primary="True"
+
+        Here:
+          l10n_ar_stock_picking_batch.report_batch_delivery_document
+              inherit_id="stock_batch_picking_ux.report_batch_delivery_document" primary="True"
+
+        The line tables (stock_move_table / stock_move_line_table) and all the
+        stock sub-template calls come from the grandparent
+        (stock.report_delivery_document) through the batch base template —
+        no duplication needed.
+    -->
+    <template id="report_batch_delivery_document"
+              inherit_id="stock_batch_picking_ux.report_batch_delivery_document"
+              primary="True">
+
+        <!-- ── 1. Argentine header variables ───────────────────────────── -->
+        <t t-set="o" position="after">
+            <t t-set="custom_header" t-value="'l10n_ar.custom_header'"/>
+            <t t-set="report_date" t-value="o.scheduled_date"/>
+            <t t-set="report_number" t-value="o.l10n_ar_delivery_guide_number or o.name"/>
+            <t t-set="pre_printed_report" t-value="False"/>
+            <t t-set="document_letter"
+               t-value="(o.document_type_id and o.document_type_id.l10n_ar_letter) or 'X'"/>
+            <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
+            <t t-set="report_name"
+               t-value="(o.document_type_id and o.document_type_id.report_name) or 'Comprobante de Entrega'"/>
+            <t t-set="header_address"
+               t-value="o.picking_type_id.report_partner_id
+                        or o.picking_type_id.warehouse_id.partner_id
+                        or o.company_id.partner_id"/>
+
+            <!-- Argentine footer: AFIP barcode, CAI, signature section, pager -->
+            <t t-set="custom_footer">
+                <div class="row">
+                    <div name="footer_left_column" class="col-8 text-center">
+                        <t t-if="o.l10n_ar_afip_barcode">
+                            <div style="text-align: center;">
+                                <img t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'
+                                               % ('Code128', o.l10n_ar_afip_barcode, 400, 40)"
+                                     alt="Barcode"
+                                     style="height:40px; width:100%"/>
+                                <br/>
+                                <span t-esc="o.l10n_ar_afip_barcode" style="font-size: 14px;"/>
+                            </div>
+                        </t>
+                        <t t-if="o.picking_type_id.report_signature_section and not o.l10n_ar_afip_barcode">
+                            <table class="table table-borderless table-sm">
+                                <thead>
+                                    <tr>
+                                        <th width="25%">Recibí conforme:</th>
+                                        <th width="25%"></th>
+                                        <th width="25%"></th>
+                                        <th width="25%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th style="text-align: center;">____ / ____ / ____</th>
+                                        <td><hr style="border: 1px solid #000000;"/></td>
+                                        <td><hr style="border: 1px solid #000000;"/></td>
+                                        <td><hr style="border: 1px solid #000000;"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center;">Fecha</th>
+                                        <th style="text-align: center;">DNI</th>
+                                        <th style="text-align: center;">Firma</th>
+                                        <th style="text-align: center;">Aclaración</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+
+                    <div name="footer_right_column" class="col-4 text-right">
+                        <div t-if="not pre_printed_report and o.l10n_ar_cai_data">
+                            CAI: <span t-out="o.l10n_ar_cai_data['cai_authorization_code']"/>
+                        </div>
+                        <div t-if="not pre_printed_report and o.l10n_ar_cai_data">
+                            CAI Due Date: <span t-field="o.l10n_ar_cai_expiration_date"/>
+                        </div>
+                        <div name="pager" t-if="report_type == 'pdf'">
+                            Page: <span class="page"/> / <span class="topage"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+
+        <!-- ── 2. Remove generic title (custom_header handles it) ────── -->
+        <h2 position="replace"/>
+
+        <!-- ── 3. Argentine informations block ──────────────────────── -->
+        <div id="informations" position="replace">
+            <div id="informations" class="row mt32 mb32">
+                <div class="col-6">
+                    <t t-set="partner" t-value="o.partner_id"/>
+                    <t t-set="commercial_partner" t-value="partner.commercial_partner_id"/>
+
+                    <!-- (14) Denominación / Razón Social -->
+                    <strong>Customer: </strong>
+                    <span t-field="commercial_partner.name"/>
+                    <br/>
+
+                    <span t-if="commercial_partner != partner">
+                        <strong>Deliver to: </strong>
+                        <span t-field="partner.name"/>
+                    </span>
+                    <span t-out="partner"
+                          t-options='{"widget": "contact", "fields": ["address", "phone", "mobile"],
+                                      "no_marker": True, "no_tag_br": True}'/>
+
+                    <!-- (16) Responsabilidad AFIP -->
+                    <strong>VAT Cond: </strong>
+                    <span t-field="partner.l10n_ar_afip_responsibility_type_id"/>
+
+                    <!-- (17) CUIT -->
+                    <t t-if="partner.vat
+                             and partner.l10n_latam_identification_type_id.name
+                             and partner.l10n_latam_identification_type_id.name != 'Sigd'">
+                        <br/>
+                        <strong>
+                            <t t-out="partner.l10n_latam_identification_type_id.name
+                                      or o.company_id.country_id.vat_label"
+                               id="inv_tax_id_label"/>:
+                        </strong>
+                        <span t-out="partner.l10n_ar_formatted_vat or partner.vat"/>
+                    </t>
+                </div>
+
+                <div class="col-6">
+                    <t>
+                        <strong>Batch:</strong>
+                        <span t-field="o.name"/>
+                    </t>
+                    <t t-if="o.cot">
+                        <br/>
+                        <strong>COT:</strong>
+                        <span t-field="o.cot"/>
+                    </t>
+                    <t t-if="o.declared_value">
+                        <br/>
+                        <strong>Declared Value:</strong>
+                        <span t-field="o.declared_value"/>
+                    </t>
+                    <t t-if="o.number_of_packages">
+                        <br/>
+                        <strong>Packages Qty:</strong>
+                        <span t-field="o.number_of_packages"/>
+                    </t>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── 4. Signature section after done-lines table (with barcode) ── -->
+        <table name="stock_move_line_table" position="after">
+            <t t-if="o.picking_type_id.report_signature_section and o.l10n_ar_afip_barcode">
+                <table class="table table-borderless table-sm">
+                    <thead>
+                        <tr>
+                            <th width="25%">Recibí conforme:</th>
+                            <th width="25%"></th>
+                            <th width="25%"></th>
+                            <th width="25%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Fecha: ____ / ____ / ____</th>
+                            <td><hr style="border: 1px solid #000000;"/></td>
+                            <td><hr style="border: 1px solid #000000;"/></td>
+                            <td><hr style="border: 1px solid #000000;"/></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <th style="text-align: center;">DNI</th>
+                            <th style="text-align: center;">Firma</th>
+                            <th style="text-align: center;">Aclaración</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+        </table>
+
+    </template>
+
+</odoo>

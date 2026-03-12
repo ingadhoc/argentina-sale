@@ -8,6 +8,57 @@ from odoo import api, fields, models
 class StockPickingBatch(models.Model):
     _inherit = "stock.picking.batch"
 
+    # ── Argentine report fields ──────────────────────────────────────────────
+    # Delegate to the first picking that has CAI/delivery-guide data.
+    # All pickings in a batch share the same delivery guide (see
+    # l10n_ar_action_create_delivery_guide), so picking_ids[0] is enough.
+
+    l10n_ar_cai_data = fields.Json(
+        compute="_compute_l10n_ar_report_fields",
+        string="CAI Data",
+    )
+    document_type_id = fields.Many2one(
+        comodel_name="l10n_latam.document.type",
+        compute="_compute_l10n_ar_report_fields",
+        string="Document Type (AR)",
+    )
+    l10n_ar_cai_expiration_date = fields.Date(
+        compute="_compute_l10n_ar_report_fields",
+        string="CAI Expiration Date",
+    )
+    l10n_ar_afip_barcode = fields.Char(
+        compute="_compute_l10n_ar_report_fields",
+        string="AFIP Barcode",
+    )
+    cot = fields.Char(
+        compute="_compute_l10n_ar_report_fields",
+        string="COT",
+    )
+
+    @api.depends(
+        "picking_ids.l10n_ar_cai_data",
+        "picking_ids.cot",
+        "picking_ids.l10n_ar_afip_barcode",
+    )
+    def _compute_l10n_ar_report_fields(self):
+        for batch in self:
+            # Take data from the first picking that has a delivery guide assigned
+            ref_picking = batch.picking_ids.filtered("l10n_ar_delivery_guide_number")[:1]
+            if ref_picking:
+                batch.l10n_ar_cai_data = ref_picking.l10n_ar_cai_data
+                batch.document_type_id = ref_picking.document_type_id
+                batch.l10n_ar_cai_expiration_date = ref_picking.l10n_ar_cai_expiration_date
+                batch.l10n_ar_afip_barcode = ref_picking.l10n_ar_afip_barcode
+                batch.cot = ref_picking.cot
+            else:
+                batch.l10n_ar_cai_data = False
+                batch.document_type_id = False
+                batch.l10n_ar_cai_expiration_date = False
+                batch.l10n_ar_afip_barcode = False
+                batch.cot = False
+
+    # ────────────────────────────────────────────────────────────────────────
+
     l10n_ar_delivery_guide_number = fields.Char(
         compute="_compute_l10n_ar_delivery_guide_number",
         inverse="_inverse_l10n_ar_delivery_guide_number",
@@ -17,6 +68,20 @@ class StockPickingBatch(models.Model):
     l10n_ar_allow_generate_delivery_guide = fields.Boolean(
         compute="_compute_l10n_ar_delivery_guide_flags",
     )
+    automatic_declare_value = fields.Boolean(
+        related="picking_type_id.automatic_declare_value",
+    )
+    declared_value = fields.Float(
+        digits="Account",
+        compute="_compute_declared_value",
+        store=True,
+        readonly=False,
+    )
+
+    @api.depends("picking_type_id.automatic_declare_value", "picking_ids.declared_value")
+    def _compute_declared_value(self):
+        for batch in self:
+            batch.declared_value = sum(batch.picking_ids.mapped("declared_value"))
 
     @api.depends("state", "l10n_ar_delivery_guide_number", "picking_type_id.l10n_ar_document_type_id")
     def _compute_l10n_ar_delivery_guide_flags(self):
