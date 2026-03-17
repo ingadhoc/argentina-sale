@@ -83,6 +83,16 @@ class StockPickingBatch(models.Model):
         for batch in self:
             batch.declared_value = sum(batch.picking_ids.mapped("declared_value"))
 
+    def _get_name_delivery_report(self, report_xml_id):
+        """Analogous to StockPicking._get_name_delivery_report in l10n_ar_stock_ux.
+        Returns the Argentine batch report when the company is AR and a delivery
+        guide number has been assigned; otherwise falls back to the generic report.
+        """
+        self.ensure_one()
+        if self.company_id.country_id.code == "AR" and self.l10n_ar_delivery_guide_number:
+            return "l10n_ar_stock_picking_batch.report_batch_delivery_document"
+        return report_xml_id
+
     @api.depends("state", "l10n_ar_delivery_guide_number", "picking_type_id.l10n_ar_document_type_id")
     def _compute_l10n_ar_delivery_guide_flags(self):
         """

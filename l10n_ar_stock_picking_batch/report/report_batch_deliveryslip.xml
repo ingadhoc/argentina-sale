@@ -20,6 +20,23 @@
         (stock.report_delivery_document) through the batch base template —
         no duplication needed.
     -->
+    <!--
+        Inherit the batch entry-point to dynamically choose the Argentine report
+        or the generic one, mirroring what l10n_ar_stock_ux does for stock.picking:
+
+          <t t-call="stock.report_delivery_document" position="attributes">
+              <attribute name="t-call">
+                  #{ o._get_name_delivery_report('stock.report_delivery_document') }
+              </attribute>
+          </t>
+    -->
+    <template id="report_batch_deliveryslip"
+              inherit_id="stock_batch_picking_ux.report_batch_deliveryslip">
+        <t t-call="stock_batch_picking_ux.report_batch_delivery_document" position="attributes">
+            <attribute name="t-call">#{ o._get_name_delivery_report('stock_batch_picking_ux.report_batch_delivery_document') }</attribute>
+        </t>
+    </template>
+
     <template id="report_batch_delivery_document"
               inherit_id="stock_batch_picking_ux.report_batch_delivery_document"
               primary="True">
