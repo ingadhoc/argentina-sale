@@ -6,7 +6,7 @@
             <attribute name="t-if" add="doc.company_id.country_code != 'AR'" separator="and"/>
         </t>
         <t t-call="sale.report_saleorder_document" position="after">
-            <t t-call="l10n_ar_sale.report_saleorder_document" t-if="doc.company_id.country_code == 'AR'"/>
+            <t t-call="l10n_ar_sale.report_saleorder_document" t-if="doc.company_id.country_code == 'AR'" t-lang="doc.partner_id.lang"/>
         </t>
     </template>
 
@@ -15,7 +15,7 @@
             <attribute name="t-if" add="doc.company_id.country_code != 'AR'" separator="and"/>
         </t>
         <t t-call="sale.report_saleorder_document" position="after">
-            <t t-call="l10n_ar_sale.report_saleorder_document" t-if="doc.company_id.country_code == 'AR'"/>
+            <t t-call="l10n_ar_sale.report_saleorder_document" t-if="doc.company_id.country_code == 'AR'" t-lang="doc.partner_id.lang"/>
         </t>
     </template>
 
