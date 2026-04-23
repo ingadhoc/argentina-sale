@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-08 14:20+0000\n"
-"PO-Revision-Date: 2026-04-14 14:41+0000\n"
+"PO-Revision-Date: 2026-04-23 18:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
 "argentina-sale-19-0/argentina-sale-19-0-l10n_ar_stock_ux/es/>\n"
@@ -120,8 +120,9 @@ msgstr "<strong>Cond. IVA: </strong>"
 
 #. module: l10n_ar_stock_ux
 #: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_stock_picking__l10n_ar_afip_barcode
+#, fuzzy
 msgid "AFIP Barcode"
-msgstr "AFIP Código de barras"
+msgstr "Código de barras ARCA"
 
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.report_delivery_document
