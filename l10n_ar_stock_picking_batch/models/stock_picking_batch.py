@@ -97,9 +97,7 @@ class StockPickingBatch(models.Model):
     @api.depends("state", "l10n_ar_delivery_guide_number", "picking_type_id.l10n_ar_document_type_id")
     def _compute_l10n_ar_delivery_guide_flags(self):
         """
-        Compute flags for allowing delivery guide generation and sending.
-        - Generation allowed if: state is 'done', document type exists, and no guide number.
-        - Send allowed if: guide number exists.
+        Generation allowed if: state is 'done', document type exists, and no guide number yet.
         """
         for batch in self:
             has_doc_type = bool(batch.picking_type_id.l10n_ar_document_type_id)

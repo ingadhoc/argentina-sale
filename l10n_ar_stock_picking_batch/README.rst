@@ -14,7 +14,14 @@
 Argentinean Delivery Guides on Batch Pickings
 =============================================
 
-TODO
+Extends batch pickings to support Argentine delivery guides (remitos).
+
+Main features:
+
+* **Generate delivery guide from a batch**: a *Generate Delivery Guide* button appears on the batch form once it is validated (state ``done``) and the operation type has an Argentine document type configured. It creates the guide on the first picking and propagates the number and CAI data to all other pickings in the batch.
+* **Synchronisation**: the delivery guide number on the batch is computed from its pickings and kept in sync. Editing it on the batch writes back to all pickings (only those that differ are updated).
+* **View protection**: on pickings that belong to a batch the delivery guide number field becomes read-only, preventing out-of-sync manual edits.
+* **Declared value**: the batch aggregates the declared value from its pickings.
 
 Installation
 ============
