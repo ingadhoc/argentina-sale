@@ -39,6 +39,7 @@ class StockPickingBatch(models.Model):
         "picking_ids.l10n_ar_cai_data",
         "picking_ids.cot",
         "picking_ids.l10n_ar_afip_barcode",
+        "picking_ids.l10n_ar_delivery_guide_number",
     )
     def _compute_l10n_ar_report_fields(self):
         for batch in self:
@@ -109,26 +110,31 @@ class StockPickingBatch(models.Model):
     @api.depends("picking_ids.l10n_ar_delivery_guide_number")
     def _compute_l10n_ar_delivery_guide_number(self):
         for batch in self:
-            delivery_guide_numbers = list(
+            delivery_guide_numbers = sorted(
                 set(batch.picking_ids.filtered("l10n_ar_delivery_guide_number").mapped("l10n_ar_delivery_guide_number"))
             )
             batch.l10n_ar_delivery_guide_number = ", ".join(delivery_guide_numbers)
 
     def _inverse_l10n_ar_delivery_guide_number(self):
         for batch in self:
-            batch.picking_ids.write({"l10n_ar_delivery_guide_number": batch.l10n_ar_delivery_guide_number})
+            pickings_to_update = batch.picking_ids.filtered(
+                lambda p: p.l10n_ar_delivery_guide_number != batch.l10n_ar_delivery_guide_number
+            )
+            if pickings_to_update:
+                pickings_to_update.write({"l10n_ar_delivery_guide_number": batch.l10n_ar_delivery_guide_number})
 
     def l10n_ar_action_create_delivery_guide(self):
         """
-        Assign delivery guid info to related pickings
+        Assign delivery guide info to related pickings
         """
         for batch in self:
-            if not batch.l10n_ar_delivery_guide_number:
+            if not batch.l10n_ar_delivery_guide_number and batch.picking_ids:
                 batch.picking_ids[:1].l10n_ar_action_create_delivery_guide()
+                first_picking = batch.picking_ids[0]
                 batch.picking_ids[1:].write(
                     {
-                        "l10n_ar_delivery_guide_number": batch.picking_ids[0].l10n_ar_delivery_guide_number,
-                        "l10n_ar_cai_data": batch.picking_ids[0].l10n_ar_cai_data,
+                        "l10n_ar_delivery_guide_number": first_picking.l10n_ar_delivery_guide_number,
+                        "l10n_ar_cai_data": first_picking.l10n_ar_cai_data,
                     }
                 )
 
@@ -141,5 +147,7 @@ class StockPickingBatch(models.Model):
                 docs = [self.l10n_ar_delivery_guide_number]
             l10n_ar_delivery_guide_numbers = []
             for doc in docs:
-                l10n_ar_delivery_guide_numbers.append(self.env.ref("l10n_ar.dc_r_r")._format_document_number(doc))
+                l10n_ar_delivery_guide_numbers.append(
+                    self.env.ref("l10n_ar.dc_r_r")._format_document_number(doc.strip())
+                )
             self.l10n_ar_delivery_guide_number = ",".join(l10n_ar_delivery_guide_numbers)
