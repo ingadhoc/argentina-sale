@@ -119,6 +119,18 @@ class SaleOrder(models.Model):
                 if to_unlink._origin != new_taxes:
                     line.tax_id = (line.tax_id - to_unlink) | new_taxes
 
+    def _create_delivery_line(self, carrier, price_unit):
+        """Al agregar el envío, el módulo delivery solo aplica map_tax() de la posición fiscal,
+        que no incluye las percepciones argentinas (almacenadas en l10n_ar_tax_ids).
+        Luego de crear la línea de envío, agregamos las percepciones correspondientes."""
+        line = super()._create_delivery_line(carrier, price_unit)
+        if self.fiscal_position_id.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception"):
+            date = fields.Date.to_date(fields.Datetime.context_timestamp(self, self.date_order))
+            new_taxes = self.fiscal_position_id._l10n_ar_add_taxes(self.partner_id, self.company_id, date, "perception")
+            if new_taxes:
+                line.tax_id = line.tax_id | new_taxes
+        return line
+
     def copy(self, default=None):
         """Re computamos las percepciones al duplicar una venta porque puede ser que la orden venga de otro periodo
         o por alguna razón las percepciones hayan cambiado
