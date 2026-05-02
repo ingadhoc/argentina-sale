@@ -94,6 +94,30 @@ class SaleOrderLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals):
+        # Para líneas de delivery, _compute_tax_ids es ignorado porque _prepare_delivery_line_vals
+        # setea tax_ids explícitamente con fiscal_position.map_tax(), que no llama a
+        # _l10n_ar_add_taxes() y omite las percepciones. Al pasar tax_ids explícito en el
+        # create(), el ORM usa ese valor y descarta el resultado del compute. Corregimos esto
+        # enriqueciendo los vals antes del super() para que las percepciones queden incluidas.
+        if "is_delivery" in self._fields:
+            for v in vals:
+                if not v.get("is_delivery"):
+                    continue
+                order = self.env["sale.order"].browse(v.get("order_id"))
+                if not order.fiscal_position_id.l10n_ar_tax_ids:
+                    continue
+                date = fields.Date.to_date(
+                    fields.Datetime.context_timestamp(
+                        order.with_context(tz="America/Argentina/Buenos_Aires"),
+                        order.date_order,
+                    )
+                )
+                perception_taxes = order.fiscal_position_id._l10n_ar_add_taxes(
+                    order.partner_id, order.company_id, date, "perception"
+                )
+                if perception_taxes:
+                    existing_ids = {id_ for cmd in v.get("tax_ids", []) if cmd[0] == 6 for id_ in cmd[2]}
+                    v["tax_ids"] = [(6, 0, list(existing_ids | set(perception_taxes.ids)))]
         rec = super(SaleOrderLine, self).create(vals)
         rec.check_vat_tax()
         return rec
