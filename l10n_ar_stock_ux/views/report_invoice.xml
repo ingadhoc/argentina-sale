@@ -5,7 +5,7 @@
 
         <div name="comment" position="after">
             <p t-if="any(x.sudo().lot_id.dispatch_number for x in o.mapped('invoice_line_ids.move_line_ids.move_line_ids'))" name="dispach">
-                <span t-out="'Despachos Involucrados: ' + ', '.join(o.mapped('invoice_line_ids.move_line_ids.move_line_ids.lot_id').filtered('dispatch_number').mapped('dispatch_number'))"/>
+                <span t-out="'Despachos Involucrados: ' + ', '.join(sorted(set(o.mapped('invoice_line_ids.move_line_ids.move_line_ids.lot_id').filtered('dispatch_number').mapped('dispatch_number'))))"/>
             </p>
         </div>
         <t t-if="o.ref" position="after">
