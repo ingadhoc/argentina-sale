@@ -22,7 +22,7 @@ if records:
                 <button name="l10n_ar_action_create_delivery_guide"
                         type="object"
                         string="Generate Delivery Guide"
-                        invisible="country_code != 'AR' or not l10n_ar_allow_generate_delivery_guide or not partner_id"
+                        invisible="country_code != 'AR' or not l10n_ar_allow_generate_delivery_guide"
                 />
             </button>
             <field name="number_of_packages" position="after">
