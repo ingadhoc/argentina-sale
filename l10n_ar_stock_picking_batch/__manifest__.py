@@ -28,7 +28,7 @@
     "license": "AGPL-3",
     "images": [],
     "depends": [
-        "stock_batch_picking_ux",
+        "stock_picking_batch",
         "l10n_ar_stock_ux",
     ],
     "data": [
