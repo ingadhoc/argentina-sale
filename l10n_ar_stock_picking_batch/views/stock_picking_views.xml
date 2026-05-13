@@ -5,19 +5,25 @@
         <field name="priority">99</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
+            <!--
+                Conditional on batch_partner_id (not batch_id): a batch without
+                partner manages delivery guides per picking, so the warning and
+                the field locks must NOT apply in that case.
+            -->
             <sheet position="before">
-                <div class="alert alert-warning mb-2" invisible="not batch_id" role="alert">
+                <field name="batch_partner_id" invisible="1"/>
+                <div class="alert alert-warning mb-2" invisible="not batch_partner_id" role="alert">
                     <strong>Advertencia:</strong> La asignación de remitos se hace desde el lote de traslados; si quiere hacerlos desde este traslado, debe desvincular el traslado del lote.
                 </div>
             </sheet>
             <field name="l10n_ar_delivery_guide_number" position="attributes">
-                <attribute name="readonly">batch_id</attribute>
+                <attribute name="readonly">batch_partner_id</attribute>
             </field>
             <field name="number_of_packages" position="attributes">
-                <attribute name="invisible">batch_id</attribute>
+                <attribute name="invisible">batch_partner_id</attribute>
             </field>
             <field name="declared_value" position="attributes">
-                <attribute name="invisible">batch_id</attribute>
+                <attribute name="invisible">batch_partner_id</attribute>
             </field>
         </field>
     </record>
