@@ -2,8 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo import api, fields, models
 
 
 class StockPickingBatch(models.Model):
@@ -127,8 +126,6 @@ class StockPickingBatch(models.Model):
         Assign delivery guide info to related pickings
         """
         for batch in self:
-            if not batch.partner_id:
-                raise UserError(_("Para generar el remito debe definir un cliente o proveedor en el lote."))
             if not batch.l10n_ar_delivery_guide_number and batch.picking_ids:
                 batch.picking_ids[:1].l10n_ar_action_create_delivery_guide()
                 first_picking = batch.picking_ids[0]
