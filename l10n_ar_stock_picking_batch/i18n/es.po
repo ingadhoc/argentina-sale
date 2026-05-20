@@ -1,0 +1,202 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_stock_picking_batch
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-29 14:17+0000\n"
+"PO-Revision-Date: 2026-04-29 14:17+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid ""
+"<br/>\n"
+"                        <strong>COT:</strong>"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid ""
+"<br/>\n"
+"                        <strong>Declared Value:</strong>"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid ""
+"<br/>\n"
+"                        <strong>Packages Qty:</strong>"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.stock_picking_form_exception
+msgid ""
+"<strong>Advertencia:</strong> La asignación de remitos se hace desde el lote"
+" de traslados, si quiere hacerlos desde este traslado cancele el lote o "
+"separe el traslado del mismo"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "<strong>Batch:</strong>"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "<strong>Customer: </strong>"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "<strong>Deliver to: </strong>"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "<strong>VAT Cond: </strong>"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__l10n_ar_afip_barcode
+msgid "AFIP Barcode"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "Aclaración"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__automatic_declare_value
+msgid "Automatic Declare Value"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "Barcode"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model,name:l10n_ar_stock_picking_batch.model_stock_picking_batch
+msgid "Batch Transfer"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__l10n_ar_cai_data
+msgid "CAI Data"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "CAI Due Date:"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__l10n_ar_cai_expiration_date
+msgid "CAI Expiration Date"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "CAI:"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__cot
+msgid "COT"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__country_code
+msgid "Country Code"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "DNI"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__declared_value
+msgid "Declared Value"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__l10n_ar_delivery_guide_number
+msgid "Delivery Guide No."
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__document_type_id
+msgid "Document Type (AR)"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "Fecha"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "Fecha: ____ / ____ / ____"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "Firma"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.actions.server,name:l10n_ar_stock_picking_batch.action_batch_generate_delivery_guide
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.stock_batch_picking_form
+msgid "Generate Delivery Guide"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__l10n_ar_allow_generate_delivery_guide
+msgid "L10N Ar Allow Generate Delivery Guide"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "Page: <span class=\"page\"/> / <span class=\"topage\"/>"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
+msgid "Recibí conforme:"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,help:l10n_ar_stock_picking_batch.field_stock_picking_batch__country_code
+msgid ""
+"The ISO country code in two chars. \n"
+"You can use this field for quick search."
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,help:l10n_ar_stock_picking_batch.field_stock_picking_batch__automatic_declare_value
+msgid ""
+"When enabled, automatically suggest declared value based on product prices. "
+"The value will be calculated in the company's currency. Define a pricelist "
+"for pickings not linked to a sale order."
+msgstr ""
