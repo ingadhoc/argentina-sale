@@ -40,3 +40,6 @@ class AccountChartTemplate(models.AbstractModel):
             'company_id': company.id,
         }
         return vals
+
+    def test_commit():
+        val= 'falso commit'
