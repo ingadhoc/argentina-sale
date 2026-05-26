@@ -16,11 +16,30 @@ Argentinean Delivery Guides on Batch Pickings
 
 Extends batch pickings to support Argentine delivery guides (remitos).
 
+The whole module is conditional on the batch having a partner
+(``batch_partner_id``, related to ``batch_id.partner_id``):
+
+* **Partner batches** (single-partner) → delivery guides are issued at the
+  batch level (one remito for the whole batch).
+* **Mixed-partner batches** (no partner on the batch) → delivery guides are
+  handled at picking level, as in a non-batched flow.
+
 Main features:
 
 * **Generate delivery guide from a batch**: a *Generate Delivery Guide* button appears on the batch form once it is validated (state ``done``) and the operation type has an Argentine document type configured. It creates the guide on the first picking and propagates the number and CAI data to all other pickings in the batch.
 * **Synchronisation**: the delivery guide number on the batch is computed from its pickings and kept in sync. Editing it on the batch writes back to all pickings (only those that differ are updated).
-* **View protection**: on pickings that belong to a batch the delivery guide number field becomes read-only, preventing out-of-sync manual edits.
+* **Picking view, partner batches**:
+
+  - A warning banner is displayed on the picking explaining that the delivery
+    guide is managed from the batch.
+  - The picking-level *Generate Delivery Guide* button is hidden.
+  - ``l10n_ar_delivery_guide_number`` becomes read-only, preventing
+    out-of-sync manual edits.
+  - ``number_of_packages`` and ``declared_value`` are hidden (set at batch
+    level).
+
+* **Picking view, mixed-partner batches**: no UI changes — the picking keeps
+  its native delivery-guide flow.
 * **Declared value**: the batch aggregates the declared value from its pickings.
 
 Installation
