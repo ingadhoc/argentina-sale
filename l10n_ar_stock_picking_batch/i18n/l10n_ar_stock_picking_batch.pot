@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-29 14:17+0000\n"
-"PO-Revision-Date: 2026-04-29 14:17+0000\n"
+"POT-Creation-Date: 2026-05-27 16:07+0000\n"
+"PO-Revision-Date: 2026-05-27 16:07+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -39,9 +39,9 @@ msgstr ""
 #. module: l10n_ar_stock_picking_batch
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.stock_picking_form_exception
 msgid ""
-"<strong>Advertencia:</strong> La asignación de remitos se hace desde el lote"
-" de traslados, si quiere hacerlos desde este traslado cancele el lote o "
-"separe el traslado del mismo"
+"<strong>Advertencia:</strong> Esta transferencia pertenece a un lote de "
+"traslado con contacto definido. La asignación de remitos se hace desde el "
+"lote; si quiere hacerla desde este traslado, debe desvincularlo del lote."
 msgstr ""
 
 #. module: l10n_ar_stock_picking_batch
