@@ -308,20 +308,20 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/product_template.py:0
-msgid "El código según nomenclador de arba debe ser de 6 dígitos numéricos"
-msgstr ""
+msgid "The ARBA nomenclature code must be exactly 6 numeric digits"
+msgstr "El código según nomenclador de ARBA debe ser exactamente de 6 dígitos numéricos"
 
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "Error al conectar con ARBA COT. Estado: %(status)s. Mensaje: %(msg)s"
-msgstr ""
+msgid "Error connecting to ARBA COT. Status: %(status)s. Message: %(msg)s"
+msgstr "Error al conectar con ARBA COT. Estado: %(status)s. Mensaje: %(msg)s"
 
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "Error al presentar remito:\n"
-msgstr ""
+msgid "Error submitting delivery order:\n"
+msgstr "Error al presentar remito:\n"
 
 #. module: l10n_ar_stock_ux
 #. odoo-python
@@ -337,8 +337,11 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #: model:ir.model.fields,help:l10n_ar_stock_ux.field_arba_cot_wizard__datetime_out
 msgid ""
-"Fecha de salida. No debe ser inferior a ayer ni superior a dentro de 30 días."
+"Departure date. Must not be earlier than yesterday or more than 30 days in "
+"the future."
 msgstr ""
+"Fecha de salida. No debe ser inferior a ayer ni superior a dentro de 30 "
+"días."
 
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.report_delivery_document
@@ -377,10 +380,10 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid ""
+msgid "Origin and destination provinces are required and must have a valid code"
+msgstr ""
 "Las provincias de origen y destino son obligatorias y deben tener un código "
 "válido"
-msgstr ""
 
 #. module: l10n_ar_stock_ux
 #: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_arba_cot_wizard__write_uid
@@ -395,8 +398,8 @@ msgstr "Última actualización el"
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "Los remitos seleccionados deben pertenecer a la misma compañía"
-msgstr ""
+msgid "Selected delivery orders must belong to the same company"
+msgstr "Los remitos seleccionados deben pertenecer a la misma compañía"
 
 #. module: l10n_ar_stock_ux
 #: model:ir.model,name:l10n_ar_stock_ux.model_stock_lot
@@ -432,8 +435,8 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "No se asignó número de remito"
-msgstr ""
+msgid "No delivery guide number was assigned"
+msgstr "No se asignó número de remito"
 
 #. module: l10n_ar_stock_ux
 #. odoo-python
@@ -562,8 +565,8 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "Remito Electrónico Solicitado"
-msgstr ""
+msgid "Electronic Delivery Order Requested"
+msgstr "Remito Electrónico Solicitado"
 
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.view_picking_cot_form
@@ -598,9 +601,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
 msgid ""
-"Si el CUIT de la compañía y el cuit del transportista son el mismo, se debe "
-"informar la patente del vehículo."
+"If the company CUIT and the carrier CUIT are the same, the vehicle license "
+"plate must be provided."
 msgstr ""
+"Si el CUIT de la compañía y el CUIT del transportista son el mismo, se debe "
+"informar la patente del vehículo."
 
 #. module: l10n_ar_stock_ux
 #: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_arba_cot_wizard__tipo_recorrido
@@ -657,6 +662,22 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.res_config_settings_view_form
 msgid "link"
 msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/arba_cot_wizard.py:0
+msgid "Invalid license plate format (%s)"
+msgstr "El formato de patente no es válido (%s)"
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
+msgid ""
+"You must link a \"Carrier\" to the selected delivery method or choose a "
+"different delivery method."
+msgstr ""
+"Debe vincular un \"Transportista\" a la forma de envío seleccionada o "
+"elegir otra forma de envío."
 
 #~ msgid ""
 #~ "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are "

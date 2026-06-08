@@ -126,9 +126,9 @@ class SaleOrderLine(models.Model):
             if len(vat_taxes) != 1:
                 raise UserError(
                     _(
-                        'Debe haber un único impuesto del grupo de impuestos "IVA" por línea, agréguelo a "%s". '
-                        "En caso de tenerlo, revise la configuración del impuesto, en opciones avanzadas, "
-                        'en el campo correspondiente "Grupo de Impuestos".',
+                        'There must be exactly one tax from the "VAT" tax group per line, add it to "%s". '
+                        "If you already have one, check the tax configuration under advanced options "
+                        'in the "Tax Group" field.',
                         rec.product_id.name,
                     )
                 )

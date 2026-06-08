@@ -15,6 +15,4 @@ class ProductTemplate(models.Model):
     def check_arba_code(self):
         for rec in self.filtered("arba_code"):
             if len(rec.arba_code) != 6 or not rec.arba_code.isdigit():
-                raise ValidationError(
-                    self.env._("El código según nomenclador de arba debe ser de 6 dígitos" " numéricos")
-                )
+                raise ValidationError(self.env._("The ARBA nomenclature code must be exactly 6 numeric digits"))

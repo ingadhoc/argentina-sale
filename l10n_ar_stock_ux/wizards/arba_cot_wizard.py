@@ -13,7 +13,7 @@ class ArbaCotWizard(models.TransientModel):
     _description = "arba.cot.wizard"
 
     datetime_out = fields.Datetime(
-        required=True, help="Fecha de salida. No debe ser inferior a ayer ni superior a dentro de 30 días."
+        required=True, help="Departure date. Must not be earlier than yesterday or more than 30 days in the future."
     )
     tipo_recorrido = fields.Selection(
         [("U", "Urbano"), ("R", "Rural"), ("M", "Mixto")],
@@ -66,7 +66,7 @@ class ArbaCotWizard(models.TransientModel):
         if not patente_vehiculo_valida:
             error.append("Patente Vehiculo")
         if error:
-            raise ValidationError(self.env._("El formato de patente no es válido (%s)" % ", ".join(error)))
+            raise ValidationError(self.env._("Invalid license plate format (%s)", ", ".join(error)))
 
     def confirm(self):
         self.ensure_one()
