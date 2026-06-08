@@ -276,19 +276,19 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/product_template.py:0
-msgid "El código según nomenclador de arba debe ser de 6 dígitos numéricos"
+msgid "The ARBA nomenclature code must be exactly 6 numeric digits"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "Error al conectar con ARBA COT. Estado: %(status)s. Mensaje: %(msg)s"
+msgid "Error connecting to ARBA COT. Status: %(status)s. Message: %(msg)s"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "Error al presentar remito:\n"
+msgid "Error submitting delivery order:\n"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -305,8 +305,8 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #: model:ir.model.fields,help:l10n_ar_stock_ux.field_arba_cot_wizard__datetime_out
 msgid ""
-"Fecha de salida. No debe ser inferior a ayer ni superior a dentro de 30 "
-"días."
+"Departure date. Must not be earlier than yesterday or more than 30 days in "
+"the future."
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -346,9 +346,7 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid ""
-"Las provincias de origen y destino son obligatorias y deben tener un código "
-"válido"
+msgid "Origin and destination provinces are required and must have a valid code"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -364,7 +362,7 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "Los remitos seleccionados deben pertenecer a la misma compañía"
+msgid "Selected delivery orders must belong to the same company"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -399,7 +397,7 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "No se asignó número de remito"
+msgid "No delivery guide number was assigned"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -520,7 +518,7 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "Remito Electrónico Solicitado"
+msgid "Electronic Delivery Order Requested"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -556,8 +554,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
 msgid ""
-"Si el CUIT de la compañía y el cuit del transportista son el mismo, se debe "
-"informar la patente del vehículo."
+"If the company CUIT and the carrier CUIT are the same, the vehicle license "
+"plate must be provided."
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -614,4 +612,18 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.res_config_settings_view_form
 msgid "link"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/arba_cot_wizard.py:0
+msgid "Invalid license plate format (%s)"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
+msgid ""
+"You must link a \"Carrier\" to the selected delivery method or choose a "
+"different delivery method."
 msgstr ""

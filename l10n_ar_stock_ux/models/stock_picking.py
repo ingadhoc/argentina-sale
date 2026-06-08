@@ -136,15 +136,15 @@ class StockPicking(models.Model):
 
         company = self.mapped("company_id")
         if len(company) > 1:
-            raise UserError(self.env._("Los remitos seleccionados deben pertenecer a la misma compañía"))
+            raise UserError(self.env._("Selected delivery orders must belong to the same company"))
         cuit = company.partner_id.ensure_vat()
         cuit_carrier = carrier_partner.ensure_vat()
 
         if cuit_carrier == cuit and not patente_vehiculo:
             raise UserError(
                 self.env._(
-                    "Si el CUIT de la compañía y el cuit del transportista son el "
-                    "mismo, se debe informar la patente del vehículo."
+                    "If the company CUIT and the carrier CUIT are the same, "
+                    "the vehicle license plate must be provided."
                 )
             )
 
@@ -180,16 +180,14 @@ class StockPicking(models.Model):
 
         for rec in self:
             if not rec.l10n_ar_delivery_guide_number:
-                raise UserError(self.env._("No se asignó número de remito"))
+                raise UserError(self.env._("No delivery guide number was assigned"))
             voucher = rec.l10n_ar_delivery_guide_number
             dest_partner = rec.partner_id
             source_partner = rec.picking_type_id.warehouse_id.partner_id or rec.company_id.partner_id
             commercial_partner = dest_partner.commercial_partner_id
 
             if not source_partner.state_id.code or not dest_partner.state_id.code:
-                raise UserError(
-                    self.env._("Las provincias de origen y destino son obligatorias y deben tener un código válido")
-                )
+                raise UserError(self.env._("Origin and destination provinces are required and must have a valid code"))
 
             if not rec.document_type_id:
                 raise UserError(self.env._('Picking has no "Document type" linked (Id: %s)', rec.id))
@@ -422,7 +420,7 @@ class StockPicking(models.Model):
                 raise UserError(self.env._("Error parsing ARBA COT response"))
         else:
             errors = root.findall(".//errores/error")
-            error_string = self.env._("Error al presentar remito:\n")
+            error_string = self.env._("Error submitting delivery order:\n")
             for error in errors:
                 error_string += f"* * {error.find('codigo').text} {error.find('descripcion').text}\n"
             _logger.warning(error_string)
@@ -441,8 +439,10 @@ class StockPicking(models.Model):
         for rec in self:
             if not carrier_partner:
                 raise UserError(
-                    'Debe vincular una "Empresa transportista" a la forma de envío'
-                    " seleccionada o elegir otra forma de envío"
+                    self.env._(
+                        'You must link a "Carrier" to the selected delivery method '
+                        "or choose a different delivery method."
+                    )
                 )
             file = rec._get_arba_file_data(
                 datetime_out,
@@ -470,12 +470,12 @@ class StockPicking(models.Model):
                 attachments = [(file[0], file[1])]
                 body = f"""
                     <p>
-                        Resultado solicitud COT:
+                        COT request result:
                         <ul>
-                            <li>Número Comprobante: {cot["numeroComprobante"]}</li>
-                            <li>Codigo Integridad: {cot["codigoIntegridad"]}</li>
-                            <li>Procesado: {cot["procesado"]}</li>
-                            <li>Número Único: {cot["numeroUnico"]}</li>
+                            <li>Voucher Number: {cot["numeroComprobante"]}</li>
+                            <li>Integrity Code: {cot["codigoIntegridad"]}</li>
+                            <li>Processed: {cot["procesado"]}</li>
+                            <li>Unique Number: {cot["numeroUnico"]}</li>
                             <li>COT: {cot["cot"]}</li>
                         </ul>
                     </p>
@@ -489,7 +489,7 @@ class StockPicking(models.Model):
                 )
                 rec.message_post(
                     body=body,
-                    subject=self.env._("Remito Electrónico Solicitado"),
+                    subject=self.env._("Electronic Delivery Order Requested"),
                     attachments=attachments,
                     body_is_html=True,
                 )
@@ -497,7 +497,7 @@ class StockPicking(models.Model):
             else:
                 raise UserError(
                     self.env._(
-                        "Error al conectar con ARBA COT. Estado: %(status)s. Mensaje: %(msg)s",
+                        "Error connecting to ARBA COT. Status: %(status)s. Message: %(msg)s",
                         status=res.status_code,
                         msg=res.text,
                     )

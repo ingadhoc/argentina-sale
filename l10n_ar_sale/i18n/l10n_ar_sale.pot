@@ -80,10 +80,9 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_sale/models/sale_order_line.py:0
 msgid ""
-"Debe haber un único impuesto del grupo de impuestos \"IVA\" por línea, "
-"agréguelo a \"%s\". En caso de tenerlo, revise la configuración del "
-"impuesto, en opciones avanzadas, en el campo correspondiente \"Grupo de "
-"Impuestos\"."
+"There must be exactly one tax from the \"VAT\" tax group per line, add it to "
+"\"%s\". If you already have one, check the tax configuration under advanced "
+"options in the \"Tax Group\" field."
 msgstr ""
 
 #. module: l10n_ar_sale

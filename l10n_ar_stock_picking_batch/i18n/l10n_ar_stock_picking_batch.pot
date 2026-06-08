@@ -39,9 +39,9 @@ msgstr ""
 #. module: l10n_ar_stock_picking_batch
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.stock_picking_form_exception
 msgid ""
-"<strong>Advertencia:</strong> Esta transferencia pertenece a un lote de "
-"traslado con contacto definido. La asignación de remitos se hace desde el "
-"lote; si quiere hacerla desde este traslado, debe desvincularlo del lote."
+"<strong>Warning:</strong> Delivery guide assignment is managed from the "
+"batch transfer. To assign from this transfer, cancel the batch or remove the"
+" transfer from it."
 msgstr ""
 
 #. module: l10n_ar_stock_picking_batch
