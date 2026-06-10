@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 16:07+0000\n"
-"PO-Revision-Date: 2026-05-27 16:07+0000\n"
+"POT-Creation-Date: 2026-06-10 14:43+0000\n"
+"PO-Revision-Date: 2026-06-10 14:43+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -37,14 +37,6 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_stock_picking_batch
-#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.stock_picking_form_exception
-msgid ""
-"<strong>Warning:</strong> This transfer belongs to a batch with a defined "
-"contact. Delivery guide assignment is managed from the batch; to assign from"
-" this transfer, you must remove it from the batch."
-msgstr ""
-
-#. module: l10n_ar_stock_picking_batch
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
 msgid "<strong>Batch:</strong>"
 msgstr ""
@@ -62,6 +54,14 @@ msgstr ""
 #. module: l10n_ar_stock_picking_batch
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
 msgid "<strong>VAT Cond: </strong>"
+msgstr ""
+
+#. module: l10n_ar_stock_picking_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.stock_picking_form_exception
+msgid ""
+"<strong>Warning:</strong> This transfer belongs to a batch with a defined "
+"contact. Delivery guide assignment is managed from the batch; to assign from"
+" this transfer, you must remove it from the batch."
 msgstr ""
 
 #. module: l10n_ar_stock_picking_batch
