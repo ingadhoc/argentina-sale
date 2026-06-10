@@ -309,7 +309,9 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/product_template.py:0
 msgid "The ARBA nomenclature code must be exactly 6 numeric digits"
-msgstr "El código según nomenclador de ARBA debe ser exactamente de 6 dígitos numéricos"
+msgstr ""
+"El código según nomenclador de ARBA debe ser exactamente de 6 dígitos "
+"numéricos"
 
 #. module: l10n_ar_stock_ux
 #. odoo-python
@@ -340,8 +342,7 @@ msgid ""
 "Departure date. Must not be earlier than yesterday or more than 30 days in "
 "the future."
 msgstr ""
-"Fecha de salida. No debe ser inferior a ayer ni superior a dentro de 30 "
-"días."
+"Fecha de salida. No debe ser inferior a ayer ni superior a dentro de 30 días."
 
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.report_delivery_document
@@ -380,7 +381,8 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
-msgid "Origin and destination provinces are required and must have a valid code"
+msgid ""
+"Origin and destination provinces are required and must have a valid code"
 msgstr ""
 "Las provincias de origen y destino son obligatorias y deben tener un código "
 "válido"
@@ -676,8 +678,8 @@ msgid ""
 "You must link a \"Carrier\" to the selected delivery method or choose a "
 "different delivery method."
 msgstr ""
-"Debe vincular un \"Transportista\" a la forma de envío seleccionada o "
-"elegir otra forma de envío."
+"Debe vincular un \"Transportista\" a la forma de envío seleccionada o elegir "
+"otra forma de envío."
 
 #~ msgid ""
 #~ "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are "
