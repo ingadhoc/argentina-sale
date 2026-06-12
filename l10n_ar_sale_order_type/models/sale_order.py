@@ -8,6 +8,11 @@ from odoo import api, models
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    def _l10n_ar_set_expo_journal(self, invoice_vals):
+        if self.type_id.journal_id:
+            return invoice_vals
+        return super()._l10n_ar_set_expo_journal(invoice_vals)
+
     @api.depends("type_id.discriminate_taxes")
     def _compute_vat_discriminated(self):
         recs = self.filtered(lambda x: x.type_id.discriminate_taxes in ["yes", "no"])
