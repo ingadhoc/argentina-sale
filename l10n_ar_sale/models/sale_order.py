@@ -58,6 +58,40 @@ class SaleOrder(models.Model):
             return "l10n_ar_sale.report_saleorder_document"
         return report_xml_id
 
+    def _prepare_invoice(self):
+        res = super()._prepare_invoice()
+        return self._l10n_ar_set_expo_journal(res)
+
+    def _l10n_ar_set_expo_journal(self, invoice_vals):
+        """Switch to an export journal when the partner requires export document types.
+
+        Mirrors _onchange_partner_journal (l10n_ar) which only fires in the UI;
+        called from _prepare_invoice so it also applies when invoicing from a sale order.
+        """
+        if self.company_id.account_fiscal_country_id.code != "AR":
+            return invoice_vals
+        partner = self.partner_invoice_id.commercial_partner_id
+        res_code = partner.l10n_ar_afip_responsibility_type_id.code
+        expo_systems = ["FEERCEL", "FEEWS", "FEERCELP"]
+        if res_code not in ["8", "9", "10"]:
+            return invoice_vals
+        current_journal = (
+            self.env["account.journal"].browse(invoice_vals["journal_id"]) if invoice_vals.get("journal_id") else None
+        )
+        if not current_journal or current_journal.l10n_ar_afip_pos_system not in expo_systems:
+            expo_journal = self.env["account.journal"].search(
+                [
+                    *self.env["account.journal"]._check_company_domain(self.company_id),
+                    ("l10n_latam_use_documents", "=", True),
+                    ("type", "=", "sale"),
+                    ("l10n_ar_afip_pos_system", "in", expo_systems),
+                ],
+                limit=1,
+            )
+            if expo_journal:
+                invoice_vals["journal_id"] = expo_journal.id
+        return invoice_vals
+
     def _create_invoices(self, grouped=False, final=False, date=None):
         """Por alguna razon cuando voy a crear la factura a traves de una devolucion, no me esta permitiendo crearla
         y validarla porque resulta el campo tipo de documento esta quedando vacio. Este campo se llena y computa
