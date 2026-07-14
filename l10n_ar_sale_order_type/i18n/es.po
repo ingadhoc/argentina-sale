@@ -49,7 +49,7 @@ msgstr ""
 #. module: l10n_ar_sale_order_type
 #: model:ir.model.fields,field_description:l10n_ar_sale_order_type.field_sale_order_type__report_partner_id
 msgid "Report Partner"
-msgstr ""
+msgstr "Contacto para Encabezado"
 
 #. module: l10n_ar_sale_order_type
 #: model:ir.model,name:l10n_ar_sale_order_type.model_sale_order
