@@ -4,7 +4,7 @@
 ##############################################################################
 import logging
 
-from odoo import _, api, fields, models
+from odoo import Command, _, api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -139,6 +139,30 @@ class SaleOrderLine(models.Model):
         if "tax_ids" in vals or "company_id" in vals:
             self.check_vat_tax()
         return res
+
+    def copy_data(self, default=None):
+        vals_list = super().copy_data(default=default)
+        # Respetar overrides explícitos del caller (p. ej. copy({'tax_ids': ...}))
+        if default and "tax_ids" in default:
+            return vals_list
+        for line, vals in zip(self, vals_list):
+            if vals and vals.get("tax_ids"):
+                active_taxes = line.tax_ids.filtered("active")
+                if line.company_id.country_code == "AR":
+                    for tax in line.tax_ids - active_taxes:
+                        replacement = self.env["account.tax"].search(
+                            [
+                                ("company_id", "=", tax.company_id.id),
+                                ("tax_group_id", "=", tax.tax_group_id.id),
+                                ("amount", "=", tax.amount),
+                                ("type_tax_use", "=", tax.type_tax_use),
+                                ("active", "=", True),
+                            ],
+                            limit=1,
+                        )
+                        active_taxes |= replacement
+                vals["tax_ids"] = [Command.set(active_taxes.ids)]
+        return vals_list
 
     def _compute_tax_ids(self):
         """Agregado de taxes de modulo l10n_ar_tax segun fiscal position"""
