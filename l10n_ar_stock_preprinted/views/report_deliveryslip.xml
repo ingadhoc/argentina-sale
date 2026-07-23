@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- En remitos preimpresos el papel de imprenta ya trae encabezado, numeración y CAI.
+         Por eso, cuando el tipo de operación es preimpreso, el reporte solo imprime el
+         contenido variable: activamos pre_printed_report y suprimimos encabezado y número. -->
+    <template id="report_delivery_document_preprinted"
+              inherit_id="l10n_ar_stock_ux.report_delivery_document">
+
+        <xpath expr="//t[@t-set='pre_printed_report']" position="attributes">
+            <attribute name="t-value">o.l10n_ar_is_preprinted</attribute>
+        </xpath>
+
+        <xpath expr="//t[@t-set='custom_header']" position="attributes">
+            <attribute name="t-value">not o.l10n_ar_is_preprinted and o.company_id.country_id.code == 'AR' and 'l10n_ar.custom_header' or False</attribute>
+        </xpath>
+
+        <xpath expr="//t[@t-set='report_number']" position="attributes">
+            <attribute name="t-value">not o.l10n_ar_is_preprinted and (o.l10n_ar_delivery_guide_number or o.name) or False</attribute>
+        </xpath>
+
+    </template>
+</odoo>
