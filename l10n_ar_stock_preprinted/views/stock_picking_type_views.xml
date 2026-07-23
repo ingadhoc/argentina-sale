@@ -1,38 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Habilitamos el caso "preimpreso": tipo de documento de remito SIN CAI.
-         Para eso relajamos el required del CAI (y de los datos que solo aplican al
-         autoimpreso) y agregamos los renglones por remito. -->
+         El casillero Autoimpreso se autocalcula según el CAI (con CAI = autoimpreso).
+         Relajamos la obligatoriedad del CAI y ocultamos sus datos cuando es preimpreso. -->
     <record id="view_picking_type_form_preprinted" model="ir.ui.view">
         <field name="name">stock.picking.type.form.preprinted</field>
         <field name="model">stock.picking.type</field>
         <field name="inherit_id" ref="l10n_ar_stock.view_picking_type_form_inherit_l10n_ar_stock"/>
         <field name="arch" type="xml">
-            <!-- toggle Autoimpreso: define si el remito es autoimpreso (con CAI) o preimpreso -->
+            <!-- indicador Autoimpreso (solo lectura, computado del CAI) -->
             <field name="l10n_ar_document_type_id" position="after">
                 <field name="l10n_ar_autoprinted" invisible="not l10n_ar_document_type_id"/>
             </field>
-            <!-- el CAI y su rango solo aplican (y son obligatorios) en autoimpreso -->
+            <!-- CAI opcional: su presencia define autoimpreso vs preimpreso -->
             <field name="l10n_ar_cai_authorization_code" position="attributes">
-                <attribute name="required">l10n_ar_document_type_id and l10n_ar_autoprinted</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
+                <attribute name="required">0</attribute>
             </field>
+            <!-- vencimiento y rango solo aplican (y son obligatorios) cuando hay CAI -->
             <field name="l10n_ar_cai_expiration_date" position="attributes">
-                <attribute name="required">l10n_ar_document_type_id and l10n_ar_autoprinted</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
+                <attribute name="required">l10n_ar_cai_authorization_code</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_cai_authorization_code</attribute>
             </field>
             <field name="l10n_ar_sequence_number_start" position="attributes">
-                <attribute name="required">l10n_ar_document_type_id and l10n_ar_autoprinted</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
+                <attribute name="required">l10n_ar_cai_authorization_code</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_cai_authorization_code</attribute>
             </field>
             <field name="l10n_ar_sequence_number_end" position="attributes">
-                <attribute name="required">l10n_ar_document_type_id and l10n_ar_autoprinted</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
-            </field>
-            <!-- renglones por hoja: solo aplica al preimpreso -->
-            <field name="l10n_ar_next_delivery_number" position="after">
-                <field name="l10n_ar_lines_per_voucher"
-                       invisible="not l10n_ar_document_type_id or l10n_ar_autoprinted"/>
+                <attribute name="required">l10n_ar_cai_authorization_code</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_cai_authorization_code</attribute>
             </field>
         </field>
     </record>
