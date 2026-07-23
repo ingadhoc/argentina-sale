@@ -8,24 +8,31 @@
         <field name="model">stock.picking.type</field>
         <field name="inherit_id" ref="l10n_ar_stock.view_picking_type_form_inherit_l10n_ar_stock"/>
         <field name="arch" type="xml">
-            <!-- CAI opcional: su presencia distingue autoimpreso (con CAI) de preimpreso (sin CAI) -->
-            <field name="l10n_ar_cai_authorization_code" position="attributes">
-                <attribute name="required">0</attribute>
+            <!-- toggle Autoimpreso: define si el remito es autoimpreso (con CAI) o preimpreso -->
+            <field name="l10n_ar_document_type_id" position="after">
+                <field name="l10n_ar_autoprinted" invisible="not l10n_ar_document_type_id"/>
             </field>
-            <!-- estos datos solo son obligatorios cuando hay CAI (autoimpreso) -->
+            <!-- el CAI y su rango solo aplican (y son obligatorios) en autoimpreso -->
+            <field name="l10n_ar_cai_authorization_code" position="attributes">
+                <attribute name="required">l10n_ar_document_type_id and l10n_ar_autoprinted</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
+            </field>
             <field name="l10n_ar_cai_expiration_date" position="attributes">
-                <attribute name="required">l10n_ar_cai_authorization_code</attribute>
+                <attribute name="required">l10n_ar_document_type_id and l10n_ar_autoprinted</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
             </field>
             <field name="l10n_ar_sequence_number_start" position="attributes">
-                <attribute name="required">l10n_ar_cai_authorization_code</attribute>
+                <attribute name="required">l10n_ar_document_type_id and l10n_ar_autoprinted</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
             </field>
             <field name="l10n_ar_sequence_number_end" position="attributes">
-                <attribute name="required">l10n_ar_cai_authorization_code</attribute>
+                <attribute name="required">l10n_ar_document_type_id and l10n_ar_autoprinted</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
             </field>
-            <!-- renglones por hoja: solo aplica al preimpreso (doc type sin CAI) -->
+            <!-- renglones por hoja: solo aplica al preimpreso -->
             <field name="l10n_ar_next_delivery_number" position="after">
                 <field name="l10n_ar_lines_per_voucher"
-                       invisible="not l10n_ar_document_type_id or l10n_ar_cai_authorization_code"/>
+                       invisible="not l10n_ar_document_type_id or l10n_ar_autoprinted"/>
             </field>
         </field>
     </record>
