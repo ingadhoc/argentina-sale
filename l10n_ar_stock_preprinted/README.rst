@@ -10,9 +10,9 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-===============================
+==================================
 Remito Preimpreso para Argentina
-===============================
+==================================
 
 Reincorpora el soporte de **remitos preimpresos de imprenta** sobre el flujo de
 remitos argentinos de ``l10n_ar_stock`` / ``l10n_ar_stock_ux``.
