@@ -25,21 +25,24 @@ variable (productos, cliente) y numera las transferencias según los comprobante
 Cómo se distingue del autoimpreso
 =================================
 
-El modo se **deriva del tipo de operación**, sin campos nuevos que el usuario
-deba marcar:
+Un casillero **Autoimpreso** en el tipo de operación define el modo:
 
-* **Autoimpreso** — el tipo de operación tiene CAI cargado. Se imprime el
-  comprobante completo (encabezado, número y CAI) y se numera con un único
-  número por transferencia (comportamiento estándar de ``l10n_ar_stock``).
-* **Preimpreso** — el tipo de operación tiene un tipo de documento de remito
-  configurado pero **no** tiene CAI (el CAI viene impreso en el papel). Este
-  módulo habilita ese caso relajando la obligatoriedad del CAI.
+* **Autoimpreso** (tildado) — Odoo imprime el comprobante completo (encabezado,
+  número y CAI); el CAI es obligatorio. Se numera con un único número por
+  transferencia (comportamiento estándar de ``l10n_ar_stock``).
+* **Preimpreso** (destildado) — el papel de imprenta ya trae encabezado,
+  numeración y CAI. No se pide CAI y Odoo solo imprime el contenido variable,
+  numerando según las hojas consumidas.
 
 Qué agrega
 ==========
 
-* ``stock.picking.type.l10n_ar_is_preprinted`` (computado): indica si el tipo de
-  operación es preimpreso (tiene documento de remito y no tiene CAI).
+* ``stock.picking.type.l10n_ar_autoprinted``: casillero *Autoimpreso* (por
+  defecto verdadero). Al destildarlo, el CAI deja de pedirse y aparecen los
+  *Renglones por Remito*.
+* ``stock.picking.type.l10n_ar_is_preprinted`` (computado): verdadero cuando hay
+  documento de remito y el tipo **no** es autoimpreso. Lo usan el reporte y la
+  numeración.
 * ``stock.picking.type.l10n_ar_lines_per_voucher``: renglones que entran en cada
   hoja preimpresa. Se usa para calcular cuántos números consume una entrega
   larga. Si es 0, cada entrega consume un único número.
@@ -57,7 +60,7 @@ En *Inventario > Configuración > Tipos de operación*, para un tipo de operaci�
 de salida:
 
 #. Definir el *Tipo de documento* de remito.
-#. Dejar el *CAI* vacío (así el tipo pasa a preimpreso).
+#. Destildar *Autoimpreso* (así el tipo pasa a preimpreso).
 #. Opcionalmente cargar *Renglones por Remito*.
 
 Credits
