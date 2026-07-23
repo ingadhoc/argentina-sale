@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Habilitamos el caso "preimpreso": tipo de documento de remito SIN CAI.
+         Para eso relajamos el required del CAI (y de los datos que solo aplican al
+         autoimpreso) y agregamos los renglones por remito. -->
+    <record id="view_picking_type_form_preprinted" model="ir.ui.view">
+        <field name="name">stock.picking.type.form.preprinted</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="l10n_ar_stock.view_picking_type_form_inherit_l10n_ar_stock"/>
+        <field name="arch" type="xml">
+            <!-- CAI opcional: su presencia distingue autoimpreso (con CAI) de preimpreso (sin CAI) -->
+            <field name="l10n_ar_cai_authorization_code" position="attributes">
+                <attribute name="required">0</attribute>
+            </field>
+            <!-- estos datos solo son obligatorios cuando hay CAI (autoimpreso) -->
+            <field name="l10n_ar_cai_expiration_date" position="attributes">
+                <attribute name="required">l10n_ar_cai_authorization_code</attribute>
+            </field>
+            <field name="l10n_ar_sequence_number_start" position="attributes">
+                <attribute name="required">l10n_ar_cai_authorization_code</attribute>
+            </field>
+            <field name="l10n_ar_sequence_number_end" position="attributes">
+                <attribute name="required">l10n_ar_cai_authorization_code</attribute>
+            </field>
+            <!-- renglones por hoja: solo aplica al preimpreso (doc type sin CAI) -->
+            <field name="l10n_ar_next_delivery_number" position="after">
+                <field name="l10n_ar_lines_per_voucher"
+                       invisible="not l10n_ar_document_type_id or l10n_ar_cai_authorization_code"/>
+            </field>
+        </field>
+    </record>
+</odoo>
