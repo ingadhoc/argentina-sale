@@ -548,6 +548,12 @@ msgid "Selected delivery orders must belong to the same company"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/stock_picking_type.py:0
+msgid "Shared delivery guide sequence"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
 #: model:ir.model.fields.selection,name:l10n_ar_stock_ux.selection__arba_cot_wizard__prod_no_term_dev__1
 msgid "Si"
 msgstr ""
@@ -563,6 +569,14 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/product_template.py:0
 msgid "The ARBA nomenclature code must be exactly 6 numeric digits"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/stock_picking_type.py:0
+msgid ""
+"The prefix and next number of this delivery guide sequence are also used by "
+"these operation types: %s. Changing them here will affect them too."
 msgstr ""
 
 #. module: l10n_ar_stock_ux
