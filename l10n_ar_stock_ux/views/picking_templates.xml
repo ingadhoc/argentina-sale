@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Agregamos el número de remito a la etiqueta de despacho de stock_ux.
+         En v18 este dato lo agregaba stock_voucher (discontinuado en v19) desde
+         picking.voucher_ids; en v19 el dato vive en el campo
+         l10n_ar_delivery_guide_number de la localización argentina. -->
+
+    <template
+        id="custom_label_transfer_template_view_pdf"
+        inherit_id="stock_ux.custom_label_transfer_template_view_pdf"
+    >
+        <xpath expr="//div[t[@t-out='picking.origin']]" position="after">
+            <div t-if="picking.l10n_ar_delivery_guide_number" style="font-weight: normal;">Remito/s:
+                <t t-out="picking.l10n_ar_delivery_guide_number" />
+            </div>
+        </xpath>
+    </template>
+
+    <template
+        id="custom_label_transfer_template_view_zpl"
+        inherit_id="stock_ux.custom_label_transfer_template_view_zpl"
+    >
+        <xpath expr="//t[@t-esc='picking.origin']" position="after"><t t-if="picking.l10n_ar_delivery_guide_number">^FS ^CFJ,25 ^FO50,720^FDRemito:^FS ^CF0,28 ^FO160,720^FD<t t-esc="picking.l10n_ar_delivery_guide_number" /></t></xpath>
+    </template>
+
+</odoo>

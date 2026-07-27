@@ -28,6 +28,7 @@
         "views/stock_lot_views.xml",
         "views/report_deliveryslip.xml",
         "views/report_invoice.xml",
+        "views/picking_templates.xml",
         "data/ir_sequence_data.xml",
         "data/product_uom_data.xml",
         "security/ir.model.access.csv",
