@@ -71,7 +71,7 @@ class StockPicking(models.Model):
         Another option would be to use report_substitute module and setup a subsitution with a domain
         """
         self.ensure_one()
-        if self.company_id.country_id.code == "AR" and self.l10n_ar_delivery_guide_number:
+        if self.company_id.country_id.code == "AR":
             return "l10n_ar_stock_ux.report_delivery_document"
         return report_xml_id
 
