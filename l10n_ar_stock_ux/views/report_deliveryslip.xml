@@ -49,26 +49,20 @@
                             </div>
                         </t>
                         <t t-if="o.picking_type_id.report_signature_section and not o.l10n_ar_afip_barcode">
-                            <table class="table table-borderless table-sm">
-                                <thead>
-                                    <tr>
-                                        <th width="25%">Recibí conforme:</th>
-                                        <th width="25%"></th>
-                                        <th width="25%"></th>
-                                        <th width="25%"></th>
-                                    </tr>
-                                </thead>
+                            <hr style="border-top: 1px solid #000000; margin: 24px 0 4px 0;"/>
+                            <strong>Recibí conforme:</strong>
+                            <table class="table table-borderless table-sm" style="margin-top: 8px;">
                                 <tbody>
                                     <tr>
-                                        <th style="text-align: center;">____ / ____ / ____</th>
-                                        <td>
-                                            <hr style="border: 1px solid #000000;"/>
+                                        <td style="width: 25%; height: 60px; vertical-align: bottom; text-align: center;">____ / ____ / ____</td>
+                                        <td style="width: 25%; height: 60px; vertical-align: bottom;">
+                                            <hr style="border: 1px solid #000000; margin: 0;"/>
                                         </td>
-                                        <td>
-                                            <hr style="border: 1px solid #000000;"/>
+                                        <td style="width: 25%; height: 60px; vertical-align: bottom;">
+                                            <hr style="border: 1px solid #000000; margin: 0;"/>
                                         </td>
-                                        <td>
-                                            <hr style="border: 1px solid #000000;"/>
+                                        <td style="width: 25%; height: 60px; vertical-align: bottom;">
+                                            <hr style="border: 1px solid #000000; margin: 0;"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -194,30 +188,24 @@
 
         <table name="stock_move_line_table" position="after">
             <t t-if="o.picking_type_id.report_signature_section and o.l10n_ar_afip_barcode">
-                <table class="table table-borderless table-sm">
-                    <thead>
-                        <tr>
-                            <th width="25%">Recibí conforme:</th>
-                            <th width="25%"></th>
-                            <th width="25%"></th>
-                            <th width="25%"></th>
-                        </tr>
-                    </thead>
+                <hr style="border-top: 1px solid #000000; margin: 24px 0 4px 0;"/>
+                <strong>Recibí conforme:</strong>
+                <table class="table table-borderless table-sm" style="margin-top: 8px;">
                     <tbody>
                         <tr>
-                            <th width="25%">Fecha: ____ / ____ / ____</th>
-                            <td>
-                                <hr style="border: 1px solid #000000;"/>
+                            <td style="width: 25%; height: 60px; vertical-align: bottom; text-align: center;">____ / ____ / ____</td>
+                            <td style="width: 25%; height: 60px; vertical-align: bottom;">
+                                <hr style="border: 1px solid #000000; margin: 0;"/>
                             </td>
-                            <td>
-                                <hr style="border: 1px solid #000000;"/>
+                            <td style="width: 25%; height: 60px; vertical-align: bottom;">
+                                <hr style="border: 1px solid #000000; margin: 0;"/>
                             </td>
-                            <td>
-                                <hr style="border: 1px solid #000000;"/>
+                            <td style="width: 25%; height: 60px; vertical-align: bottom;">
+                                <hr style="border: 1px solid #000000; margin: 0;"/>
                             </td>
                         </tr>
                         <tr>
-                            <td></td>
+                            <th style="text-align: center;">Fecha</th>
                             <th style="text-align: center;">DNI</th>
                             <th style="text-align: center;">Firma</th>
                             <th style="text-align: center;">Aclaración</th>
