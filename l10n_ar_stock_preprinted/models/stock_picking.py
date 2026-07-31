@@ -7,8 +7,8 @@ from odoo import fields, models
 class StockPicking(models.Model):
     _inherit = "stock.picking"
 
-    l10n_ar_is_preprinted = fields.Boolean(
-        related="picking_type_id.l10n_ar_is_preprinted",
+    l10n_ar_voucher_print_mode = fields.Selection(
+        related="picking_type_id.l10n_ar_voucher_print_mode",
     )
 
     def _l10n_ar_count_pages_with_products(self, pdf_reader):
@@ -70,7 +70,7 @@ class StockPicking(models.Model):
         dispara impresiones automáticas. En autoimpresos se delega al flujo estándar de
         Odoo (un número + datos de CAI)."""
         self.ensure_one()
-        if self.l10n_ar_is_preprinted:
+        if self.l10n_ar_voucher_print_mode == "preprinted":
             if not self.l10n_ar_delivery_guide_number:
                 picking_type = self.picking_type_id
                 picking_type._ensure_l10n_ar_stock_sequence()

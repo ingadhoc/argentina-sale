@@ -12,13 +12,13 @@
 
         <!-- pre_printed_report gobierna el blanqueo del encabezado loc arg y oculta el CAI -->
         <xpath expr="//t[@t-set='pre_printed_report']" position="attributes">
-            <attribute name="t-value">o.l10n_ar_is_preprinted</attribute>
+            <attribute name="t-value">o.l10n_ar_voucher_print_mode == 'preprinted'</attribute>
         </xpath>
 
         <!-- En preimpreso el pie queda vacío (sin firma, sin paginador, sin CAI). Lo dejamos
              truthy pero en blanco para que el layout NO caiga al pie estándar de Odoo. -->
         <xpath expr="//t[@t-set='custom_footer']" position="after">
-            <t t-if="o.l10n_ar_is_preprinted" t-set="custom_footer">
+            <t t-if="o.l10n_ar_voucher_print_mode == 'preprinted'" t-set="custom_footer">
                 <span/>
             </t>
         </xpath>
