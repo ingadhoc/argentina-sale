@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- El casillero Autoimpreso gobierna el CAI: al activarlo, el CAI y su vencimiento
-         (y el rango autorizado) se vuelven visibles y obligatorios; al desactivarlo se
-         ocultan y el tipo de operación queda como preimpreso. -->
+    <!-- El Modo de Impresión del Remito gobierna el CAI: en autoimpreso (default) la vista
+         queda como la del core (CAI, vencimiento y rango visibles y obligatorios, porque
+         Odoo los imprime); al pasar a preimpreso esos campos se ocultan y dejan de pedirse
+         porque ya vienen impresos en el papel de la imprenta. El prefijo (punto de venta) y
+         el próximo número siguen visibles en los dos modos: en preimpreso la secuencia tiene
+         que arrancar en el número de la primera hoja del talonario. -->
     <record id="view_picking_type_form_preprinted" model="ir.ui.view">
         <field name="name">stock.picking.type.form.preprinted</field>
         <field name="model">stock.picking.type</field>
         <field name="inherit_id" ref="l10n_ar_stock.view_picking_type_form_inherit_l10n_ar_stock"/>
         <field name="arch" type="xml">
-            <!-- Autoimpreso: booleano editable, solo relevante en tipos de operación con remito -->
+            <!-- Modo de impresión: solo relevante en tipos de operación con remito -->
             <field name="l10n_ar_document_type_id" position="after">
-                <field name="l10n_ar_autoprinted" invisible="not l10n_ar_document_type_id"/>
+                <field name="l10n_ar_voucher_print_mode" invisible="not l10n_ar_document_type_id"/>
             </field>
-            <!-- CAI: visible y obligatorio solo cuando es autoimpreso -->
+            <!-- CAI: visible y obligatorio solo en autoimpreso -->
             <field name="l10n_ar_cai_authorization_code" position="attributes">
-                <attribute name="required">l10n_ar_autoprinted</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
+                <attribute name="required">l10n_ar_document_type_id and l10n_ar_voucher_print_mode == 'autoprinted'</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted'</attribute>
             </field>
             <!-- Vencimiento y rango del CAI: mismo criterio que el CAI -->
             <field name="l10n_ar_cai_expiration_date" position="attributes">
-                <attribute name="required">l10n_ar_autoprinted</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
+                <attribute name="required">l10n_ar_document_type_id and l10n_ar_voucher_print_mode == 'autoprinted'</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted'</attribute>
             </field>
             <field name="l10n_ar_sequence_number_start" position="attributes">
-                <attribute name="required">l10n_ar_autoprinted</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
+                <attribute name="required">l10n_ar_document_type_id and l10n_ar_voucher_print_mode == 'autoprinted'</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted'</attribute>
             </field>
             <field name="l10n_ar_sequence_number_end" position="attributes">
-                <attribute name="required">l10n_ar_autoprinted</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or not l10n_ar_autoprinted</attribute>
+                <attribute name="required">l10n_ar_document_type_id and l10n_ar_voucher_print_mode == 'autoprinted'</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted'</attribute>
             </field>
         </field>
     </record>

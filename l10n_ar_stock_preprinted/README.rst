@@ -25,26 +25,29 @@ se imprimen.
 Cómo se distingue del autoimpreso
 =================================
 
-El modo se **autocalcula según el CAI** del tipo de operación:
+El modo es una **decisión explícita** del tipo de operación, en el campo
+*Modo de Impresión del Remito*:
 
-* **Autoimpreso** — el tipo de operación tiene CAI cargado. Odoo imprime el
-  comprobante completo (encabezado, número y CAI) y numera con un único número
-  por transferencia (comportamiento estándar de ``l10n_ar_stock``).
-* **Preimpreso** — el tipo de operación tiene un tipo de documento de remito
-  pero **no** tiene CAI. Este módulo habilita ese caso relajando la
-  obligatoriedad del CAI.
+* **Autoimpreso** (default) — Odoo imprime el comprobante completo (encabezado,
+  número y CAI) y numera con un único número por transferencia (comportamiento
+  estándar de ``l10n_ar_stock``). El CAI, su vencimiento y el rango autorizado
+  son obligatorios porque Odoo los imprime.
+* **Preimpreso** — el papel de imprenta ya trae encabezado, numeración y CAI.
+  Odoo solo imprime el contenido variable y numera según las hojas que se
+  consumen. El CAI, su vencimiento y el rango se ocultan y dejan de pedirse.
 
 Qué agrega
 ==========
 
-* ``stock.picking.type.l10n_ar_autoprinted`` (computado): casillero *Autoimpreso*
-  de solo lectura; verdadero cuando hay CAI cargado.
-* ``stock.picking.type.l10n_ar_is_preprinted`` (computado): verdadero cuando hay
-  documento de remito y no hay CAI. Lo usan el reporte y la numeración.
+* ``stock.picking.type.l10n_ar_voucher_print_mode`` (selección, almacenada):
+  *Autoimpreso* / *Preimpreso*. Lo usan la vista, el reporte y la numeración.
+  Una restricción de servidor exige CAI, vencimiento y rango cuando el modo es
+  autoimpreso (la vista sola no cubre imports ni escrituras por ORM).
 * Numeración: al generar la guía de remito en un tipo preimpreso, se renderiza el
   comprobante de entrega, se cuentan las **hojas (páginas) que se imprimen** y se
   asignan tantos números consecutivos como hojas, separados por coma y sin datos
-  de CAI.
+  de CAI. Si el reporte está configurado con duplicado/triplicado, el juego de
+  copias consume un solo número por hoja.
 * Reporte: en preimpreso el remito se imprime sin encabezado, sin número y sin
   CAI (ya vienen en el papel).
 
@@ -55,8 +58,10 @@ En *Inventario > Configuración > Tipos de operación*, para un tipo de operaci�
 de salida:
 
 #. Definir el *Tipo de documento* de remito.
-#. Dejar el *CAI* vacío (así el casillero *Autoimpreso* queda destildado y el
-   tipo pasa a preimpreso).
+#. Poner *Modo de Impresión del Remito* en **Preimpreso**.
+#. Ajustar el *Prefijo* (punto de venta) y el *Próximo número* para que coincidan
+   con la primera hoja del talonario de la imprenta. Estos dos campos se piden en
+   los dos modos.
 
 Credits
 =======
