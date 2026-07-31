@@ -71,7 +71,9 @@ class StockPicking(models.Model):
         reporte (original / duplicado / triplicado), y el juego de copias consume UN solo
         número, así que acotamos el conteo a las páginas de una sola copia."""
         self.ensure_one()
-        report = self.env.ref("stock.action_report_delivery").sudo()
+        # sin sudo: el conteo lo dispara el usuario que genera la guía, con los mismos permisos
+        # que tiene al imprimir el remito a mano
+        report = self.env.ref("stock.action_report_delivery")
         pdf_content, _dummy = report.with_context(l10n_ar_preprinted_sheet_count=True)._render_qweb_pdf(
             report.id, self.ids
         )
