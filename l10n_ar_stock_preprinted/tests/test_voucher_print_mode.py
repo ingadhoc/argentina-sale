@@ -99,7 +99,14 @@ class TestVoucherPrintMode(TransactionCase):
             self.picking.l10n_ar_action_create_delivery_guide()
         numbers = self.picking.l10n_ar_delivery_guide_number.split(",")
         self.assertEqual(len(numbers), 3)
-        self.assertEqual(numbers, sorted(numbers), "los números deben ser consecutivos")
+        # los números tienen la forma <prefijo>-<8 dígitos>: comparamos la parte numérica
+        # contra un range para verificar que sean consecutivos y sin huecos
+        sequence_numbers = [int(number.split("-")[-1]) for number in numbers]
+        self.assertEqual(
+            sequence_numbers,
+            list(range(sequence_numbers[0], sequence_numbers[0] + 3)),
+            "los números deben ser consecutivos y sin huecos",
+        )
         self.assertEqual(
             self.picking.l10n_ar_cai_data,
             {"document_type_id": self.document_type.id},

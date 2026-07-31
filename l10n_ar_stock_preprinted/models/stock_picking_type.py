@@ -12,6 +12,7 @@ class StockPickingType(models.Model):
         ],
         string="Modo de Impresión del Remito",
         default="autoprinted",
+        required=True,
         help="Argentina: cómo se imprime el remito de este tipo de operación.\n"
         "* Autoimpreso: Odoo imprime el comprobante completo (encabezado, número y CAI), por lo que "
         "el CAI, su vencimiento y el rango autorizado son obligatorios.\n"
