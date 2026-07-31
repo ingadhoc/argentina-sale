@@ -16,16 +16,6 @@ class StockPicking(models.Model):
         related="picking_type_id.l10n_ar_voucher_print_mode",
     )
 
-    def _get_name_delivery_report(self, report_xml_id):
-        """Al contar las hojas del preimpreso el número de remito todavía no está asignado, y
-        ``l10n_ar_stock_ux`` elige el template argentino justamente por tener número. Sin esto
-        contaríamos las hojas del comprobante estándar de Odoo, que pagina distinto al que se
-        imprime."""
-        self.ensure_one()
-        if self.env.context.get("l10n_ar_preprinted_sheet_count") and self.company_id.country_id.code == "AR":
-            return "l10n_ar_stock_ux.report_delivery_document"
-        return super()._get_name_delivery_report(report_xml_id)
-
     def _l10n_ar_count_pages_with_products(self, pdf_reader):
         """Cuenta las páginas del PDF que realmente contienen líneas de producto,
         analizando el texto de cada hoja: una hoja que solo trae firma o totales NO
@@ -65,7 +55,9 @@ class StockPicking(models.Model):
         """Cantidad de hojas que consume el remito preimpreso = cantidad de páginas que
         realmente se imprimen con productos (las hojas de solo firma/totales no consumen
         número). Se obtiene renderizando el comprobante de entrega y contando esas páginas
-        del PDF resultante.
+        del PDF resultante. El render es el mismo comprobante argentino que se imprime
+        (``l10n_ar_stock_ux`` lo elige para toda transferencia de compañía AR), así que la
+        paginación que contamos es la que sale en papel.
 
         El PDF trae el comprobante repetido tantas veces como copias tenga configurado el
         reporte (original / duplicado / triplicado), y el juego de copias consume UN solo
@@ -74,9 +66,7 @@ class StockPicking(models.Model):
         # sin sudo: el conteo lo dispara el usuario que genera la guía, con los mismos permisos
         # que tiene al imprimir el remito a mano
         report = self.env.ref("stock.action_report_delivery")
-        pdf_content, _dummy = report.with_context(l10n_ar_preprinted_sheet_count=True)._render_qweb_pdf(
-            report.id, self.ids
-        )
+        pdf_content, _dummy = report._render_qweb_pdf(report.id, self.ids)
         pdf_reader = PdfReader(BytesIO(pdf_content))
         copies = COPIES_BY_L10N_AR_COPIES.get(report.l10n_ar_copies, 1)
         pages_per_copy = len(pdf_reader.pages) // copies
