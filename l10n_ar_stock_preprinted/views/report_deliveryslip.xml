@@ -6,22 +6,48 @@
          únicamente la fecha del comprobante, y vaciamos el pie de página. Mantenemos el
          encabezado de la loc arg (custom_header) — NO lo ponemos en False — porque hacerlo
          haría caer el reporte al encabezado estándar de Odoo (logo + datos de la empresa),
-         que es justo lo que no queremos en un remito preimpreso. -->
+         que es justo lo que no queremos en un remito preimpreso.
+
+         El modo preimpreso del reporte se aplica solo cuando el remito ya tiene número
+         asignado (l10n_ar_delivery_guide_number) o cuando estamos contando hojas
+         (contexto l10n_ar_counting). Sin número asignado el picking se imprime como el
+         comprobante de entrega normal (con encabezado y pie), que es lo que se espera
+         cuando todavía no se generó la guía. -->
     <template id="report_delivery_document_preprinted"
               inherit_id="l10n_ar_stock_ux.report_delivery_document">
 
         <!-- pre_printed_report gobierna el blanqueo del encabezado loc arg y oculta el CAI -->
         <xpath expr="//t[@t-set='pre_printed_report']" position="attributes">
-            <attribute name="t-value">o.l10n_ar_voucher_print_mode == 'preprinted'</attribute>
+            <attribute name="t-value">o.l10n_ar_voucher_print_mode == 'preprinted' and (o.l10n_ar_delivery_guide_number or o.env.context.get('l10n_ar_counting'))</attribute>
         </xpath>
 
         <!-- En preimpreso el pie queda vacío (sin firma, sin paginador, sin CAI). Lo dejamos
              truthy pero en blanco para que el layout NO caiga al pie estándar de Odoo. -->
         <xpath expr="//t[@t-set='custom_footer']" position="after">
-            <t t-if="o.l10n_ar_voucher_print_mode == 'preprinted'" t-set="custom_footer">
+            <t t-if="o.l10n_ar_voucher_print_mode == 'preprinted' and (o.l10n_ar_delivery_guide_number or o.env.context.get('l10n_ar_counting'))" t-set="custom_footer">
                 <span/>
             </t>
         </xpath>
 
+    </template>
+
+    <!-- Marca invisible por línea de producto, solo cuando renderizamos para contar hojas
+         (contexto l10n_ar_counting). Es texto blanco de 1px: queda en la capa de texto del
+         PDF (la lee _l10n_ar_count_pages_with_products) pero no se ve. Así una hoja con
+         productos trae al menos una marca y una hoja de solo transportista / firma / totales
+         no, sin depender de que el producto tenga código. Se marcan los dos leaf-templates
+         que usa un picking validado (líneas agregadas y líneas con número de serie). -->
+    <template id="stock_report_delivery_aggregated_move_lines_preprinted"
+              inherit_id="stock.stock_report_delivery_aggregated_move_lines">
+        <xpath expr="//tr/td[1]/span[1]" position="after">
+            <span t-if="o.env.context.get('l10n_ar_counting')" style="color:#ffffff;font-size:1px">PREPRINTEDLINEMARK</span>
+        </xpath>
+    </template>
+
+    <template id="stock_report_delivery_has_serial_move_line_preprinted"
+              inherit_id="stock.stock_report_delivery_has_serial_move_line">
+        <xpath expr="//span[@t-field='move_line.product_id']" position="after">
+            <span t-if="o.env.context.get('l10n_ar_counting')" style="color:#ffffff;font-size:1px">PREPRINTEDLINEMARK</span>
+        </xpath>
     </template>
 </odoo>
