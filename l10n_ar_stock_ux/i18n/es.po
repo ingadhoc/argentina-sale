@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-10 14:43+0000\n"
+"POT-Creation-Date: 2026-08-03 16:10+0000\n"
 "PO-Revision-Date: 2026-04-23 18:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/argentina-"
@@ -578,6 +578,11 @@ msgid "Remito electrónico (COT)"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.custom_label_transfer_template_view_pdf
+msgid "Remito/s:"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
 #: model:ir.model.fields,help:l10n_ar_stock_ux.field_arba_cot_wizard__patente_vehiculo
 msgid ""
 "Requerido si CUIT Transportista = CUIT Compañía\n"
@@ -670,6 +675,11 @@ msgid ""
 msgstr ""
 "Debe vincular un \"Transportista\" a la forma de envío seleccionada o elegir "
 "otra forma de envío."
+
+#. module: l10n_ar_stock_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.custom_label_transfer_template_view_zpl
+msgid "^FS ^CFJ,25 ^FO50,720^FDRemito:^FS ^CF0,28 ^FO160,720^FD"
+msgstr ""
 
 #. module: l10n_ar_stock_ux
 #: model:ir.model,name:l10n_ar_stock_ux.model_arba_cot_wizard
