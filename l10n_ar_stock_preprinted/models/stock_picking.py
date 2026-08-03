@@ -1,4 +1,3 @@
-import re
 from io import BytesIO
 
 from odoo import fields, models
@@ -8,6 +7,12 @@ from odoo.tools.pdf import PdfReader
 # cada copia repite TODAS las páginas del comprobante
 COPIES_BY_L10N_AR_COPIES = {"duplicado": 2, "triplicado": 3}
 
+# marca invisible (texto blanco de 1px) que el comprobante imprime una vez por línea de
+# producto cuando se renderiza para contar hojas (contexto l10n_ar_counting). Permite saber
+# qué páginas tienen productos sin depender de que el producto tenga código ni de heurísticas
+# de texto: una hoja de solo transportista / firma / totales no la lleva y no consume número.
+L10N_AR_PREPRINTED_LINE_MARK = "PREPRINTEDLINEMARK"
+
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
@@ -16,38 +21,34 @@ class StockPicking(models.Model):
         related="picking_type_id.l10n_ar_voucher_print_mode",
     )
 
-    def _l10n_ar_count_pages_with_products(self, pdf_reader):
-        """Cuenta las páginas del PDF que realmente contienen líneas de producto,
-        analizando el texto de cada hoja: una hoja que solo trae firma o totales NO
-        consume número de remito. La detección usa los identificadores del producto
-        (código interno / código de barras) para ser independiente del idioma; si el
-        producto no tiene código, cae a un patrón numérico genérico (cantidad/precio
-        con decimales)."""
+    def _get_name_delivery_report(self, report_xml_id):
+        """Los tipos preimpresos usan SIEMPRE el comprobante argentino, tengan o no número de
+        remito asignado. El core de ``l10n_ar_stock_ux`` solo lo elige cuando ya hay número,
+        pero lo necesitamos también antes: sin número el picking se imprime como comprobante
+        de entrega normal (no el remito de Odoo), y durante el conteo de hojas se fuerza el
+        layout preimpreso — los dos casos requieren el template argentino."""
         self.ensure_one()
-        move_lines = self.move_line_ids or self.move_ids
-        identifiers = set()
-        for line in move_lines:
-            product = line.product_id
-            if product.default_code:
-                identifiers.add(product.default_code.lower().strip())
-            if product.barcode:
-                identifiers.add(product.barcode.lower().strip())
+        if self.company_id.country_id.code == "AR" and self.l10n_ar_voucher_print_mode == "preprinted":
+            return "l10n_ar_stock_ux.report_delivery_document"
+        return super()._get_name_delivery_report(report_xml_id)
 
+    def _l10n_ar_count_pages_with_products(self, pdf_reader):
+        """Cuenta las páginas del PDF que contienen líneas de producto: una hoja que solo
+        trae firma, totales o datos del transportista NO consume número de remito. El
+        comprobante imprime una marca invisible (``L10N_AR_PREPRINTED_LINE_MARK``) por cada
+        línea de producto cuando se renderiza con el contexto de conteo, así que una página
+        con productos trae al menos una marca. Es independiente del idioma y de que el
+        producto tenga código interno o de barras."""
+        self.ensure_one()
         pages_with_products = 0
         for page in pdf_reader.pages:
             try:
-                text = (page.extract_text() or "").lower()
+                text = page.extract_text() or ""
             except Exception:
                 # Si no se puede extraer el texto, asumimos que la hoja trae productos.
                 pages_with_products += 1
                 continue
-            if not text:
-                continue
-            if identifiers:
-                has_products = any(identifier in text for identifier in identifiers)
-            else:
-                has_products = bool(re.search(r"\b\d+[.,]\d+\b", text))
-            if has_products:
+            if L10N_AR_PREPRINTED_LINE_MARK in text:
                 pages_with_products += 1
         return max(1, pages_with_products)
 
@@ -63,9 +64,15 @@ class StockPicking(models.Model):
         reporte (original / duplicado / triplicado), y el juego de copias consume UN solo
         número, así que acotamos el conteo a las páginas de una sola copia."""
         self.ensure_one()
-        # sin sudo: el conteo lo dispara el usuario que genera la guía, con los mismos permisos
-        # que tiene al imprimir el remito a mano
         report = self.env.ref("stock.action_report_delivery")
+        # Renderizamos con sudo y con el contexto l10n_ar_counting:
+        # - sudo: el motor de reportes corre elevado cuando imprimís a mano; llamándolo
+        #   directo como usuario, el comprobante toca modelos relacionados (p.ej. el tipo de
+        #   pedido de venta) que el operador no puede leer y falla por permisos.
+        # - l10n_ar_counting: el conteo corre ANTES de asignar el número, así que sin el flag
+        #   el comprobante saldría como "Comprobante de Entrega" y paginaría distinto a lo que
+        #   después se imprime; el flag fuerza el layout preimpreso e imprime la marca de línea.
+        report = report.sudo().with_context(l10n_ar_counting=True)
         pdf_content, _dummy = report._render_qweb_pdf(report.id, self.ids)
         pdf_reader = PdfReader(BytesIO(pdf_content))
         copies = COPIES_BY_L10N_AR_COPIES.get(report.l10n_ar_copies, 1)

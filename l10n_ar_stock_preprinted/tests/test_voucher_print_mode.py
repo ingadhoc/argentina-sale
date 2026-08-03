@@ -5,6 +5,8 @@ from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
 from odoo.tools.pdf import PdfWriter
 
+from ..models.stock_picking import L10N_AR_PREPRINTED_LINE_MARK
+
 
 def _pdf_with_pages(pages):
     """PDF en blanco de ``pages`` páginas, para no depender de wkhtmltopdf."""
@@ -140,3 +142,39 @@ class TestVoucherPrintMode(TransactionCase):
             patch.object(type(self.picking), "_l10n_ar_count_pages_with_products", return_value=2),
         ):
             self.assertEqual(self.picking._l10n_ar_count_preprinted_sheets(), 2)
+
+    def test_preprinted_forces_ar_delivery_report(self):
+        """Un tipo preimpreso usa el comprobante argentino aunque todavía NO tenga número de
+        remito: sin número se imprime como comprobante de entrega normal (no el remito de
+        Odoo) y el conteo de hojas fuerza el layout preimpreso; los dos necesitan el template
+        argentino. El core de l10n_ar_stock_ux solo lo elige cuando ya hay número."""
+        self.picking.company_id.country_id = self.env.ref("base.ar")
+        self.assertFalse(self.picking.l10n_ar_delivery_guide_number)
+        self.assertEqual(
+            self.picking._get_name_delivery_report("stock.report_delivery_document"),
+            "l10n_ar_stock_ux.report_delivery_document",
+        )
+
+    def test_count_pages_by_line_mark(self):
+        """El contador cuenta solo las páginas que traen la marca de línea de producto: una
+        hoja de solo transportista / firma / totales (sin marca) no consume número."""
+
+        class _Page:
+            def __init__(self, text):
+                self._text = text
+
+            def extract_text(self):
+                return self._text
+
+        class _Reader:
+            def __init__(self, pages):
+                self.pages = pages
+
+        reader = _Reader(
+            [
+                _Page("Producto A " + L10N_AR_PREPRINTED_LINE_MARK),
+                _Page("Producto B " + L10N_AR_PREPRINTED_LINE_MARK),
+                _Page("Datos del transportista, sin líneas de producto"),
+            ]
+        )
+        self.assertEqual(self.picking._l10n_ar_count_pages_with_products(reader), 2)
