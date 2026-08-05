@@ -21,17 +21,6 @@ class StockPicking(models.Model):
         related="picking_type_id.l10n_ar_voucher_print_mode",
     )
 
-    def _get_name_delivery_report(self, report_xml_id):
-        """Los tipos preimpresos usan SIEMPRE el comprobante argentino, tengan o no número de
-        remito asignado. El core de ``l10n_ar_stock_ux`` solo lo elige cuando ya hay número,
-        pero lo necesitamos también antes: sin número el picking se imprime como comprobante
-        de entrega normal (no el remito de Odoo), y durante el conteo de hojas se fuerza el
-        layout preimpreso — los dos casos requieren el template argentino."""
-        self.ensure_one()
-        if self.company_id.country_id.code == "AR" and self.l10n_ar_voucher_print_mode == "preprinted":
-            return "l10n_ar_stock_ux.report_delivery_document"
-        return super()._get_name_delivery_report(report_xml_id)
-
     def _l10n_ar_count_pages_with_products(self, pages):
         """Cuenta cuántas de ``pages`` contienen líneas de producto: una hoja que solo trae
         firma, totales o datos del transportista NO consume número de remito. El comprobante
@@ -70,9 +59,13 @@ class StockPicking(models.Model):
         self.ensure_one()
         report = self.env.ref("stock.action_report_delivery")
         # Renderizamos con sudo y con el contexto l10n_ar_counting:
-        # - sudo: el motor de reportes corre elevado cuando imprimís a mano; llamándolo
-        #   directo como usuario, el comprobante toca modelos relacionados (p.ej. el tipo de
-        #   pedido de venta) que el operador no puede leer y falla por permisos.
+        # - sudo: numerar no puede depender de los permisos de lectura del que valida. Quien
+        #   dispara el conteo (al validar, si el tipo de operación autoasigna) no es
+        #   necesariamente quien después imprime, y el comprobante toca modelos relacionados
+        #   que un operador de depósito puede no tener permitido leer. Ojo: el motor de
+        #   reportes NO eleva por su cuenta (ver _render_qweb_pdf_prepare_streams, "evaluation
+        #   context as current user"), así que si el comprobante necesita sudo para renderizar
+        #   eso es un problema del template, no algo que este método deba tapar.
         # - l10n_ar_counting: el conteo corre ANTES de asignar el número, así que sin el flag
         #   el comprobante saldría como "Comprobante de Entrega" y paginaría distinto a lo que
         #   después se imprime; el flag fuerza el layout preimpreso e imprime la marca de línea.
