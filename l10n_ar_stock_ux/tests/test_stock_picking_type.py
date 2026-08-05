@@ -45,6 +45,11 @@ class TestL10nArStockUxSharedSequence(TestArCommon):
                 "l10n_ar_document_type_id": document_type.id,
                 "l10n_ar_cai_authorization_code": "99999999999999",
                 "l10n_ar_cai_expiration_date": "2030-12-31",
+                # el rango autorizado del CAI va junto con el resto: la vista del core lo pide
+                # required cuando hay tipo de documento, y l10n_ar_stock_preprinted lo exige
+                # también del lado del servidor cuando el remito es autoimpreso
+                "l10n_ar_sequence_number_start": "00000001",
+                "l10n_ar_sequence_number_end": "99999999",
                 "l10n_ar_delivery_sequence_prefix": prefix,
                 "l10n_ar_next_delivery_number": next_number,
             }
