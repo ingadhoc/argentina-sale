@@ -83,8 +83,12 @@
                     </div>
 
                     <div name="footer_right_column" class="col-4 text-right">
-                        <div t-if="not pre_printed_report and o.l10n_ar_cai_data.get('cai_authorization_code')">
-                            CAI: <span t-out="o.l10n_ar_cai_data.get('cai_authorization_code')"/>
+                        <!-- l10n_ar_cai_data es un fields.Json: con la columna en NULL el ORM
+                             devuelve False, así que normalizamos antes de leer la clave. Y la
+                             leemos con .get() porque el dict puede no traerla (un remito
+                             preimpreso no tiene CAI: viene impreso en el papel). -->
+                        <div t-if="not pre_printed_report and (o.l10n_ar_cai_data or {}).get('cai_authorization_code')">
+                            CAI: <span t-out="(o.l10n_ar_cai_data or {}).get('cai_authorization_code')"/>
                         </div>
                         <div t-if="not pre_printed_report and o.l10n_ar_cai_expiration_date">
                             CAI Due Date: <span t-field="o.l10n_ar_cai_expiration_date"/>
