@@ -32,16 +32,20 @@ class StockPicking(models.Model):
             return "l10n_ar_stock_ux.report_delivery_document"
         return super()._get_name_delivery_report(report_xml_id)
 
-    def _l10n_ar_count_pages_with_products(self, pdf_reader):
-        """Cuenta las páginas del PDF que contienen líneas de producto: una hoja que solo
-        trae firma, totales o datos del transportista NO consume número de remito. El
-        comprobante imprime una marca invisible (``L10N_AR_PREPRINTED_LINE_MARK``) por cada
-        línea de producto cuando se renderiza con el contexto de conteo, así que una página
-        con productos trae al menos una marca. Es independiente del idioma y de que el
-        producto tenga código interno o de barras."""
+    def _l10n_ar_count_pages_with_products(self, pages):
+        """Cuenta cuántas de ``pages`` contienen líneas de producto: una hoja que solo trae
+        firma, totales o datos del transportista NO consume número de remito. El comprobante
+        imprime una marca invisible (``L10N_AR_PREPRINTED_LINE_MARK``) por cada línea de
+        producto cuando se renderiza con el contexto de conteo, así que una página con
+        productos trae al menos una marca. Es independiente del idioma y de que el producto
+        tenga código interno o de barras.
+
+        Recibe las páginas y no el PdfReader completo porque el PDF trae el comprobante
+        repetido una vez por copia: hay que contar sobre UNA sola copia (ver
+        ``_l10n_ar_count_preprinted_sheets``)."""
         self.ensure_one()
         pages_with_products = 0
-        for page in pdf_reader.pages:
+        for page in pages:
             try:
                 text = page.extract_text() or ""
             except Exception:
@@ -62,7 +66,7 @@ class StockPicking(models.Model):
 
         El PDF trae el comprobante repetido tantas veces como copias tenga configurado el
         reporte (original / duplicado / triplicado), y el juego de copias consume UN solo
-        número, así que acotamos el conteo a las páginas de una sola copia."""
+        número por hoja, así que contamos únicamente sobre las páginas de la primera copia."""
         self.ensure_one()
         report = self.env.ref("stock.action_report_delivery")
         # Renderizamos con sudo y con el contexto l10n_ar_counting:
@@ -76,9 +80,8 @@ class StockPicking(models.Model):
         pdf_content, _dummy = report._render_qweb_pdf(report.id, self.ids)
         pdf_reader = PdfReader(BytesIO(pdf_content))
         copies = COPIES_BY_L10N_AR_COPIES.get(report.l10n_ar_copies, 1)
-        pages_per_copy = len(pdf_reader.pages) // copies
-        sheets = self._l10n_ar_count_pages_with_products(pdf_reader)
-        return max(1, min(sheets, pages_per_copy))
+        pages_per_copy = max(1, len(pdf_reader.pages) // copies)
+        return self._l10n_ar_count_pages_with_products(pdf_reader.pages[:pages_per_copy])
 
     def l10n_ar_action_create_delivery_guide(self):
         """En remitos preimpresos numeramos según las hojas realmente impresas (una por
@@ -97,9 +100,16 @@ class StockPicking(models.Model):
                 sheets = self._l10n_ar_count_preprinted_sheets()
                 numbers = [picking_type.l10n_ar_sequence_id.next_by_id() for __ in range(sheets)]
                 self.l10n_ar_delivery_guide_number = ",".join(numbers)
-                # el CAI no aplica al preimpreso (viene impreso en el papel)
+                # El CAI, su vencimiento y el rango no aplican al preimpreso: vienen impresos
+                # en el papel de la imprenta. Igual escribimos las claves en False para
+                # respetar la forma del dict que arma el core (l10n_ar_stock), porque los
+                # reportes lo leen por subscript y un dict parcial los rompe con KeyError.
                 self.l10n_ar_cai_data = {
                     "document_type_id": picking_type.l10n_ar_document_type_id.id,
+                    "cai_authorization_code": False,
+                    "cai_expiration_date": False,
+                    "sequence_number_start": False,
+                    "sequence_number_end": False,
                 }
             return self.env.ref("stock.action_report_delivery").report_action(self)
         return super().l10n_ar_action_create_delivery_guide()
