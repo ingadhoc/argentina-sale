@@ -634,8 +634,8 @@ msgid ""
 "these operation types: %s. Changing them here will affect them too."
 msgstr ""
 "El prefijo y el próximo número de esta secuencia de remito también son "
-"utilizados por estos tipos de operación: %s. Al modificarlos aquí, también se "
-"verán afectados."
+"utilizados por estos tipos de operación: %s. Al modificarlos aquí, también "
+"se verán afectados."
 
 #. module: l10n_ar_stock_ux
 #: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_arba_cot_wizard__tipo_recorrido
