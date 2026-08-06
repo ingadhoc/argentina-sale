@@ -1,0 +1,20 @@
+{
+    "name": "Integración entre envío gratis de fidelización y localización argentina",
+    "version": "18.0.1.0.0",
+    "category": "Localization/Argentina",
+    "sequence": 14,
+    "author": "ADHOC SA",
+    "website": "www.adhoc.com.ar",
+    "license": "AGPL-3",
+    "summary": "",
+    "depends": [
+        "l10n_ar_sale",
+        "sale_loyalty_delivery",
+    ],
+    "external_dependencies": {},
+    "data": [],
+    "demo": [],
+    "installable": True,
+    "auto_install": True,
+    "application": False,
+}
