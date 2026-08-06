@@ -1,0 +1,101 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_stock_preprinted
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-06 09:58+0000\n"
+"PO-Revision-Date: 2026-08-06 09:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model.fields,help:l10n_ar_stock_preprinted.field_stock_picking__l10n_ar_voucher_print_mode
+#: model:ir.model.fields,help:l10n_ar_stock_preprinted.field_stock_picking_type__l10n_ar_voucher_print_mode
+msgid ""
+"Argentina: cómo se imprime el remito de este tipo de operación.\n"
+"* Autoimpreso: Odoo imprime el comprobante completo (encabezado, número y CAI), por lo que el CAI, su vencimiento y el rango autorizado son obligatorios.\n"
+"* Preimpreso: el papel de imprenta ya trae encabezado, numeración y CAI, así que Odoo solo imprime el contenido variable y numera según las hojas que se consumen. El CAI no se carga acá porque viene impreso en el papel."
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model.fields.selection,name:l10n_ar_stock_preprinted.selection__stock_picking_type__l10n_ar_voucher_print_mode__autoprinted
+msgid "Autoimpreso"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#. odoo-python
+#: code:addons/l10n_ar_stock_preprinted/models/stock_picking_type.py:0
+msgid "CAI"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#. odoo-python
+#: code:addons/l10n_ar_stock_preprinted/models/stock_picking_type.py:0
+msgid "CAI Expiration Date"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model.fields,field_description:l10n_ar_stock_preprinted.field_stock_picking__display_name
+#: model:ir.model.fields,field_description:l10n_ar_stock_preprinted.field_stock_picking_type__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#. odoo-python
+#: code:addons/l10n_ar_stock_preprinted/models/stock_picking_type.py:0
+msgid ""
+"En el tipo de operación %(picking_type)s el remito es autoimpreso, así que debe completar: %(fields)s.\n"
+"Si el papel lo provee una imprenta (ya trae encabezado, numeración y CAI), configure el Modo de Impresión del Remito como Preimpreso."
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model.fields,field_description:l10n_ar_stock_preprinted.field_stock_picking__id
+#: model:ir.model.fields,field_description:l10n_ar_stock_preprinted.field_stock_picking_type__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model.fields,field_description:l10n_ar_stock_preprinted.field_stock_picking__l10n_ar_voucher_print_mode
+#: model:ir.model.fields,field_description:l10n_ar_stock_preprinted.field_stock_picking_type__l10n_ar_voucher_print_mode
+msgid "Modo de Impresión del Remito"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_preprinted.stock_report_delivery_aggregated_move_lines_preprinted
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_preprinted.stock_report_delivery_has_serial_move_line_preprinted
+msgid "PREPRINTEDLINEMARK"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model,name:l10n_ar_stock_preprinted.model_stock_picking_type
+msgid "Picking Type"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model.fields.selection,name:l10n_ar_stock_preprinted.selection__stock_picking_type__l10n_ar_voucher_print_mode__preprinted
+msgid "Preimpreso"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#. odoo-python
+#: code:addons/l10n_ar_stock_preprinted/models/stock_picking_type.py:0
+msgid "Sequence From"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#. odoo-python
+#: code:addons/l10n_ar_stock_preprinted/models/stock_picking_type.py:0
+msgid "Sequence To"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model,name:l10n_ar_stock_preprinted.model_stock_picking
+msgid "Transfer"
+msgstr ""
