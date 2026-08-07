@@ -83,7 +83,7 @@
                     </div>
 
                     <div name="footer_right_column" class="col-4 text-right">
-                        <div t-if="not pre_printed_report and o.l10n_ar_cai_data.get('cai_authorization_code')">
+                        <div t-if="not pre_printed_report and o.l10n_ar_cai_data and o.l10n_ar_cai_data.get('cai_authorization_code')">
                             CAI: <span t-out="o.l10n_ar_cai_data.get('cai_authorization_code')"/>
                         </div>
                         <div t-if="not pre_printed_report and o.l10n_ar_cai_expiration_date">
