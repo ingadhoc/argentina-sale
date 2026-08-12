@@ -505,14 +505,30 @@ class StockPicking(models.Model):
 
             return True
 
+    def _l10n_ar_assign_delivery_guide_numbers(self):
+        for picking in self.filtered(
+            lambda p: p.picking_type_id.auto_assign_delivery_guide and not p.l10n_ar_delivery_guide_number
+        ):
+            picking.l10n_ar_action_create_delivery_guide()
+
+    def _send_confirmation_email(self):
+        # asignamos el nro recién acá — el hook que stock llama al final de _action_done,
+        # justo antes de mandar el mail de confirmación — para que el reporte que adjunta
+        # el mail salga con look y nro argentino sin tomar el lock temprano (ver
+        # _action_done)
+        self._l10n_ar_assign_delivery_guide_numbers()
+        return super()._send_confirmation_email()
+
     def _action_done(self):
-        # asignamos nro antes de validar para que el reporte que salga al enviar por correo (_send_confirmation_email)
-        # sea con look y nro argentino
-        # TODO revisar si alguien lo usa y sacar este contexto
-        if not self._context.get("do_not_assign_numbers", False):
-            for picking in self.filtered("picking_type_id.auto_assign_delivery_guide"):
-                picking.l10n_ar_action_create_delivery_guide()
+        # next_by_id() sobre la secuencia no_gap del remito toma un lock de fila sobre
+        # ir_sequence (SELECT ... FOR UPDATE NOWAIT) que se retiene hasta el commit:
+        # asignar el nro al inicio de la validación serializa las validaciones
+        # concurrentes contra toda la duración de _action_done (valuación, backorders,
+        # mails) y produce LockNotAvailable en validaciones masivas. Por eso se asigna
+        # lo más tarde posible: en _send_confirmation_email, y acá solo como catch-all
+        # por si algún flujo no pasa por ese hook.
         res = super()._action_done()
+        self._l10n_ar_assign_delivery_guide_numbers()
         for rec in self.filtered(lambda x: x.picking_type_code == "incoming" and x.dispatch_number):
             rec.move_line_ids.filtered(lambda l: l.lot_id and not l.lot_id.dispatch_number).mapped("lot_id").write(
                 {"dispatch_number": rec.dispatch_number}
