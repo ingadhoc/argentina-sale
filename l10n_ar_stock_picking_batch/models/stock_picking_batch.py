@@ -86,11 +86,13 @@ class StockPickingBatch(models.Model):
 
     def _get_name_delivery_report(self, report_xml_id):
         """Analogous to StockPicking._get_name_delivery_report in l10n_ar_stock_ux.
-        Returns the Argentine batch report when the company is AR and a delivery
-        guide number has been assigned; otherwise falls back to the generic report.
+        Returns the Argentine batch report for any AR company batch, with or without a
+        delivery guide number: printing one by one already uses the Argentine format for
+        both cases, and printing the same transfers as a batch has to match. Without a
+        number the template degrades on its own (letter X, no CAI, no AFIP barcode).
         """
         self.ensure_one()
-        if self.company_id.country_id.code == "AR" and self.l10n_ar_delivery_guide_number:
+        if self.company_id.country_id.code == "AR":
             return "l10n_ar_stock_picking_batch.report_batch_delivery_document"
         return report_xml_id
 
