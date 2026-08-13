@@ -64,6 +64,26 @@ class StockPicking(models.Model):
                 l10n_ar_delivery_guide_numbers.append(self.env.ref("l10n_ar.dc_r_r")._format_document_number(doc))
             self.l10n_ar_delivery_guide_number = ",".join(l10n_ar_delivery_guide_numbers)
 
+    def write(self, vals):
+        """Al limpiar el número de remito descartamos también la foto del CAI.
+
+        ``l10n_ar_cai_data`` congela los datos fiscales del momento en que se numeró, y de
+        ahí salen la letra, el tipo de documento y el CAI del comprobante. Si queda con los
+        datos del remito anterior, el comprobante se sigue imprimiendo como aquel remito
+        aunque ya no tenga número. Odoo no contempla el caso porque deja el campo readonly:
+        acá lo hacemos editable, así que también nos toca dejar el registro consistente.
+
+        Si el write trae `l10n_ar_cai_data` explícito respetamos ese valor: el que escribe
+        los dos campos juntos ya decidió con qué datos quiere quedarse.
+        """
+        if (
+            "l10n_ar_delivery_guide_number" in vals
+            and not vals["l10n_ar_delivery_guide_number"]
+            and "l10n_ar_cai_data" not in vals
+        ):
+            vals = dict(vals, l10n_ar_cai_data=False)
+        return super().write(vals)
+
     def _get_name_delivery_report(self, report_xml_id):
         """Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document
         Basically it allows different localizations to define it's own report

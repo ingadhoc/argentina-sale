@@ -85,8 +85,8 @@ class TestL10nArStockUxDeliveryReport(TransactionCase):
         )
         self._assert_no_cai_block()
 
-    def test_renders_with_full_cai_data(self):
-        """Remito autoimpreso: el CAI y su vencimiento salen impresos."""
+    def _number_picking(self):
+        """Deja el picking numerado como un remito autoimpreso ya emitido."""
         self.picking.write(
             {
                 "l10n_ar_delivery_guide_number": "00099-00000001",
@@ -99,5 +99,35 @@ class TestL10nArStockUxDeliveryReport(TransactionCase):
                 },
             }
         )
+
+    def test_clearing_guide_number_clears_cai_data(self):
+        """Limpiar el número descarta la foto del CAI y todo lo que se computa de ella."""
+        self._number_picking()
+        self.picking.l10n_ar_delivery_guide_number = False
+        self.assertFalse(self.picking.l10n_ar_cai_data)
+        self.assertFalse(self.picking.document_type_id)
+        self.assertFalse(self.picking.l10n_ar_cai_expiration_date)
+
+    def test_clearing_guide_number_respects_explicit_cai_data(self):
+        """Si el write trae los dos campos, gana lo que pidió quien escribe."""
+        self._number_picking()
+        cai_data = {"document_type_id": self.document_type.id}
+        self.picking.write({"l10n_ar_delivery_guide_number": False, "l10n_ar_cai_data": cai_data})
+        self.assertEqual(self.picking.l10n_ar_cai_data, cai_data)
+
+    def test_renders_as_plain_voucher_after_clearing_guide_number(self):
+        """El caso del ticket: limpiado el remito, el comprobante deja de imprimirse como
+        aquel remito (letra, tipo de documento y CAI) y vuelve al comprobante de entrega."""
+        self._number_picking()
+        self.picking.l10n_ar_delivery_guide_number = False
+        html = self._render()
+        self.assertNotIn(b"12345678901234", html)
+        self.assertNotIn(b"00099-00000001", html)
+        self.assertIn(b"Comprobante de Entrega", html)
+        self._assert_no_cai_block()
+
+    def test_renders_with_full_cai_data(self):
+        """Remito autoimpreso: el CAI y su vencimiento salen impresos."""
+        self._number_picking()
         html = self._render()
         self.assertIn(b"12345678901234", html)

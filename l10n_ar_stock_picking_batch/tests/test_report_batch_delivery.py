@@ -66,6 +66,22 @@ class TestL10nArBatchDeliveryReport(TransactionCase):
         self.assertFalse(self.batch.l10n_ar_cai_data)
         self._assert_no_cai_block()
 
+    def test_uses_ar_report_without_delivery_guide_number(self):
+        """El lote sin numerar también usa el comprobante argentino: las mismas
+        transferencias impresas de a una ya salen así, el lote tiene que coincidir."""
+        self.assertFalse(self.batch.l10n_ar_delivery_guide_number)
+        self.assertEqual(
+            self.batch._get_name_delivery_report("stock_batch_picking_ux.report_batch_delivery_document"),
+            "l10n_ar_stock_picking_batch.report_batch_delivery_document",
+        )
+
+    def test_renders_as_plain_voucher_without_delivery_guide_number(self):
+        """Sin número el comprobante argentino degrada solo: letra X y sin CAI."""
+        html = self._render()
+        self.assertIn(b"Comprobante de Entrega", html)
+        self.assertIn(self.batch.name.encode(), html)
+        self._assert_no_cai_block()
+
     def test_renders_with_cai_data_without_authorization_code(self):
         """Remito preimpreso adentro del lote: el dict no trae el código de CAI."""
         self.picking.write(
