@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-03 16:10+0000\n"
-"PO-Revision-Date: 2026-08-03 16:10+0000\n"
+"POT-Creation-Date: 2026-08-20 13:55+0000\n"
+"PO-Revision-Date: 2026-08-20 13:55+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -82,6 +82,11 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.report_delivery_document
 msgid "<strong>Order:</strong>"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.report_delivery_document
+msgid "<strong>Recibí conforme:</strong>"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -311,11 +316,6 @@ msgstr ""
 
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.report_delivery_document
-msgid "Fecha: ____ / ____ / ____"
-msgstr ""
-
-#. module: l10n_ar_stock_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.report_delivery_document
 msgid "Firma"
 msgstr ""
 
@@ -517,11 +517,6 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_arba_cot_wizard__prod_no_term_dev
 msgid "Productos no terminados / devoluciones"
-msgstr ""
-
-#. module: l10n_ar_stock_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.report_delivery_document
-msgid "Recibí conforme:"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
