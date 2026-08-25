@@ -162,7 +162,7 @@ class SaleOrder(models.Model):
             date = fields.Date.to_date(fields.Datetime.context_timestamp(self, self.date_order))
             new_taxes = self.fiscal_position_id._l10n_ar_add_taxes(self.partner_id, self.company_id, date, "perception")
             if new_taxes:
-                line.tax_id = line.tax_id | new_taxes
+                line.tax_ids = line.tax_ids | new_taxes
         return line
 
     def copy(self, default=None):
