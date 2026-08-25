@@ -22,9 +22,12 @@ class AccountMove(models.Model):
             and not credit_note.reversed_entry_id
         ):
             # a diferencia del core, alcanza con que compartan alguna linea de la orden:
-            # asi tambien cubrimos el caso de una orden facturada en varias facturas
+            # asi tambien cubrimos el caso de una orden facturada en varias facturas.
+            # pedimos ademas que la factura tenga numero: las que siguen en borrador tienen
+            # name False y no sirven como referencia (ademas de romper el join de abajo)
             origin_invoices = self.filtered(
                 lambda inv: inv.move_type == "out_invoice"
+                and inv.name
                 and credit_note.invoice_line_ids.sale_line_ids & inv.invoice_line_ids.sale_line_ids
             )
             if origin_invoices:
