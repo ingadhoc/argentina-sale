@@ -64,7 +64,7 @@ msgid ""
 "                    <strong>PO Number:</strong>"
 msgstr ""
 "<br/>\n"
-"                    <strong>Número de PO:</strong>"
+"                    <strong>Número de OC:</strong>"
 
 #. module: l10n_ar_stock
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock.report_delivery_document
