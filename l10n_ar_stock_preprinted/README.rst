@@ -50,6 +50,35 @@ Qué agrega
   copias consume un solo número por hoja.
 * Reporte: en preimpreso el remito se imprime sin encabezado, sin número y sin
   CAI (ya vienen en el papel).
+* ``stock.picking.type.l10n_ar_preprinted_report_view_id`` (opcional): plantilla
+  QWeb propia con la que se imprime el remito de ese tipo de operación, en lugar
+  del comprobante estándar. Ver *Plantilla propia* más abajo.
+
+Plantilla propia
+================
+
+Cada imprenta entrega el talonario con su propia grilla, y el comprobante
+estándar no siempre cae donde el papel lo espera. Para eso el tipo de operación
+acepta una **plantilla QWeb propia**, que la hace un consultor funcional desde la
+interfaz —sin módulo, sin deploy— en *Ajustes > Técnico > Vistas*:
+
+#. Crear una vista de tipo *QWeb* con un ``<t t-name="...">`` propio. No es una
+   herencia del comprobante estándar: es una plantilla desde cero, dibujada para
+   la grilla del papel.
+#. La plantilla recibe el picking en la variable ``o`` y el tipo de copia en
+   ``copy_type``, y tiene que abrir con ``<t t-call="web.html_container">`` igual
+   que el comprobante estándar.
+#. Seleccionarla en *Plantilla del Remito Preimpreso*, en el tipo de operación.
+
+Vacío el campo, se usa el comprobante estándar y no cambia nada.
+
+**Numeración con plantilla propia.** El comprobante estándar descuenta del conteo
+las hojas que solo traen firma, totales o datos del transportista, apoyándose en
+una marca invisible que imprime por cada línea de producto. Una plantilla propia
+no emite esa marca, así que el criterio cambia: se cuentan **todas las páginas**
+que se imprimen, porque una plantilla dibujada para el papel de la imprenta no
+emite hojas que no sean del talonario. El juego de copias
+(duplicado / triplicado) sigue consumiendo un solo número por hoja.
 
 Configuración
 =============

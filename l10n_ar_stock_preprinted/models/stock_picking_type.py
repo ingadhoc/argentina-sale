@@ -21,6 +21,21 @@ class StockPickingType(models.Model):
         "acá porque viene impreso en el papel.",
     )
 
+    l10n_ar_preprinted_report_view_id = fields.Many2one(
+        "ir.ui.view",
+        string="Plantilla del Remito Preimpreso",
+        domain=[("type", "=", "qweb"), ("mode", "=", "primary")],
+        ondelete="restrict",
+        help="Vista QWeb propia con la que se imprime el remito de este tipo de operación, en lugar "
+        "del comprobante estándar. Sirve para adaptar el contenido variable a la grilla del papel "
+        "de la imprenta, que cada talonario trae distinta.\n"
+        "La plantilla se crea desde Ajustes > Técnico > Vistas y recibe el picking en la variable "
+        "'o' (y el tipo de copia en 'copy_type'); tiene que abrir con "
+        '<t t-call="web.html_container"> igual que el comprobante estándar.\n'
+        "Con una plantilla propia la numeración cuenta TODAS las páginas que se imprimen: cada "
+        "página es una hoja del talonario. Vacío, se usa el comprobante estándar.",
+    )
+
     # === CONSTRAINT METHODS === #
 
     @api.constrains(
@@ -57,5 +72,29 @@ class StockPickingType(models.Model):
                         " como Preimpreso.",
                         picking_type=picking_type.display_name,
                         fields=", ".join(missing),
+                    )
+                )
+
+    @api.constrains("l10n_ar_preprinted_report_view_id")
+    def _constrains_l10n_ar_preprinted_report_view(self):
+        """La plantilla tiene que ser una vista QWeb autónoma. El domain del campo ya lo pide,
+        pero el modo también puede setearse por import / data / ORM, donde el domain no aplica.
+
+        El chequeo de 'primary' no es cosmético: una vista de herencia (mode = 'extension') no
+        tiene arch renderizable propio — es un diff de xpaths — así que el t-call del comprobante
+        imprimiría los nodos del diff sueltos en vez del remito."""
+        for picking_type in self.filtered("l10n_ar_preprinted_report_view_id"):
+            view = picking_type.l10n_ar_preprinted_report_view_id
+            if view.type != "qweb" or view.mode != "primary":
+                raise ValidationError(
+                    _(
+                        "La plantilla del remito preimpreso de %(picking_type)s tiene que ser una"
+                        " vista QWeb autónoma, y %(view)s es de tipo %(type)s y modo"
+                        " %(mode)s.\nCree la plantilla desde Ajustes > Técnico > Vistas con un"
+                        " <t t-name> propio, sin vista heredada.",
+                        picking_type=picking_type.display_name,
+                        view=view.display_name,
+                        type=view.type,
+                        mode=view.mode,
                     )
                 )

@@ -14,6 +14,11 @@
             <!-- Modo de impresión: solo relevante en tipos de operación con remito -->
             <field name="l10n_ar_document_type_id" position="after">
                 <field name="l10n_ar_voucher_print_mode" invisible="not l10n_ar_document_type_id"/>
+                <!-- La plantilla propia solo aplica al preimpreso: es lo que permite adaptar el
+                     contenido variable a la grilla del papel de cada imprenta. -->
+                <field name="l10n_ar_preprinted_report_view_id"
+                       invisible="not l10n_ar_document_type_id or l10n_ar_voucher_print_mode != 'preprinted'"
+                       options="{'no_create': True}"/>
             </field>
             <!-- CAI: visible y obligatorio solo en autoimpreso -->
             <field name="l10n_ar_cai_authorization_code" position="attributes">
