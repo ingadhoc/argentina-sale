@@ -29,6 +29,14 @@ class StockPicking(models.Model):
         layout preimpreso — los dos casos requieren el template argentino."""
         self.ensure_one()
         if self.company_id.country_id.code == "AR" and self.l10n_ar_voucher_print_mode == "preprinted":
+            # Si el tipo de operación tiene plantilla propia, el comprobante se imprime con esa.
+            # Devolvemos el key y no el external id porque el t-call resuelve los templates por
+            # ir.ui.view.key (_get_template_domain), y una vista hecha desde la interfaz no tiene
+            # external id; key en cambio siempre tiene (lo exige el constraint de base, y Odoo lo
+            # autogenera cuando no se lo dan).
+            custom_view = self.picking_type_id.l10n_ar_preprinted_report_view_id
+            if custom_view:
+                return custom_view.key
             return "l10n_ar_stock_ux.report_delivery_document"
         return super()._get_name_delivery_report(report_xml_id)
 
@@ -77,6 +85,14 @@ class StockPicking(models.Model):
         pdf_reader = PdfReader(BytesIO(pdf_content))
         copies = COPIES_BY_L10N_AR_COPIES.get(report.l10n_ar_copies, 1)
         pages_per_copy = len(pdf_reader.pages) // copies
+        if self.picking_type_id.l10n_ar_preprinted_report_view_id:
+            # Con plantilla propia contamos TODAS las páginas de una copia. La marca de línea
+            # la inyectan herencias sobre los leaf-templates del comprobante estándar, y una
+            # plantilla hecha desde cero no los llama: contar por marca daría cero marcas — una
+            # sola hoja, sin aviso, para un remito de varias. Y además no hace falta discriminar:
+            # una plantilla dibujada para el papel de la imprenta no emite hojas que no sean del
+            # talonario, así que cada página que sale consume un número.
+            return max(1, pages_per_copy)
         sheets = self._l10n_ar_count_pages_with_products(pdf_reader)
         return max(1, min(sheets, pages_per_copy))
 
