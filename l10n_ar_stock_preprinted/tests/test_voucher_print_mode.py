@@ -3,27 +3,6 @@ from unittest.mock import patch
 from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
 
-from ..models.stock_picking import L10N_AR_PREPRINTED_LINE_MARK
-
-# parcheamos el PdfReader del módulo para simular la paginación sin depender de wkhtmltopdf
-PDF_READER = "odoo.addons.l10n_ar_stock_preprinted.models.stock_picking.PdfReader"
-
-MARKED = "línea de producto " + L10N_AR_PREPRINTED_LINE_MARK
-UNMARKED = "solo datos del transportista"
-
-
-class FakePage:
-    def __init__(self, text):
-        self._text = text
-
-    def extract_text(self):
-        return self._text
-
-
-class FakeReader:
-    def __init__(self, page_texts):
-        self.pages = [FakePage(text) for text in page_texts]
-
 
 class TestVoucherPrintMode(TransactionCase):
     """El modo de impresión del remito y la numeración que se deriva de él."""
@@ -64,16 +43,6 @@ class TestVoucherPrintMode(TransactionCase):
                 ],
             }
         )
-
-    def _count_sheets(self, page_texts, copies=False):
-        """Corre el conteo real sobre un PDF simulado de ``page_texts`` páginas."""
-        report = self.env.ref("stock.action_report_delivery")
-        report.l10n_ar_copies = copies
-        with (
-            patch.object(type(report), "_render_qweb_pdf", return_value=(b"", "pdf")),
-            patch(PDF_READER, return_value=FakeReader(page_texts)),
-        ):
-            return self.picking._l10n_ar_count_preprinted_sheets()
 
     def test_preprinted_allows_empty_cai(self):
         """En preimpreso el CAI y el rango no se cargan: vienen impresos en el papel."""
@@ -155,26 +124,6 @@ class TestVoucherPrintMode(TransactionCase):
             self.picking.l10n_ar_action_create_delivery_guide()
         self.assertEqual(self.picking.l10n_ar_delivery_guide_number, numbers)
 
-    def test_sheet_count_counts_a_single_copy(self):
-        """Con copias, el conteo tiene que correr sobre UNA copia: el comprobante de 3 hojas
-        (2 con productos + 1 de solo transportista) repetido en triplicado son 9 páginas, y
-        consume 2 hojas del talonario, no 3. Contar las marcas sobre el PDF entero las
-        multiplica por la cantidad de copias."""
-        self.assertEqual(self._count_sheets([MARKED, MARKED, UNMARKED] * 3, copies="triplicado"), 2)
-
-    def test_sheet_count_ignores_report_copies(self):
-        """El reporte repite el comprobante una vez por copia (duplicado / triplicado) y el
-        juego de copias consume un solo número por hoja: 6 páginas en triplicado son 2 hojas."""
-        self.assertEqual(self._count_sheets([MARKED, MARKED] * 3, copies="triplicado"), 2)
-        self.assertEqual(self._count_sheets([MARKED, MARKED] * 2, copies="duplicado"), 2)
-
-    def test_sheet_count_without_copies(self):
-        self.assertEqual(self._count_sheets([MARKED, MARKED]), 2)
-
-    def test_sheet_count_is_never_zero(self):
-        """Si no se pudo detectar ninguna hoja con productos igual se consume una hoja."""
-        self.assertEqual(self._count_sheets([UNMARKED]), 1)
-
     def test_preprinted_uses_ar_delivery_report(self):
         """Toda transferencia de compañía AR se imprime con el comprobante argentino, tenga o
         no número de remito asignado (l10n_ar_stock_ux). El preimpreso lo necesita también
@@ -185,9 +134,3 @@ class TestVoucherPrintMode(TransactionCase):
             self.picking._get_name_delivery_report("stock.report_delivery_document"),
             "l10n_ar_stock_ux.report_delivery_document",
         )
-
-    def test_count_pages_by_line_mark(self):
-        """El contador cuenta solo las páginas que traen la marca de línea de producto: una
-        hoja de solo transportista / firma / totales (sin marca) no consume número."""
-        pages = FakeReader([MARKED, MARKED, UNMARKED]).pages
-        self.assertEqual(self.picking._l10n_ar_count_pages_with_products(pages), 2)

@@ -33,23 +33,4 @@
 
     </template>
 
-    <!-- Marca invisible por línea de producto, solo cuando renderizamos para contar hojas
-         (contexto l10n_ar_counting). Es texto blanco de 1px: queda en la capa de texto del
-         PDF (la lee _l10n_ar_count_pages_with_products) pero no se ve. Así una hoja con
-         productos trae al menos una marca y una hoja de solo transportista / firma / totales
-         no, sin depender de que el producto tenga código. Se marcan los dos leaf-templates
-         que usa un picking validado (líneas agregadas y líneas con número de serie). -->
-    <template id="stock_report_delivery_aggregated_move_lines_preprinted"
-              inherit_id="stock.stock_report_delivery_aggregated_move_lines">
-        <xpath expr="//tr/td[1]/span[1]" position="after">
-            <span t-if="o.env.context.get('l10n_ar_counting')" style="color:#ffffff;font-size:1px">PREPRINTEDLINEMARK</span>
-        </xpath>
-    </template>
-
-    <template id="stock_report_delivery_has_serial_move_line_preprinted"
-              inherit_id="stock.stock_report_delivery_has_serial_move_line">
-        <xpath expr="//span[@t-field='move_line.product_id']" position="after">
-            <span t-if="o.env.context.get('l10n_ar_counting')" style="color:#ffffff;font-size:1px">PREPRINTEDLINEMARK</span>
-        </xpath>
-    </template>
 </odoo>

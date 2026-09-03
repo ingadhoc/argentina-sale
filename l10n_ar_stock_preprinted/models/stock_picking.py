@@ -7,12 +7,6 @@ from odoo.tools.pdf import PdfReader
 # cada copia repite TODAS las páginas del comprobante
 COPIES_BY_L10N_AR_COPIES = {"duplicado": 2, "triplicado": 3}
 
-# marca invisible (texto blanco de 1px) que el comprobante imprime una vez por línea de
-# producto cuando se renderiza para contar hojas (contexto l10n_ar_counting). Permite saber
-# qué páginas tienen productos sin depender de que el producto tenga código ni de heurísticas
-# de texto: una hoja de solo transportista / firma / totales no la lleva y no consume número.
-L10N_AR_PREPRINTED_LINE_MARK = "PREPRINTEDLINEMARK"
-
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
@@ -21,41 +15,21 @@ class StockPicking(models.Model):
         related="picking_type_id.l10n_ar_voucher_print_mode",
     )
 
-    def _l10n_ar_count_pages_with_products(self, pages):
-        """Cuenta cuántas de ``pages`` contienen líneas de producto: una hoja que solo trae
-        firma, totales o datos del transportista NO consume número de remito. El comprobante
-        imprime una marca invisible (``L10N_AR_PREPRINTED_LINE_MARK``) por cada línea de
-        producto cuando se renderiza con el contexto de conteo, así que una página con
-        productos trae al menos una marca. Es independiente del idioma y de que el producto
-        tenga código interno o de barras.
-
-        Recibe las páginas y no el PdfReader completo porque el PDF trae el comprobante
-        repetido una vez por copia: hay que contar sobre UNA sola copia (ver
-        ``_l10n_ar_count_preprinted_sheets``)."""
-        self.ensure_one()
-        pages_with_products = 0
-        for page in pages:
-            try:
-                text = page.extract_text() or ""
-            except Exception:
-                # Si no se puede extraer el texto, asumimos que la hoja trae productos.
-                pages_with_products += 1
-                continue
-            if L10N_AR_PREPRINTED_LINE_MARK in text:
-                pages_with_products += 1
-        return max(1, pages_with_products)
-
     def _l10n_ar_count_preprinted_sheets(self):
         """Cantidad de hojas que consume el remito preimpreso = cantidad de páginas que
-        realmente se imprimen con productos (las hojas de solo firma/totales no consumen
-        número). Se obtiene renderizando el comprobante de entrega y contando esas páginas
-        del PDF resultante. El render es el mismo comprobante argentino que se imprime
-        (``l10n_ar_stock_ux`` lo elige para toda transferencia de compañía AR), así que la
-        paginación que contamos es la que sale en papel.
+        salen por la impresora. Toda hoja impresa sale sobre papel del talonario y quema
+        el número que la imprenta ya le imprimió, tenga productos, totales o solo los datos
+        del transportista: si no la contáramos, el contador de Odoo quedaría atrás del papel
+        y habría que adelantarlo a mano, que es justo lo que este módulo viene a evitar.
+
+        Se obtiene renderizando el comprobante de entrega y contando las páginas del PDF.
+        El render es el mismo comprobante argentino que se imprime (``l10n_ar_stock_ux`` lo
+        elige para toda transferencia de compañía AR), así que la paginación que contamos es
+        la que sale en papel.
 
         El PDF trae el comprobante repetido tantas veces como copias tenga configurado el
         reporte (original / duplicado / triplicado), y el juego de copias consume UN solo
-        número por hoja, así que contamos únicamente sobre las páginas de la primera copia."""
+        número por hoja, así que contamos únicamente las páginas de una copia."""
         self.ensure_one()
         report = self.env.ref("stock.action_report_delivery")
         # Renderizamos con sudo y con el contexto l10n_ar_counting:
@@ -68,13 +42,12 @@ class StockPicking(models.Model):
         #   eso es un problema del template, no algo que este método deba tapar.
         # - l10n_ar_counting: el conteo corre ANTES de asignar el número, así que sin el flag
         #   el comprobante saldría como "Comprobante de Entrega" y paginaría distinto a lo que
-        #   después se imprime; el flag fuerza el layout preimpreso e imprime la marca de línea.
+        #   después se imprime; el flag fuerza el layout preimpreso.
         report = report.sudo().with_context(l10n_ar_counting=True)
         pdf_content, _dummy = report._render_qweb_pdf(report.id, self.ids)
         pdf_reader = PdfReader(BytesIO(pdf_content))
         copies = COPIES_BY_L10N_AR_COPIES.get(report.l10n_ar_copies, 1)
-        pages_per_copy = max(1, len(pdf_reader.pages) // copies)
-        return self._l10n_ar_count_pages_with_products(pdf_reader.pages[:pages_per_copy])
+        return max(1, len(pdf_reader.pages) // copies)
 
     def l10n_ar_action_create_delivery_guide(self):
         """En remitos preimpresos numeramos según las hojas realmente impresas (una por
