@@ -425,7 +425,12 @@ class StockPicking(models.Model):
 
     def _parse_arba_response(self, response_content):
         root = ET.fromstring(response_content)
-        process = root.find(".//procesado") and root.find(".//procesado").text == "SI"
+        # Un Element sin hijos evalua como False en ElementTree, asi que
+        # `root.find(...) and ...` trataba las respuestas EXITOSAS (procesado=SI)
+        # como fallidas: se descartaba el COT ya otorgado y el reintento daba
+        # error 17 "El remito ya fue procesado con anterioridad".
+        procesado = root.find(".//procesado")
+        process = procesado is not None and procesado.text == "SI"
         if process:
             try:
                 return {
