@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- La plantilla propia aplica a los dos modos de impresión del remito: en preimpreso
+         reemplaza el formato para que caiga en la grilla del papel de la imprenta, y en
+         autoimpreso sirve para agregar campos que el comprobante estándar no trae. Por eso
+         la visibilidad depende solo de que el tipo de operación tenga remito. -->
+    <record id="view_picking_type_form_custom_report" model="ir.ui.view">
+        <field name="name">stock.picking.type.form.custom.report</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="l10n_ar_stock.view_picking_type_form_inherit_l10n_ar_stock"/>
+        <field name="arch" type="xml">
+            <field name="l10n_ar_document_type_id" position="after">
+                <field name="l10n_ar_delivery_report_view_id"
+                       invisible="not l10n_ar_document_type_id"
+                       options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+</odoo>
