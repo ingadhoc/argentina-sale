@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-06 09:58+0000\n"
-"PO-Revision-Date: 2026-08-06 09:58+0000\n"
+"POT-Creation-Date: 2026-09-08 19:47+0000\n"
+"PO-Revision-Date: 2026-09-08 19:47+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -65,12 +65,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_stock_preprinted.field_stock_picking__l10n_ar_voucher_print_mode
 #: model:ir.model.fields,field_description:l10n_ar_stock_preprinted.field_stock_picking_type__l10n_ar_voucher_print_mode
 msgid "Modo de Impresión del Remito"
-msgstr ""
-
-#. module: l10n_ar_stock_preprinted
-#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_preprinted.stock_report_delivery_aggregated_move_lines_preprinted
-#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_preprinted.stock_report_delivery_has_serial_move_line_preprinted
-msgid "PREPRINTEDLINEMARK"
 msgstr ""
 
 #. module: l10n_ar_stock_preprinted
