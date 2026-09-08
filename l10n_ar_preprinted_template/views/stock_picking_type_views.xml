@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- La plantilla propia aplica solo al remito preimpreso, así que el campo se muestra solo
+         en ese modo: en autoimpreso el remito se imprime siempre con el comprobante estándar y
+         cargar una plantilla no haría nada. Es la misma razón por la que el cliente que pasa de
+         preimpreso a remito digital no tiene que borrar la plantilla vieja: deja de verla y deja
+         de aplicarse. El día que se abra la perso en autoimpreso, se saca esta condición. -->
+    <record id="view_picking_type_form_preprinted_template" model="ir.ui.view">
+        <field name="name">stock.picking.type.form.preprinted.template</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="l10n_ar_stock_preprinted.view_picking_type_form_preprinted"/>
+        <field name="arch" type="xml">
+            <field name="l10n_ar_voucher_print_mode" position="after">
+                <field name="l10n_ar_delivery_report_view_id"
+                       invisible="not l10n_ar_document_type_id or l10n_ar_voucher_print_mode != 'preprinted'"
+                       options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+</odoo>
