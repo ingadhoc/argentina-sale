@@ -1,0 +1,62 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_preprinted_template
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-14 17:09+0000\n"
+"PO-Revision-Date: 2026-09-14 17:09+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ar_preprinted_template
+#: model:ir.model.fields,field_description:l10n_ar_preprinted_template.field_stock_picking__display_name
+#: model:ir.model.fields,field_description:l10n_ar_preprinted_template.field_stock_picking_type__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ar_preprinted_template
+#: model:ir.model.fields,field_description:l10n_ar_preprinted_template.field_stock_picking__id
+#: model:ir.model.fields,field_description:l10n_ar_preprinted_template.field_stock_picking_type__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ar_preprinted_template
+#. odoo-python
+#: code:addons/l10n_ar_preprinted_template/models/stock_picking_type.py:0
+msgid ""
+"La plantilla del remito de %(picking_type)s tiene que ser una vista QWeb de modo 'primary', y %(view)s es de tipo %(type)s y modo %(mode)s.\n"
+"Cree la plantilla desde Ajustes > Técnico > Vistas, con un <t t-name> propio o heredando el comprobante estándar en modo 'primary'."
+msgstr ""
+
+#. module: l10n_ar_preprinted_template
+#: model:ir.model,name:l10n_ar_preprinted_template.model_stock_picking_type
+msgid "Picking Type"
+msgstr ""
+
+#. module: l10n_ar_preprinted_template
+#: model:ir.model.fields,field_description:l10n_ar_preprinted_template.field_stock_picking_type__l10n_ar_delivery_report_view_id
+msgid "Plantilla del Remito"
+msgstr ""
+
+#. module: l10n_ar_preprinted_template
+#: model:ir.model,name:l10n_ar_preprinted_template.model_stock_picking
+msgid "Transfer"
+msgstr ""
+
+#. module: l10n_ar_preprinted_template
+#: model:ir.model.fields,help:l10n_ar_preprinted_template.field_stock_picking_type__l10n_ar_delivery_report_view_id
+msgid ""
+"Vista QWeb propia con la que se imprime el remito preimpreso de este tipo de operación, en lugar del comprobante estándar. Vacío, se usa el comprobante estándar y nada cambia.\n"
+"La plantilla la crea un consultor funcional o el propio cliente desde Ajustes > Técnico > Vistas, y hay dos formas de armarla según qué se necesite personalizar:\n"
+"* Formato: una plantilla desde cero, dibujada para la grilla del papel de la imprenta. Recibe la transferencia en la variable 'o' (y el tipo de copia en 'copy_type') y tiene que abrir con <t t-call=\"web.html_container\"> igual que el comprobante estándar.\n"
+"* Campos: una vista de modo 'primary' que herede el comprobante estándar y le agregue los campos que falten. Conserva el formato nuestro, incluida la fecha del encabezado.\n"
+"En los dos casos la vista tiene que ser QWeb y de modo 'primary'.\n"
+"Solo aplica cuando el Modo de Impresión del Remito es Preimpreso: en autoimpreso el remito se imprime siempre con el comprobante estándar."
+msgstr ""
