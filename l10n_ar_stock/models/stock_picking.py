@@ -44,19 +44,20 @@ class StockPicking(models.Model):
     def _compute_l10n_ar_afip_barcode(self):
         for rec in self:
             barcode = False
+            # a prefix without digits carries no point of sale, so no barcode can be built
+            pos_number = re.sub("[^0-9]", "", rec.book_id.sequence_id.prefix or "")
             if (
-                rec.book_id.sequence_id.prefix
+                pos_number
                 and rec.book_id.l10n_ar_cai_due
                 and rec.book_id.l10n_ar_cai
                 and not rec.book_id.lines_per_voucher
             ):
                 cae_due = rec.book_id.l10n_ar_cai_due.strftime("%Y%m%d")
-                pos_number = int(re.sub("[^0-9]", "", rec.book_id.sequence_id.prefix))
                 barcode = "".join(
                     [
                         str(rec.book_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
                         "%03d" % int(rec.book_id.document_type_id.code),
-                        "%05d" % pos_number,
+                        "%05d" % int(pos_number),
                         rec.book_id.l10n_ar_cai,
                         cae_due,
                     ]
