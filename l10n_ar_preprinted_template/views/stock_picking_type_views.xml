@@ -14,6 +14,8 @@
                 <field name="l10n_ar_delivery_report_view_id"
                        invisible="not l10n_ar_document_type_id or l10n_ar_voucher_print_mode != 'preprinted'"
                        options="{'no_create': True}"/>
+                <field name="l10n_ar_delivery_paperformat_id"
+                       invisible="not l10n_ar_document_type_id or l10n_ar_voucher_print_mode != 'preprinted'"/>
             </field>
         </field>
     </record>

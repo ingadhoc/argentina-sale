@@ -28,3 +28,15 @@ class StockPicking(models.Model):
         if custom_view and self.l10n_ar_voucher_print_mode == "preprinted":
             return custom_view.key
         return super()._get_name_delivery_report(report_xml_id)
+
+    def _l10n_ar_preprinted_paperformat(self):
+        """Las medidas de hoja propias de esta transferencia, o vacío si le sirven las del reporte.
+
+        Como la plantilla, aplican solo en preimpreso: en autoimpreso Odoo imprime el comprobante
+        completo sobre papel en blanco y las medidas de la base son las correctas. Son dos campos
+        independientes a propósito — un talonario puede necesitar otra geometría y el comprobante
+        estándar adentro, o una plantilla propia que entre en la hoja de siempre."""
+        self.ensure_one()
+        if self.l10n_ar_voucher_print_mode == "preprinted":
+            return self.picking_type_id.l10n_ar_delivery_paperformat_id
+        return self.env["report.paperformat"]

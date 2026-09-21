@@ -25,6 +25,24 @@ class StockPickingType(models.Model):
         "remito se imprime siempre con el comprobante estándar.",
     )
 
+    l10n_ar_delivery_paperformat_id = fields.Many2one(
+        "report.paperformat",
+        string="Formato de Papel del Remito",
+        ondelete="restrict",
+        help="Medidas de la hoja con las que se imprime el remito preimpreso de este tipo de "
+        "operación: tamaño de papel, márgenes, alto del encabezado y del pie, y si el contenido "
+        "puede achicarse para entrar. Vacío, se usan las del reporte de remito, que son las "
+        "mismas para toda la base.\n"
+        "Hace falta porque en el talonario de la imprenta el contenido tiene que caer sobre la "
+        "grilla del papel, y cada imprenta trae la suya: de las medidas de la hoja, la plantilla "
+        "QWeb solo puede fijar el margen superior y la separación con el encabezado. El tamaño de "
+        "papel, los márgenes laterales, el inferior y el achicado automático salen de acá.\n"
+        "El formato se crea en Ajustes > Técnico > Formatos de Papel, midiéndolo sobre el papel "
+        "del talonario. Dos tipos de operación que usan el mismo talonario comparten el mismo "
+        "formato.\n"
+        "Solo aplica cuando el Modo de Impresión del Remito es Preimpreso.",
+    )
+
     # === CONSTRAINT METHODS === #
 
     @api.constrains("l10n_ar_delivery_report_view_id")
