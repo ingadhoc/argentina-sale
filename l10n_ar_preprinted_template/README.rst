@@ -15,8 +15,9 @@ Plantilla Propia del Remito Preimpreso
 =======================================
 
 Permite que un tipo de operación con remito **preimpreso** lo imprima con una
-**plantilla QWeb propia**, en lugar del comprobante estándar de
-``l10n_ar_stock_ux``.
+**plantilla QWeb propia** y con las **medidas de hoja de su talonario**, en lugar
+del comprobante estándar de ``l10n_ar_stock_ux`` y de las medidas que la base usa
+para todos los remitos.
 
 El módulo no trae ninguna plantilla: trae el campo y su validación. La plantilla
 la crea un consultor funcional o el propio cliente desde *Ajustes > Técnico >
@@ -54,6 +55,61 @@ Qué agrega
 * ``stock.picking._get_name_delivery_report`` devuelve el ``key`` de esa vista.
   Es el key y no el external id porque el ``t-call`` resuelve los templates por
   ``ir.ui.view.key``, y una vista creada desde la interfaz no tiene external id.
+* ``stock.picking.type.l10n_ar_delivery_paperformat_id`` (opcional): las medidas
+  de la hoja con las que se imprime el remito de ese tipo de operación — tamaño
+  de papel, márgenes, alto del encabezado y del pie, y si el contenido puede
+  achicarse para entrar.
+* ``ir.actions.report.get_paperformat`` devuelve ese formato cuando se está
+  imprimiendo un remito preimpreso que lo tiene cargado.
+
+Las medidas de la hoja
+======================
+
+Una plantilla propia resuelve **qué** se imprime y **dónde** dentro del área
+imprimible, pero no el tamaño de esa área. Eso lo define el formato de papel, y
+en Odoo el formato de papel cuelga del reporte: uno solo para todos los remitos
+de la base. De las medidas de la hoja, una plantilla QWeb solo puede fijar dos —
+el margen superior y la separación con el encabezado (``data-report-margin-top``
+y ``data-report-header-spacing``, los únicos atributos que ``web.report_layout``
+emite en la raíz del documento). El tamaño de papel, los márgenes laterales, el
+inferior y el achicado automático del contenido salen siempre del formato.
+
+En un remito preimpreso eso no alcanza. El contenido tiene que caer sobre la
+grilla que la imprenta ya imprimió en el papel, cada imprenta trae la suya, y el
+achicado automático es lo peor de todo: escala el contenido según cuánto entre en
+la hoja, así que dos remitos del mismo talonario pueden salir a escalas
+distintas.
+
+Cambiar el formato del reporte no es salida: arregla un talonario y desarregla
+todos los demás remitos de la base, que son los que salen en hoja blanca con
+membrete y suelen ser la mayoría.
+
+Por eso el formato se elige **por tipo de operación**, con el mismo criterio que
+la plantilla: el módulo no trae ninguna geometría adentro. El formato se crea en
+la base, midiéndolo sobre el papel del talonario, y se asigna al tipo de
+operación que lo usa. Dos tipos de operación que comparten talonario comparten
+formato; cada talonario distinto lleva el suyo.
+
+Los dos campos son independientes a propósito: un talonario puede necesitar otra
+geometría con el comprobante estándar adentro, o una plantilla propia que entre
+en la hoja de siempre.
+
+Dos detalles de implementación que conviene conocer:
+
+* El formato se resuelve en ``_render_qweb_pdf_prepare_streams``, que es donde
+  todavía se sabe qué transferencias se imprimen, y viaja por contexto hasta
+  ``get_paperformat``. No puede resolverse allá: ``get_paperformat`` es un método
+  de ``ir.actions.report`` y el motor lo llama sin los registros.
+* Por eso mismo el conteo de hojas de ``l10n_ar_stock_preprinted`` — que numera
+  el talonario renderizando el comprobante y contando páginas — cuenta con la
+  misma geometría con la que después se imprime. No es un efecto colateral: si
+  contara con otra, los números asignados no coincidirían con las hojas que
+  salen de la impresora.
+
+Imprimir juntas transferencias con geometrías distintas no se puede: wkhtmltopdf
+recibe un solo juego de medidas por corrida, así que unas saldrían bien y otras
+no. En papel preimpreso eso no es un PDF feo, es papel numerado arruinado, así
+que el módulo avisa y pide imprimirlas por separado.
 
 Alcance: solo preimpreso
 ========================
@@ -111,6 +167,9 @@ de salida:
 #. Crear la vista QWeb desde *Ajustes > Técnico > Vistas*, con uno de los dos
    criterios de arriba.
 #. Seleccionarla en *Plantilla del Remito*.
+#. Si el talonario necesita otras medidas de hoja, crear el formato en *Ajustes >
+   Técnico > Formatos de Papel* —midiéndolo sobre el papel de la imprenta— y
+   seleccionarlo en *Formato de Papel del Remito*.
 
 Advertencia sobre las actualizaciones de versión
 ================================================
