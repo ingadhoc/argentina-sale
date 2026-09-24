@@ -128,9 +128,16 @@ class SaleOrder(models.Model):
         )
         return True if module_installed else False
 
-    @api.onchange("date_order", "commercial_partner_id")
+    def _l10n_ar_delivery_fiscal_position(self):
+        """Posición fiscal con la dirección de entrega en contexto: hay percepciones que dependen de la provincia de
+        entrega y no de la del cliente (ej. l10n_ar_sircip)."""
+        self.ensure_one()
+        return self.fiscal_position_id.with_context(l10n_ar_delivery_partner_id=self.partner_shipping_id.id)
+
+    @api.onchange("date_order", "commercial_partner_id", "partner_shipping_id")
     def _l10n_ar_recompute_fiscal_position_taxes(self):
-        """Recalculamos las percepciones si cambiamos la fecha de la orden de venta o el commercial partner.
+        """Recalculamos las percepciones si cambiamos la fecha de la orden de venta, el commercial partner o la dirección
+        de entrega.
                 Para ello nos basamos en los impuestos de la posicion fiscal, buscamos si hay impuestos existentes para los tax groups involucrados y los
                 reemplazamos por los nuevos impuestos.
                 NO lo hacemos para el cambio de fiscal_position_id porque el onchange de fiscal_position_id implementado en sale_ux ya recomputa todos los taxes
@@ -147,7 +154,9 @@ class SaleOrder(models.Model):
                 lambda x: x.tax_type == "perception"
             ).mapped("default_tax_id.tax_group_id")
             date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.date_order))
-            new_taxes = rec.fiscal_position_id._l10n_ar_add_taxes(rec.partner_id, rec.company_id, date, "perception")
+            new_taxes = rec._l10n_ar_delivery_fiscal_position()._l10n_ar_add_taxes(
+                rec.partner_id, rec.company_id, date, "perception"
+            )
             for line in rec.order_line:
                 to_unlink = line.tax_id.filtered(lambda x: x.tax_group_id in fp_tax_groups)
                 if to_unlink._origin != new_taxes:
@@ -160,7 +169,9 @@ class SaleOrder(models.Model):
         line = super()._create_delivery_line(carrier, price_unit)
         if self.fiscal_position_id.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception"):
             date = fields.Date.to_date(fields.Datetime.context_timestamp(self, self.date_order))
-            new_taxes = self.fiscal_position_id._l10n_ar_add_taxes(self.partner_id, self.company_id, date, "perception")
+            new_taxes = self._l10n_ar_delivery_fiscal_position()._l10n_ar_add_taxes(
+                self.partner_id, self.company_id, date, "perception"
+            )
             if new_taxes:
                 line.tax_id = line.tax_id | new_taxes
         return line
