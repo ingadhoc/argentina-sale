@@ -134,6 +134,12 @@ class SaleOrder(models.Model):
         self.ensure_one()
         return self.fiscal_position_id.with_context(l10n_ar_delivery_partner_id=self.partner_shipping_id.id)
 
+    def action_confirm(self):
+        for rec in self.filtered("fiscal_position_id"):
+            date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.date_order))
+            rec._l10n_ar_delivery_fiscal_position()._l10n_ar_check_perceptions(rec.partner_id, date)
+        return super().action_confirm()
+
     @api.onchange("date_order", "commercial_partner_id", "partner_shipping_id")
     def _l10n_ar_recompute_fiscal_position_taxes(self):
         """Recalculamos las percepciones si cambiamos la fecha de la orden de venta, el commercial partner o la dirección
