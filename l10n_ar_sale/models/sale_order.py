@@ -135,9 +135,13 @@ class SaleOrder(models.Model):
         return self.fiscal_position_id.with_context(l10n_ar_delivery_partner_id=self.partner_shipping_id.id)
 
     def action_confirm(self):
-        for rec in self.filtered("fiscal_position_id"):
-            date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.date_order))
-            rec._l10n_ar_delivery_fiscal_position()._l10n_ar_check_perceptions(rec.partner_id, date)
+        if not self.env.context.get("l10n_ar_perceptions_confirmed"):
+            messages = []
+            for rec in self.filtered("fiscal_position_id"):
+                date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.date_order))
+                messages += rec._l10n_ar_delivery_fiscal_position()._l10n_ar_check_perceptions(rec.partner_id, date)
+            if messages and self.env["l10n_ar.perceptions.confirm"]._is_button_call():
+                return self.env["l10n_ar.perceptions.confirm"]._action_open(self, "action_confirm", messages)
         return super().action_confirm()
 
     @api.onchange("date_order", "commercial_partner_id", "partner_shipping_id")
@@ -156,9 +160,7 @@ class SaleOrder(models.Model):
                 and x.state not in ["cancel", "sale"]
             )
         ):
-            fp_tax_groups = rec.fiscal_position_id.l10n_ar_tax_ids.filtered(
-                lambda x: x.tax_type == "perception"
-            ).mapped("default_tax_id.tax_group_id")
+            fp_tax_groups = rec.fiscal_position_id._l10n_ar_perception_tax_groups()
             date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.date_order))
             new_taxes = rec._l10n_ar_delivery_fiscal_position()._l10n_ar_add_taxes(
                 rec.partner_id, rec.company_id, date, "perception"
