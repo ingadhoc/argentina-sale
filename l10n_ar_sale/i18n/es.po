@@ -184,6 +184,13 @@ msgstr ""
 " de venta."
 
 #. module: l10n_ar_sale
+#: code:addons/l10n_ar_sale/models/sale_order.py:0
+msgid ""
+"There is nothing left to invoice on: %s. Reload the order before invoicing."
+msgstr ""
+"No queda nada para facturar en: %s. Recargue el pedido antes de facturar."
+
+#. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__group_price_unit_with_tax
 msgid "Unit Price w/ Taxes"
 msgstr "Precio unitario con impuestos"
