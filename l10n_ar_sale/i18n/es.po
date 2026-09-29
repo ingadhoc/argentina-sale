@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-13 19:51+0000\n"
+"POT-Creation-Date: 2026-09-29 20:56+0000\n"
 "PO-Revision-Date: 2025-11-19 14:19+0000\n"
 "Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -192,6 +192,14 @@ msgstr ""
 
 #. module: l10n_ar_sale
 #. odoo-python
+#: code:addons/l10n_ar_sale/models/sale_order.py:0
+msgid ""
+"There is nothing left to invoice on: %s. Reload the order before invoicing."
+msgstr ""
+"No queda nada para facturar en: %s. Recargue el pedido antes de facturar."
+
+#. module: l10n_ar_sale
+#. odoo-python
 #: code:addons/l10n_ar_sale/models/sale_order_line.py:0
 msgid ""
 "There must be exactly one tax from the \"VAT\" tax group per line, add it to "
@@ -202,13 +210,6 @@ msgstr ""
 "agréguelo a \"%s\". En caso de tenerlo, revise la configuración del "
 "impuesto, en opciones avanzadas, en el campo correspondiente \"Grupo de "
 "Impuestos\"."
-
-#. module: l10n_ar_sale
-#: code:addons/l10n_ar_sale/models/sale_order.py:0
-msgid ""
-"There is nothing left to invoice on: %s. Reload the order before invoicing."
-msgstr ""
-"No queda nada para facturar en: %s. Recargue el pedido antes de facturar."
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__group_price_unit_with_tax
