@@ -24,7 +24,8 @@ class StockPicking(models.Model):
         sin tener que borrarla: se ignora sola.
         """
         self.ensure_one()
-        custom_view = self.picking_type_id.l10n_ar_delivery_report_view_id
+        # ir.ui.view is readable only by base.group_system; we only need its key.
+        custom_view = self.picking_type_id.sudo().l10n_ar_delivery_report_view_id
         if custom_view and self.l10n_ar_voucher_print_mode == "preprinted":
             return custom_view.key
         return super()._get_name_delivery_report(report_xml_id)
