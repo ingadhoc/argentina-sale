@@ -12,6 +12,7 @@
         <field name="arch" type="xml">
             <field name="l10n_ar_voucher_print_mode" position="after">
                 <field name="l10n_ar_delivery_report_view_id"
+                       groups="base.group_system"
                        invisible="not l10n_ar_document_type_id or l10n_ar_voucher_print_mode != 'preprinted'"
                        options="{'no_create': True}"/>
                 <field name="l10n_ar_delivery_paperformat_id"

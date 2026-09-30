@@ -1,5 +1,5 @@
 from odoo.exceptions import ValidationError
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase, new_test_user
 from odoo.tools import mute_logger
 from psycopg2 import IntegrityError
 
@@ -59,6 +59,32 @@ class TestPreprintedTemplate(TransactionCase):
             self.picking._get_name_delivery_report("stock.report_delivery_document"),
             self.custom_view.key,
         )
+
+    def test_stock_user_prints_with_custom_template(self):
+        """Quien imprime el remito es un usuario de inventario, no un administrador, y
+        ir.ui.view solo lo lee base.group_system: resolver la plantilla no puede depender de
+        los permisos de quien imprime."""
+        marked_view = self.env["ir.ui.view"].create(
+            {
+                "name": "Remito propio marcado test",
+                "type": "qweb",
+                "arch": """
+                    <t t-name="l10n_ar_preprinted_template.remito_propio_marcado_test">
+                        <t t-call="web.html_container">
+                            <div class="page">REMITO-PROPIO-TEST</div>
+                        </t>
+                    </t>
+                """,
+            }
+        )
+        self.picking_type.l10n_ar_delivery_report_view_id = marked_view
+        stock_user = new_test_user(self.env, login="stock_user_preprinted", groups="stock.group_stock_user")
+        html, _report_type = (
+            self.env["ir.actions.report"]
+            .with_user(stock_user)
+            ._render_qweb_html("stock.action_report_delivery", self.picking.ids)
+        )
+        self.assertIn("REMITO-PROPIO-TEST", html.decode())
 
     def test_without_custom_template_keeps_standard_voucher(self):
         """Sin plantilla propia no cambia nada: sigue el comprobante argentino."""
