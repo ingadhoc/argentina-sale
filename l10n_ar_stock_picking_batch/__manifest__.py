@@ -37,7 +37,7 @@
         "report/report_batch_deliveryslip.xml",
     ],
     "demo": [],
-    "installable": True,
+    "installable": False,
     "auto_install": True,
     "application": False,
 }

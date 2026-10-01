@@ -14,7 +14,7 @@
     "external_dependencies": {},
     "data": [],
     "demo": [],
-    "installable": True,
+    "installable": False,
     "auto_install": True,
     "application": False,
 }

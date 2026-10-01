@@ -14,6 +14,6 @@
         "views/stock_picking_type_views.xml",
         "views/report_deliveryslip.xml",
     ],
-    "installable": True,
+    "installable": False,
     "application": False,
 }
