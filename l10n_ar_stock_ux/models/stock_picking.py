@@ -111,22 +111,55 @@ class StockPicking(models.Model):
     def _compute_l10n_ar_afip_barcode(self):
         for rec in self:
             barcode = False
+            # a prefix without digits carries no point of sale, so no barcode can be built
+            pos_number = re.sub("[^0-9]", "", rec.book_id.sequence_id.prefix or "")
             if (
+<<<<<<< c687cdd09c02b4b33a84d3250f4dceeb9d0f0d1a:l10n_ar_stock_ux/models/stock_picking.py
                 rec.l10n_ar_delivery_guide_number
                 and rec.document_type_id
                 and rec.l10n_ar_cai_data
                 and rec.l10n_ar_cai_expiration_date
+||||||| 733ebe4ded31fe8cec09707db9857997758260d1:l10n_ar_stock/models/stock_picking.py
+                rec.book_id.sequence_id.prefix
+                and rec.book_id.l10n_ar_cai_due
+                and rec.book_id.l10n_ar_cai
+                and not rec.book_id.lines_per_voucher
+=======
+                pos_number
+                and rec.book_id.l10n_ar_cai_due
+                and rec.book_id.l10n_ar_cai
+                and not rec.book_id.lines_per_voucher
+>>>>>>> 84f6fe9b563076f98fefb00a61e1218f2ac57289:l10n_ar_stock/models/stock_picking.py
             ):
+<<<<<<< c687cdd09c02b4b33a84d3250f4dceeb9d0f0d1a:l10n_ar_stock_ux/models/stock_picking.py
                 cae_due = rec.l10n_ar_cai_expiration_date.strftime("%Y%m%d")
                 pos_number = self.env["account.move"]._l10n_ar_get_document_number_parts(
                     rec.l10n_ar_delivery_guide_number, rec.document_type_id.code
                 )["point_of_sale"]
+||||||| 733ebe4ded31fe8cec09707db9857997758260d1:l10n_ar_stock/models/stock_picking.py
+                cae_due = rec.book_id.l10n_ar_cai_due.strftime("%Y%m%d")
+                pos_number = int(re.sub("[^0-9]", "", rec.book_id.sequence_id.prefix))
+=======
+                cae_due = rec.book_id.l10n_ar_cai_due.strftime("%Y%m%d")
+>>>>>>> 84f6fe9b563076f98fefb00a61e1218f2ac57289:l10n_ar_stock/models/stock_picking.py
                 barcode = "".join(
                     [
+<<<<<<< c687cdd09c02b4b33a84d3250f4dceeb9d0f0d1a:l10n_ar_stock_ux/models/stock_picking.py
                         str(rec.picking_type_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
                         "%03d" % int(rec.document_type_id.code),
                         "%05d" % pos_number,
                         rec.l10n_ar_cai_data.get("cai_authorization_code"),
+||||||| 733ebe4ded31fe8cec09707db9857997758260d1:l10n_ar_stock/models/stock_picking.py
+                        str(rec.book_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
+                        "%03d" % int(rec.book_id.document_type_id.code),
+                        "%05d" % pos_number,
+                        rec.book_id.l10n_ar_cai,
+=======
+                        str(rec.book_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
+                        "%03d" % int(rec.book_id.document_type_id.code),
+                        "%05d" % int(pos_number),
+                        rec.book_id.l10n_ar_cai,
+>>>>>>> 84f6fe9b563076f98fefb00a61e1218f2ac57289:l10n_ar_stock/models/stock_picking.py
                         cae_due,
                     ]
                 )
