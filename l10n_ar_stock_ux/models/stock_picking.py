@@ -425,8 +425,8 @@ class StockPicking(models.Model):
 
     def _parse_arba_response(self, response_content):
         root = ET.fromstring(response_content)
-        process = root.find(".//procesado") and root.find(".//procesado").text == "SI"
-        if process:
+        procesado = root.find(".//procesado")
+        if procesado is not None and procesado.text == "SI":
             try:
                 return {
                     "procesado": root.find(".//procesado").text,
