@@ -95,6 +95,18 @@ class StockPicking(models.Model):
             return "l10n_ar_stock_ux.report_delivery_document"
         return report_xml_id
 
+    def _l10n_ar_get_copies_list(self):
+        """Leyendas de las copias con las que se imprime el comprobante, según su tipo de operación.
+        Sin copias devuelve [""] para que el reporte igual imprima el original, sin leyenda."""
+        self.ensure_one()
+        copies = self.picking_type_id.l10n_ar_copies
+        is_email = "force_email" in self.env.context or "default_subject" in self.env.context
+        if is_email or not copies:
+            return [""]
+        if copies == "triplicado":
+            return ["ORIGINAL", "DUPLICADO", "TRIPLICADO"]
+        return ["ORIGINAL", "DUPLICADO"]
+
     @api.depends("l10n_ar_cai_data")
     def _compute_cai_data(self):
         for rec in self:

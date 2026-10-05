@@ -12,6 +12,7 @@
                 <field name="auto_assign_delivery_guide" invisible="not l10n_ar_document_type_id"/>
                 <field name="report_partner_id" invisible="not l10n_ar_document_type_id"/>
                 <field name="report_signature_section" invisible="not l10n_ar_document_type_id"/>
+                <field name="l10n_ar_copies" invisible="country_code != 'AR' or code not in ('outgoing', 'internal')"/>
             </field>
         </field>
     </record>
