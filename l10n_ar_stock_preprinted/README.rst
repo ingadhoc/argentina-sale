@@ -46,7 +46,7 @@ Qué agrega
 * Numeración: al generar la guía de remito en un tipo preimpreso, se renderiza el
   comprobante de entrega, se cuentan las **hojas (páginas) que se imprimen** y se
   asignan tantos números consecutivos como hojas, separados por coma y sin datos
-  de CAI. Si el reporte está configurado con duplicado/triplicado, el conteo corre
+  de CAI. Si el tipo de operación está configurado con duplicado/triplicado, el conteo corre
   sobre una sola copia: el juego de copias consume un solo número por hoja.
 * Reporte: una vez generada la guía, el remito se imprime sin encabezado, sin
   número y sin CAI (ya vienen en el papel). Antes de generarla se imprime como el

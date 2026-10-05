@@ -12,8 +12,9 @@
     </record>
 
     <template id="report_deliveryslip" inherit_id="stock.report_deliveryslip">
-        <t t-foreach="docs" position="replace">
-            <t t-foreach="l10n_ar_copies_list" t-as="copy_type">
+        <!-- copies come from each picking's operation type, so they go inside the docs loop -->
+        <t t-call="stock.report_delivery_document" position="replace">
+            <t t-foreach="o._l10n_ar_get_copies_list()" t-as="copy_type">
                 <t>$0</t>
             </t>
         </t>

@@ -1,6 +1,6 @@
 {
     "name": "Remitos, COT y demas ajustes de stock para Argentina",
-    "version": "19.0.1.11.0",
+    "version": "19.0.1.12.0",
     "category": "Localization/Argentina",
     "sequence": 14,
     "author": "ADHOC SA",
@@ -26,6 +26,7 @@
         "views/product_template_views.xml",
         "views/uom_uom_views.xml",
         "views/stock_lot_views.xml",
+        "views/ir_actions_report_views.xml",
         "views/report_deliveryslip.xml",
         "views/report_invoice.xml",
         "views/picking_templates.xml",
