@@ -3,3 +3,4 @@
 # directory
 ##############################################################################
 from . import test_create_invoices
+from . import test_perception_recompute
