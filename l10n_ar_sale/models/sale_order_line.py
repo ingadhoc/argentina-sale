@@ -137,7 +137,7 @@ class SaleOrderLine(models.Model):
         super()._compute_tax_id()
 
         for rec in self.with_context(tz="America/Argentina/Buenos_Aires").filtered(
-            "order_id.fiscal_position_id.l10n_ar_tax_ids"
+            lambda x: not x.display_type and x.order_id.fiscal_position_id.l10n_ar_tax_ids
         ):
             date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.order_id.date_order))
             rec.tax_id += rec.order_id.fiscal_position_id._l10n_ar_add_taxes(

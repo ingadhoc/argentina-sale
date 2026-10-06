@@ -3,3 +3,4 @@
 # directory
 ##############################################################################
 from . import test_credit_note_reference
+from . import test_perception_recompute

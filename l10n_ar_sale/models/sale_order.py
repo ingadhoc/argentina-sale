@@ -161,8 +161,10 @@ class SaleOrder(models.Model):
             new_taxes = rec.fiscal_position_id._l10n_ar_add_taxes(rec.partner_id, rec.company_id, date, "perception")
             for line in rec.order_line:
                 to_unlink = line.tax_id.filtered(lambda x: x.tax_group_id in fp_tax_groups)
-                if to_unlink._origin != new_taxes:
-                    line.tax_id = (line.tax_id - to_unlink) | new_taxes
+                # sections and notes only lose the perceptions they may still carry
+                target_taxes = self.env["account.tax"] if line.display_type else new_taxes
+                if to_unlink._origin != target_taxes:
+                    line.tax_id = (line.tax_id - to_unlink) | target_taxes
 
     def _create_delivery_line(self, carrier, price_unit):
         """Al agregar el envío, el módulo delivery solo aplica map_tax() de la posición fiscal,
