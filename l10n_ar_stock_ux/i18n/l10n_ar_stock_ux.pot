@@ -347,8 +347,7 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.res_config_settings_view_form
 msgid ""
-"Indique la clave COT utilizada para generación de remito electrónico / COT. "
-"Puede probarla intentando subir cualquier archivo en este"
+"Indique la clave COT utilizada para generación de remito electrónico / COT."
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -646,4 +645,68 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.res_config_settings_view_form
 msgid "link"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid ""
+"Could not connect with the credentials of %(company)s (CUIT %(vat)s). ARBA "
+"answered: %(arba_message)s"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/res_company.py:0
+msgid "Could not connect to ARBA COT: %s"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid "The credentials of %(company)s (CUIT %(vat)s) are valid."
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid ""
+"Check that the CUIT is the one of the COT key and that the key matches upper "
+"and lower case."
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid "ARBA COT - %s"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/res_company.py:0
+msgid "Unexpected ARBA COT response. Status: %(status)s. Message: %(msg)s"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid "production"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid "testing"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.res_config_settings_view_form
+msgid "Check COT credentials"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.res_config_settings_view_form
+msgid ""
+"Checks the company CUIT and COT key against ARBA, on the testing or "
+"production environment according to this database."
 msgstr ""

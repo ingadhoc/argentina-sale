@@ -378,8 +378,7 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.res_config_settings_view_form
 msgid ""
-"Indique la clave COT utilizada para generación de remito electrónico / COT. "
-"Puede probarla intentando subir cualquier archivo en este"
+"Indique la clave COT utilizada para generación de remito electrónico / COT."
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -698,6 +697,75 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.res_config_settings_view_form
 msgid "link"
 msgstr ""
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid ""
+"Could not connect with the credentials of %(company)s (CUIT %(vat)s). ARBA "
+"answered: %(arba_message)s"
+msgstr ""
+"No se pudo conectar con las credenciales de %(company)s (CUIT %(vat)s). ARBA "
+"respondió: %(arba_message)s"
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/res_company.py:0
+msgid "Could not connect to ARBA COT: %s"
+msgstr "No se pudo conectar con ARBA COT: %s"
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid "The credentials of %(company)s (CUIT %(vat)s) are valid."
+msgstr "Las credenciales de %(company)s (CUIT %(vat)s) están OK."
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid ""
+"Check that the CUIT is the one of the COT key and that the key matches upper "
+"and lower case."
+msgstr "Revise que el CUIT sea el de la clave COT y que la clave respete mayúsculas "
+"y minúsculas."
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid "ARBA COT - %s"
+msgstr "COT ARBA - %s"
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/res_company.py:0
+msgid "Unexpected ARBA COT response. Status: %(status)s. Message: %(msg)s"
+msgstr "Respuesta inesperada de ARBA COT. Estado: %(status)s. Mensaje: %(msg)s"
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid "production"
+msgstr "producción"
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/wizards/res_config_settings.py:0
+msgid "testing"
+msgstr "testing"
+
+#. module: l10n_ar_stock_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.res_config_settings_view_form
+msgid "Check COT credentials"
+msgstr "Verificar credenciales COT"
+
+#. module: l10n_ar_stock_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.res_config_settings_view_form
+msgid ""
+"Checks the company CUIT and COT key against ARBA, on the testing or "
+"production environment according to this database."
+msgstr ""
+"Verifica el CUIT de la compañía y la clave COT contra ARBA, en el ambiente "
+"de testing o de producción según esta base."
 
 #~ msgid ""
 #~ "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are "
