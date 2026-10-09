@@ -1,7 +1,9 @@
+from io import BytesIO
 from unittest.mock import patch
 
 from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
+from odoo.tools.pdf import PdfFileWriter
 
 
 class TestVoucherPrintMode(TransactionCase):
@@ -134,3 +136,28 @@ class TestVoucherPrintMode(TransactionCase):
             self.picking._get_name_delivery_report("stock.report_delivery_document"),
             "l10n_ar_stock_ux.report_delivery_document",
         )
+
+    def test_preprinted_sheets_ignore_operation_type_copies(self):
+        """El juego de copias consume un solo número por hoja: un tipo en triplicado imprime el
+        comprobante tres veces pero numera una sola hoja."""
+        self.picking.company_id.country_id = self.env.ref("base.ar")
+        self.picking.partner_id = self.env["res.partner"].create({"name": "Cliente remito test"})
+        self.picking_type.l10n_ar_copies = "triplicado"
+        rendered_bodies = []
+
+        def fake_wkhtmltopdf(self_report, bodies, *args, **kwargs):
+            # one blank page per body: each copy of the voucher is its own body
+            rendered_bodies.append(len(bodies))
+            writer = PdfFileWriter()
+            for __ in bodies:
+                writer.add_blank_page(width=595, height=842)
+            stream = BytesIO()
+            writer.write(stream)
+            return stream.getvalue()
+
+        # force_report_rendering: sin eso, en tests Odoo devuelve el HTML y nunca llama a
+        # wkhtmltopdf, que es el paso que arma las páginas que se cuentan.
+        with patch.object(type(self.env["ir.actions.report"]), "_run_wkhtmltopdf", fake_wkhtmltopdf):
+            sheets = self.picking.with_context(force_report_rendering=True)._l10n_ar_count_preprinted_sheets()
+        self.assertEqual(rendered_bodies, [3], "el comprobante tendría que salir tres veces")
+        self.assertEqual(sheets, 1)

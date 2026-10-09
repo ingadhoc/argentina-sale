@@ -17,23 +17,20 @@ class TestL10nArStockUxDeliveryReport(TransactionCase):
         super().setUpClass()
         cls.env.company.country_id = cls.env.ref("base.ar")
         cls.document_type = cls.env.ref("l10n_ar.dc_r_r")
-        cls.picking_type = cls.env["stock.picking.type"].create(
-            {
-                "name": "Remito test reporte",
-                "sequence_code": "TESTREPREM",
-                "code": "outgoing",
-                "company_id": cls.env.company.id,
-                "warehouse_id": cls.env["stock.warehouse"]
-                .search([("company_id", "=", cls.env.company.id)], limit=1)
-                .id,
-                "l10n_ar_document_type_id": cls.document_type.id,
-                # tipo autoimpreso normal: Odoo imprime el CAI, así que va configurado
-                "l10n_ar_cai_authorization_code": "12345678901234",
-                "l10n_ar_cai_expiration_date": "2030-12-31",
-                "l10n_ar_sequence_number_start": "00000001",
-                "l10n_ar_sequence_number_end": "00000999",
-            }
-        )
+        cls.picking_type_vals = {
+            "name": "Remito test reporte",
+            "sequence_code": "TESTREPREM",
+            "code": "outgoing",
+            "company_id": cls.env.company.id,
+            "warehouse_id": cls.env["stock.warehouse"].search([("company_id", "=", cls.env.company.id)], limit=1).id,
+            "l10n_ar_document_type_id": cls.document_type.id,
+            # tipo autoimpreso normal: Odoo imprime el CAI, así que va configurado
+            "l10n_ar_cai_authorization_code": "12345678901234",
+            "l10n_ar_cai_expiration_date": "2030-12-31",
+            "l10n_ar_sequence_number_start": "00000001",
+            "l10n_ar_sequence_number_end": "00000999",
+        }
+        cls.picking_type = cls.env["stock.picking.type"].create(cls.picking_type_vals)
         product = cls.env["product.product"].create({"name": "Producto reporte test", "type": "consu"})
         cls.picking = cls.env["stock.picking"].create(
             {
@@ -131,3 +128,51 @@ class TestL10nArStockUxDeliveryReport(TransactionCase):
         self._number_picking()
         html = self._render()
         self.assertIn(b"12345678901234", html)
+
+    def _create_picking(self, picking_type):
+        return self.env["stock.picking"].create(
+            {
+                "picking_type_id": picking_type.id,
+                "partner_id": self.picking.partner_id.id,
+                "location_id": self.env.ref("stock.stock_location_stock").id,
+                "location_dest_id": self.env.ref("stock.stock_location_customers").id,
+            }
+        )
+
+    def test_copies_from_operation_type(self):
+        """Un tipo en triplicado imprime las tres leyendas; uno sin copias, solo el original."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        html = self._render()
+        self.assertEqual(
+            [html.count(legend) for legend in (b"ORIGINAL", b"DUPLICADO", b"TRIPLICADO")],
+            [1, 1, 1],
+        )
+        self.picking_type.l10n_ar_copies = False
+        self.assertFalse(b"DUPLICADO" in self._render())
+
+    def test_copies_per_picking_when_printing_together(self):
+        """Remitos de tipos distintos impresos juntos salen cada uno con sus copias."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        picking_types = self.env["stock.picking.type"].create(
+            [
+                dict(self.picking_type_vals, sequence_code="TESTREPDUP", l10n_ar_copies="duplicado"),
+                dict(self.picking_type_vals, sequence_code="TESTREPNONE"),
+            ]
+        )
+        pickings = self.picking | self._create_picking(picking_types[0]) | self._create_picking(picking_types[1])
+        html = self.env["ir.actions.report"]._render_qweb_html("stock.action_report_delivery", pickings.ids)[0]
+        self.assertEqual(
+            [html.count(legend) for legend in (b"ORIGINAL", b"DUPLICADO", b"TRIPLICADO")],
+            [2, 2, 1],
+        )
+
+    def test_copies_not_printed_by_email(self):
+        """Al mandar el remito por email sale una sola copia, sin leyendas."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        self.assertEqual(self.picking.with_context(default_subject="Remito")._l10n_ar_get_copies_list(), [""])
+        html = (
+            self.env["ir.actions.report"]
+            .with_context(force_email=True)
+            ._render_qweb_html("stock.action_report_delivery", self.picking.ids)[0]
+        )
+        self.assertFalse(b"DUPLICADO" in html)

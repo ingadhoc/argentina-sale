@@ -18,6 +18,7 @@ Integración del módulo de stock a requerimientos argentinos
 #. Implementacion de la generación del COT via Web Service y se suma al remito
 #. Número de despacho en lotes
 #. Crea Talonarios de Remitos en caso de que no exista
+#. Copias del remito (duplicado y triplicado) configurables por tipo de operación
 
 Sobre COT
 ---------
