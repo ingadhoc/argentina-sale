@@ -140,6 +140,6 @@ class SaleOrderLine(models.Model):
             "order_id.fiscal_position_id.l10n_ar_tax_ids"
         ):
             date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.order_id.date_order))
-            rec.tax_id += rec.order_id.fiscal_position_id._l10n_ar_add_taxes(
+            rec.tax_id += rec.order_id._l10n_ar_delivery_fiscal_position()._l10n_ar_add_taxes(
                 rec.order_partner_id, rec.company_id, date, "perception"
             )
