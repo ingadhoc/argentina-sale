@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Un único reporte aeroo para todos los talonarios del cliente. La plantilla no está fija
+         acá: tml_source = 'parser' hace que aeroo se la pida al parser_model, que la lee del tipo
+         de operación del remito que se está imprimiendo (ver report_delivery_preprinted.py).
+
+         No lleva binding_model_id a propósito: no queremos una segunda entrada en el menú
+         Imprimir. Al reporte se llega reemplazando al comprobante de entrega cuando corresponde
+         (ver models/ir_actions_report.py), así el cliente sigue imprimiendo desde donde siempre.
+
+         Al venir de un módulo el reporte tiene external id propio, así que no cuenta como
+         personalización de la base, que es lo que sí pasaba cuando cada cliente se armaba su
+         propio reporte aeroo a mano. -->
+    <record id="report_delivery_preprinted_aeroo" model="ir.actions.report">
+        <field name="name">Remito Preimpreso</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">aeroo</field>
+        <field name="report_name">l10n_ar_stock_preprinted_aeroo.report_delivery_preprinted</field>
+        <field name="parser_model">report.l10n_ar_preprinted_aeroo</field>
+        <field name="tml_source">parser</field>
+        <field name="in_format">oo-odt</field>
+        <field name="out_format" ref="report_aeroo.report_mimetypes_pdf_odt"/>
+    </record>
+</odoo>

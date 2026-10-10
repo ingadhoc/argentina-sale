@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- La plantilla del talonario y sus renglones por hoja son configuración del tipo de
+         operación, al lado del Modo de Impresión del Remito que las gobierna: solo tienen sentido
+         en preimpreso, porque en autoimpreso Odoo imprime el comprobante completo. -->
+    <record id="view_picking_type_form_preprinted_aeroo" model="ir.ui.view">
+        <field name="name">stock.picking.type.form.preprinted.aeroo</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="l10n_ar_stock_preprinted.view_picking_type_form_preprinted"/>
+        <field name="arch" type="xml">
+            <field name="l10n_ar_voucher_print_mode" position="after">
+                <field name="l10n_ar_preprinted_template_filename" invisible="1"/>
+                <field name="l10n_ar_preprinted_template"
+                       filename="l10n_ar_preprinted_template_filename"
+                       invisible="not l10n_ar_document_type_id or l10n_ar_voucher_print_mode != 'preprinted'"/>
+                <field name="l10n_ar_preprinted_lines_per_sheet"
+                       required="l10n_ar_preprinted_template"
+                       invisible="not l10n_ar_document_type_id or l10n_ar_voucher_print_mode != 'preprinted' or not l10n_ar_preprinted_template"/>
+            </field>
+        </field>
+    </record>
+</odoo>
