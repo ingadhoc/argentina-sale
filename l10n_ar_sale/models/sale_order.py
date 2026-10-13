@@ -160,9 +160,21 @@ class SaleOrder(models.Model):
             date = fields.Date.to_date(fields.Datetime.context_timestamp(rec, rec.date_order))
             new_taxes = rec.fiscal_position_id._l10n_ar_add_taxes(rec.partner_id, rec.company_id, date, "perception")
             for line in rec.order_line:
+<<<<<<< 1fa79a4098cf0ab27e4de21c7ef1a76d87411b32
                 to_unlink = line.tax_ids.filtered(lambda x: x.tax_group_id in fp_tax_groups)
                 if to_unlink._origin != new_taxes:
                     line.tax_ids = (line.tax_ids - to_unlink) | new_taxes
+||||||| 08469e7565375946385ba6959ed0899041a2f517
+                to_unlink = line.tax_id.filtered(lambda x: x.tax_group_id in fp_tax_groups)
+                if to_unlink._origin != new_taxes:
+                    line.tax_id = (line.tax_id - to_unlink) | new_taxes
+=======
+                to_unlink = line.tax_id.filtered(lambda x: x.tax_group_id in fp_tax_groups)
+                # sections and notes only lose the perceptions they may still carry
+                target_taxes = self.env["account.tax"] if line.display_type else new_taxes
+                if to_unlink._origin != target_taxes:
+                    line.tax_id = (line.tax_id - to_unlink) | target_taxes
+>>>>>>> b13a286b56d6b6e736d04283a2767564ad633acc
 
     def _create_delivery_line(self, carrier, price_unit):
         """Al agregar el envío, el módulo delivery solo aplica map_tax() de la posición fiscal,
