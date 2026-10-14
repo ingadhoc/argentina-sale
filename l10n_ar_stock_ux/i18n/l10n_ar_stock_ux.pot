@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 13:55+0000\n"
-"PO-Revision-Date: 2026-08-20 13:55+0000\n"
+"POT-Creation-Date: 2026-10-14 13:31+0000\n"
+"PO-Revision-Date: 2026-10-14 13:31+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -102,6 +102,11 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.report_delivery_document
 msgid "Aclaración"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_stock_picking_type__l10n_ar_copies
+msgid "Agregar Duplicado/Triplicado"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
@@ -224,6 +229,14 @@ msgid "Contacto para Encabezado"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
+#: model:ir.model.fields,help:l10n_ar_stock_ux.field_stock_picking_type__l10n_ar_copies
+msgid ""
+"Copias con las que se imprime el comprobante de entrega de este tipo de "
+"operación, además del original. Vacío, se imprime solo el original. Al "
+"enviarlo por email sale siempre una sola copia."
+msgstr ""
+
+#. module: l10n_ar_stock_ux
 #: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_arba_cot_wizard__create_uid
 msgid "Created by"
 msgstr ""
@@ -283,6 +296,16 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
 msgid "Document type has no validator, code or letter configured (Id: %s"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#: model:ir.model.fields.selection,name:l10n_ar_stock_ux.selection__stock_picking_type__l10n_ar_copies__duplicado
+msgid "Duplicado"
+msgstr ""
+
+#. module: l10n_ar_stock_ux
+#: model:ir.model.fields.selection,name:l10n_ar_stock_ux.selection__stock_picking_type__l10n_ar_copies__triplicado
+msgid "Duplicado y Triplicado"
 msgstr ""
 
 #. module: l10n_ar_stock_ux
