@@ -104,9 +104,13 @@ class SaleOrder(models.Model):
         Para solventar decimos si tenemos facturas que usan documentos y que no tienen un tipo de documento, intentamos
         computarlo y asignarlo, esto aplica para cuando generamos una factura desde una orden de venta o suscripcion"""
         # the invoice button is hidden by invoice_status, a condition only the browser evaluates:
-        # a form left open keeps showing it and invoices again an order that has nothing left
-        nothing_to_invoice = self.filtered(lambda order: order.invoice_status not in ("to invoice", "upselling"))
-        if nothing_to_invoice:
+        # a form left open keeps showing it and invoices again an order that has nothing left.
+        # "no" is also the fallback status, so it only blocks when there are no invoiceable lines
+        nothing_to_invoice = self.filtered(
+            lambda order: order.invoice_status == "invoiced"
+            or (order.invoice_status == "no" and not order._get_invoiceable_lines(final))
+        )
+        if nothing_to_invoice and self.env.context.get("raise_if_nothing_to_invoice", True):
             raise UserError(
                 self.env._(
                     "There is nothing left to invoice on: %s. Reload the order before invoicing.",
