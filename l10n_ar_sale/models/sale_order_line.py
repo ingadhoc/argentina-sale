@@ -101,6 +101,22 @@ class SaleOrderLine(models.Model):
             line.report_price_net = report_price_net
             line.report_tax_id = not_included_taxes
 
+    def _get_report_price_unit(self):
+        """Report unit price (with or without VAT), computed on the whole line so it is not
+        rounded per unit: sale_ux converts it to the product unit."""
+        self.ensure_one()
+        if not self.product_uom_qty:
+            return self.report_price_unit
+        order = self.order_id
+        if order.vat_discriminated:
+            taxes, key = self.tax_ids, "total_excluded"
+        else:
+            taxes, key = self.tax_ids.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code), "total_included"
+        res = taxes.with_context(round_base=False).compute_all(
+            self.price_unit * self.product_uom_qty, order.currency_id, 1.0, self.product_id, order.partner_shipping_id
+        )
+        return res[key] / self.product_uom_qty
+
     @api.model_create_multi
     def create(self, vals):
         rec = super(SaleOrderLine, self).create(vals)
