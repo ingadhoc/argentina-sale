@@ -131,3 +131,136 @@ class TestL10nArStockUxDeliveryReport(TransactionCase):
         self._number_picking()
         html = self._render()
         self.assertIn(b"12345678901234", html)
+<<<<<<< 2e47d3ffb243cf36146f0c0d5f08298b09458388
+||||||| 63d17e55d672a96530e10ced812b2f1821c3c97b
+
+    def _create_picking(self, picking_type):
+        return self.env["stock.picking"].create(
+            {
+                "picking_type_id": picking_type.id,
+                "partner_id": self.picking.partner_id.id,
+                "location_id": self.env.ref("stock.stock_location_stock").id,
+                "location_dest_id": self.env.ref("stock.stock_location_customers").id,
+            }
+        )
+
+    def test_copies_from_operation_type(self):
+        """Un tipo en triplicado imprime las tres leyendas; uno sin copias, solo el original."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        html = self._render()
+        self.assertEqual(
+            [html.count(legend) for legend in (b"ORIGINAL", b"DUPLICADO", b"TRIPLICADO")],
+            [1, 1, 1],
+        )
+        self.picking_type.l10n_ar_copies = False
+        self.assertFalse(b"DUPLICADO" in self._render())
+
+    def test_copies_per_picking_when_printing_together(self):
+        """Remitos de tipos distintos impresos juntos salen cada uno con sus copias."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        picking_types = self.env["stock.picking.type"].create(
+            [
+                dict(self.picking_type_vals, sequence_code="TESTREPDUP", l10n_ar_copies="duplicado"),
+                dict(self.picking_type_vals, sequence_code="TESTREPNONE"),
+            ]
+        )
+        pickings = self.picking | self._create_picking(picking_types[0]) | self._create_picking(picking_types[1])
+        html = self.env["ir.actions.report"]._render_qweb_html("stock.action_report_delivery", pickings.ids)[0]
+        self.assertEqual(
+            [html.count(legend) for legend in (b"ORIGINAL", b"DUPLICADO", b"TRIPLICADO")],
+            [2, 2, 1],
+        )
+
+    def test_copies_not_printed_by_email(self):
+        """Al mandar el remito por email sale una sola copia, sin leyendas."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        self.assertEqual(self.picking.with_context(default_subject="Remito")._l10n_ar_get_copies_list(), [""])
+        html = (
+            self.env["ir.actions.report"]
+            .with_context(force_email=True)
+            ._render_qweb_html("stock.action_report_delivery", self.picking.ids)[0]
+        )
+        self.assertFalse(b"DUPLICADO" in html)
+=======
+
+    def _create_picking(self, picking_type):
+        return self.env["stock.picking"].create(
+            {
+                "picking_type_id": picking_type.id,
+                "partner_id": self.picking.partner_id.id,
+                "location_id": self.env.ref("stock.stock_location_stock").id,
+                "location_dest_id": self.env.ref("stock.stock_location_customers").id,
+            }
+        )
+
+    def test_copies_from_operation_type(self):
+        """Un tipo en triplicado imprime las tres leyendas; uno sin copias, solo el original."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        html = self._render()
+        self.assertEqual(
+            [html.count(legend) for legend in (b"ORIGINAL", b"DUPLICADO", b"TRIPLICADO")],
+            [1, 1, 1],
+        )
+        self.picking_type.l10n_ar_copies = False
+        self.assertFalse(b"DUPLICADO" in self._render())
+
+    def test_copies_per_picking_when_printing_together(self):
+        """Remitos de tipos distintos impresos juntos salen cada uno con sus copias."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        picking_types = self.env["stock.picking.type"].create(
+            [
+                dict(self.picking_type_vals, sequence_code="TESTREPDUP", l10n_ar_copies="duplicado"),
+                dict(self.picking_type_vals, sequence_code="TESTREPNONE"),
+            ]
+        )
+        pickings = self.picking | self._create_picking(picking_types[0]) | self._create_picking(picking_types[1])
+        html = self.env["ir.actions.report"]._render_qweb_html("stock.action_report_delivery", pickings.ids)[0]
+        self.assertEqual(
+            [html.count(legend) for legend in (b"ORIGINAL", b"DUPLICADO", b"TRIPLICADO")],
+            [2, 2, 1],
+        )
+
+    def test_copies_not_printed_by_email(self):
+        """Al mandar el remito por email sale una sola copia, sin leyendas."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        self.assertEqual(self.picking.with_context(default_subject="Remito")._l10n_ar_get_copies_list(), [""])
+        html = (
+            self.env["ir.actions.report"]
+            .with_context(force_email=True)
+            ._render_qweb_html("stock.action_report_delivery", self.picking.ids)[0]
+        )
+        self.assertFalse(b"DUPLICADO" in html)
+
+    def _create_done_picking_with_lots(self, dispatch_numbers):
+        """Entrega validada de un producto con lote: un lote por despacho de la lista."""
+        product = self.env["product.product"].create(
+            {"name": "Producto importado test", "type": "consu", "is_storable": True, "tracking": "lot"}
+        )
+        stock_location = self.env.ref("stock.stock_location_stock")
+        for i, dispatch_number in enumerate(dispatch_numbers):
+            lot = self.env["stock.lot"].create(
+                {"name": f"LOTE-TEST-{i}", "product_id": product.id, "dispatch_number": dispatch_number}
+            )
+            self.env["stock.quant"]._update_available_quantity(product, stock_location, 1.0, lot_id=lot)
+        picking = self._create_picking(self.picking_type)
+        picking.write({"move_ids": [(0, 0, {"product_id": product.id, "product_uom_qty": len(dispatch_numbers)})]})
+        picking.action_confirm()
+        picking.action_assign()
+        picking.move_ids.picked = True
+        picking.button_validate()
+        self.assertEqual(picking.state, "done")
+        return picking
+
+    def test_dispatch_numbers_printed_once_and_sorted(self):
+        """Lotes de dos despachos: salen los dos, ordenados y sin repetir, igual que en la factura."""
+        picking = self._create_done_picking_with_lots(["DESP-B", "DESP-A", "DESP-A"])
+        html = self.env["ir.actions.report"]._render_qweb_html("stock.action_report_delivery", picking.ids)[0]
+        self.assertIn(b"Despachos Involucrados: DESP-A, DESP-B", html)
+        self.assertEqual(html.count(b"DESP-A"), 1)
+
+    def test_dispatch_numbers_not_printed_without_dispatch(self):
+        """Lotes sin despacho: el remito no imprime la línea."""
+        picking = self._create_done_picking_with_lots([False])
+        html = self.env["ir.actions.report"]._render_qweb_html("stock.action_report_delivery", picking.ids)[0]
+        self.assertFalse(b"Despachos Involucrados" in html)
+>>>>>>> 8b88f07e13fcab0235cd8bc7b4e6a120e8d9b8a4
