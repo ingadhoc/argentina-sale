@@ -176,3 +176,36 @@ class TestL10nArStockUxDeliveryReport(TransactionCase):
             ._render_qweb_html("stock.action_report_delivery", self.picking.ids)[0]
         )
         self.assertFalse(b"DUPLICADO" in html)
+
+    def _create_done_picking_with_lots(self, dispatch_numbers):
+        """Entrega validada de un producto con lote: un lote por despacho de la lista."""
+        product = self.env["product.product"].create(
+            {"name": "Producto importado test", "type": "consu", "is_storable": True, "tracking": "lot"}
+        )
+        stock_location = self.env.ref("stock.stock_location_stock")
+        for i, dispatch_number in enumerate(dispatch_numbers):
+            lot = self.env["stock.lot"].create(
+                {"name": f"LOTE-TEST-{i}", "product_id": product.id, "dispatch_number": dispatch_number}
+            )
+            self.env["stock.quant"]._update_available_quantity(product, stock_location, 1.0, lot_id=lot)
+        picking = self._create_picking(self.picking_type)
+        picking.write({"move_ids": [(0, 0, {"product_id": product.id, "product_uom_qty": len(dispatch_numbers)})]})
+        picking.action_confirm()
+        picking.action_assign()
+        picking.move_ids.picked = True
+        picking.button_validate()
+        self.assertEqual(picking.state, "done")
+        return picking
+
+    def test_dispatch_numbers_printed_once_and_sorted(self):
+        """Lotes de dos despachos: salen los dos, ordenados y sin repetir, igual que en la factura."""
+        picking = self._create_done_picking_with_lots(["DESP-B", "DESP-A", "DESP-A"])
+        html = self.env["ir.actions.report"]._render_qweb_html("stock.action_report_delivery", picking.ids)[0]
+        self.assertIn(b"Despachos Involucrados: DESP-A, DESP-B", html)
+        self.assertEqual(html.count(b"DESP-A"), 1)
+
+    def test_dispatch_numbers_not_printed_without_dispatch(self):
+        """Lotes sin despacho: el remito no imprime la línea."""
+        picking = self._create_done_picking_with_lots([False])
+        html = self.env["ir.actions.report"]._render_qweb_html("stock.action_report_delivery", picking.ids)[0]
+        self.assertFalse(b"Despachos Involucrados" in html)
