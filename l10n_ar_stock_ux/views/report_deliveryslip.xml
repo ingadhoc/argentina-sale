@@ -187,6 +187,9 @@
         </div>
 
         <table name="stock_move_line_table" position="after">
+            <p t-if="o.state == 'done' and any(x.sudo().lot_id.dispatch_number for x in o.move_line_ids)" name="dispatch">
+                <span t-out="'Despachos Involucrados: ' + ', '.join(sorted(set(o.sudo().move_line_ids.lot_id.filtered('dispatch_number').mapped('dispatch_number'))))"/>
+            </p>
             <t t-if="o.picking_type_id.report_signature_section and o.l10n_ar_afip_barcode">
                 <hr style="border-top: 1px solid #000000; margin: 24px 0 4px 0;"/>
                 <strong>Recibí conforme:</strong>
