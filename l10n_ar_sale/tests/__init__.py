@@ -3,4 +3,5 @@
 # directory
 ##############################################################################
 from . import test_create_invoices
+from . import test_perception_base_minimum_threshold
 from . import test_perception_recompute
