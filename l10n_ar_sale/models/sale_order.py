@@ -29,6 +29,13 @@ class SaleOrder(models.Model):
                 or False
             )
 
+    def _action_confirm(self):
+        # The stored totals are the reference of the perceptions of a confirmed order (see
+        # account.tax._l10n_ar_get_perceptions_below_base_threshold): compute them again with
+        # the current threshold, as the quotation ones may be outdated.
+        self.env.add_to_compute(self._fields["amount_tax"], self)
+        return super()._action_confirm()
+
     def _compute_tax_totals(self):
         super()._compute_tax_totals()
         # discriminamos o no impuestos solo en pdf y portal. En backend siempre los mostramos. Para esto evaluamos:
