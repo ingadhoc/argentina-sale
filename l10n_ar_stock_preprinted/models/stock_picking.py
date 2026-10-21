@@ -3,10 +3,6 @@ from io import BytesIO
 from odoo import fields, models
 from odoo.tools.pdf import PdfReader
 
-# copias que agrega el reporte según ir.actions.report.l10n_ar_copies (l10n_ar_ux):
-# cada copia repite TODAS las páginas del comprobante
-COPIES_BY_L10N_AR_COPIES = {"duplicado": 2, "triplicado": 3}
-
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
@@ -28,8 +24,8 @@ class StockPicking(models.Model):
         la que sale en papel.
 
         El PDF trae el comprobante repetido tantas veces como copias tenga configurado el
-        reporte (original / duplicado / triplicado), y el juego de copias consume UN solo
-        número por hoja, así que contamos únicamente las páginas de una copia."""
+        tipo de operación (original / duplicado / triplicado), y el juego de copias consume
+        UN solo número por hoja, así que contamos únicamente las páginas de una copia."""
         self.ensure_one()
         report = self.env.ref("stock.action_report_delivery")
         # Renderizamos con sudo y con el contexto l10n_ar_counting:
@@ -46,7 +42,7 @@ class StockPicking(models.Model):
         report = report.sudo().with_context(l10n_ar_counting=True)
         pdf_content, _dummy = report._render_qweb_pdf(report.id, self.ids)
         pdf_reader = PdfReader(BytesIO(pdf_content))
-        copies = COPIES_BY_L10N_AR_COPIES.get(report.l10n_ar_copies, 1)
+        copies = len(self._l10n_ar_get_copies_list())
         return max(1, len(pdf_reader.pages) // copies)
 
     def l10n_ar_action_create_delivery_guide(self):

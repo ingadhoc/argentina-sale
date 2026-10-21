@@ -30,6 +30,16 @@ class StockPickingType(models.Model):
         help="Al validar una transferencia de este tipo, se asignará automáticamente un número de remito.",
         default=False,
     )
+    l10n_ar_copies = fields.Selection(
+        selection=[
+            ("duplicado", "Duplicado"),
+            ("triplicado", "Duplicado y Triplicado"),
+        ],
+        string="Agregar Duplicado/Triplicado",
+        help="Copias con las que se imprime el comprobante de entrega de este tipo de operación, "
+        "además del original. Vacío, se imprime solo el original. Al enviarlo por email sale "
+        "siempre una sola copia.",
+    )
 
     @api.onchange("l10n_ar_sequence_number_start")
     def _add_padding_to_sequence_number_start(self):
