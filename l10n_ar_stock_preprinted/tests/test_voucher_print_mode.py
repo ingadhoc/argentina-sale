@@ -71,6 +71,52 @@ class TestVoucherPrintMode(TransactionCase):
         )
         self.assertEqual(self.picking_type.l10n_ar_voucher_print_mode, "autoprinted")
 
+    def test_autoprinted_remito_x_allows_empty_cai(self):
+        """El CAI aplica solo a los remitos clase R: un Remito X autoimpreso se guarda, se
+        numera y queda sin datos de CAI."""
+        picking_type = self.env["stock.picking.type"].create(
+            {
+                "name": "Remito X test",
+                "sequence_code": "TESTREMX",
+                "code": "outgoing",
+                "company_id": self.env.company.id,
+                "warehouse_id": self.picking_type.warehouse_id.id,
+                "l10n_ar_document_type_id": self.env.ref("l10n_ar.dc_remito_x").id,
+                "l10n_ar_voucher_print_mode": "autoprinted",
+            }
+        )
+        self.assertFalse(picking_type.l10n_ar_cai_required)
+        picking_type.l10n_ar_delivery_sequence_prefix = "00098"
+        picking = self.env["stock.picking"].create(
+            {
+                "picking_type_id": picking_type.id,
+                "location_id": self.env.ref("stock.stock_location_stock").id,
+                "location_dest_id": self.env.ref("stock.stock_location_customers").id,
+                "move_ids": [(0, 0, {"product_id": self.product.id, "product_uom_qty": 1.0})],
+            }
+        )
+        picking.l10n_ar_action_create_delivery_guide()
+        self.assertEqual(picking.l10n_ar_delivery_guide_number, "00098-00000001")
+        self.assertFalse(picking.l10n_ar_cai_data["cai_authorization_code"])
+
+    def test_cai_required_only_on_autoprinted_remito_r(self):
+        self.assertFalse(self.picking_type.l10n_ar_cai_required, "preimpreso: el CAI viene en el papel")
+        self.picking_type.l10n_ar_document_type_id = self.env.ref("l10n_ar.dc_remito_x")
+        self.picking_type.l10n_ar_voucher_print_mode = "autoprinted"
+        self.assertFalse(self.picking_type.l10n_ar_cai_required, "el Remito X no lleva CAI")
+        self.picking_type.write(
+            {
+                "l10n_ar_document_type_id": self.document_type.id,
+                "l10n_ar_cai_authorization_code": "12345678901234",
+                "l10n_ar_cai_expiration_date": "2030-12-31",
+                "l10n_ar_sequence_number_start": "00000001",
+                "l10n_ar_sequence_number_end": "00000999",
+            }
+        )
+        self.assertTrue(self.picking_type.l10n_ar_cai_required, "el Remito R autoimpreso lleva CAI")
+        with self.assertRaises(ValidationError):
+            self.picking_type.l10n_ar_cai_authorization_code = False
+
     def test_print_mode_default_is_autoprinted(self):
         """Los tipos de operación existentes y los nuevos siguen siendo autoimpresos."""
         picking_type = self.env["stock.picking.type"].create(
