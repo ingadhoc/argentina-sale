@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 19:47+0000\n"
-"PO-Revision-Date: 2026-09-08 19:47+0000\n"
+"POT-Creation-Date: 2026-10-22 20:12+0000\n"
+"PO-Revision-Date: 2026-10-22 20:12+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,8 +20,16 @@ msgstr ""
 #: model:ir.model.fields,help:l10n_ar_stock_preprinted.field_stock_picking_type__l10n_ar_voucher_print_mode
 msgid ""
 "Argentina: cómo se imprime el remito de este tipo de operación.\n"
-"* Autoimpreso: Odoo imprime el comprobante completo (encabezado, número y CAI), por lo que el CAI, su vencimiento y el rango autorizado son obligatorios.\n"
+"* Autoimpreso: Odoo imprime el comprobante completo (encabezado, número y CAI). En el Remito R el CAI, su vencimiento y el rango autorizado son obligatorios; el Remito X no lleva CAI.\n"
 "* Preimpreso: el papel de imprenta ya trae encabezado, numeración y CAI, así que Odoo solo imprime el contenido variable y numera según las hojas que se consumen. El CAI no se carga acá porque viene impreso en el papel."
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model.fields,help:l10n_ar_stock_preprinted.field_stock_picking_type__l10n_ar_cai_required
+msgid ""
+"Argentina: el CAI, su vencimiento y el rango son obligatorios. Solo en "
+"remitos clase R autoimpresos: el X no lleva CAI y en el preimpreso viene "
+"impreso en el papel."
 msgstr ""
 
 #. module: l10n_ar_stock_preprinted
@@ -39,6 +47,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_stock_preprinted/models/stock_picking_type.py:0
 msgid "CAI Expiration Date"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model.fields,field_description:l10n_ar_stock_preprinted.field_stock_picking_type__l10n_ar_cai_required
+msgid "CAI Required"
 msgstr ""
 
 #. module: l10n_ar_stock_preprinted
