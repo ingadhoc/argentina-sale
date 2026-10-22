@@ -85,6 +85,26 @@ class TestL10nArStockUxDeliveryReport(TransactionCase):
         )
         self._assert_no_cai_block()
 
+    def test_renders_with_expiration_date_without_authorization_code(self):
+        """Remito X: no lleva CAI, pero el tipo de operación puede tener cargado el
+        vencimiento. Sin CAI no hay código de barras ni vencimiento impreso."""
+        self.picking.write(
+            {
+                "l10n_ar_delivery_guide_number": "00099-00000001",
+                "l10n_ar_cai_data": {
+                    "document_type_id": self.env.ref("l10n_ar.dc_remito_x").id,
+                    "cai_authorization_code": False,
+                    "cai_expiration_date": "2030-12-31",
+                    "sequence_number_start": False,
+                    "sequence_number_end": False,
+                },
+            }
+        )
+        self.assertFalse(self.picking.l10n_ar_afip_barcode)
+        html = self._render()
+        self.assertFalse(b"CAI:" in html, "el pie no tiene que imprimir el bloque de CAI")
+        self.assertFalse(b"CAI Due Date" in html, "sin CAI no se imprime su vencimiento")
+
     def _number_picking(self):
         """Deja el picking numerado como un remito autoimpreso ya emitido."""
         self.picking.write(

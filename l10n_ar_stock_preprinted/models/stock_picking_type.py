@@ -14,12 +14,29 @@ class StockPickingType(models.Model):
         default="autoprinted",
         required=True,
         help="Argentina: cómo se imprime el remito de este tipo de operación.\n"
-        "* Autoimpreso: Odoo imprime el comprobante completo (encabezado, número y CAI), por lo que "
-        "el CAI, su vencimiento y el rango autorizado son obligatorios.\n"
+        "* Autoimpreso: Odoo imprime el comprobante completo (encabezado, número y CAI). En el "
+        "Remito R el CAI, su vencimiento y el rango autorizado son obligatorios; el Remito X no "
+        "lleva CAI.\n"
         "* Preimpreso: el papel de imprenta ya trae encabezado, numeración y CAI, así que Odoo solo "
         "imprime el contenido variable y numera según las hojas que se consumen. El CAI no se carga "
         "acá porque viene impreso en el papel.",
     )
+    l10n_ar_cai_required = fields.Boolean(
+        string="CAI Required",
+        compute="_compute_l10n_ar_cai_required",
+        help="Argentina: el CAI, su vencimiento y el rango son obligatorios. Solo en remitos clase R"
+        " autoimpresos: el X no lleva CAI y en el preimpreso viene impreso en el papel.",
+    )
+
+    # === COMPUTE METHODS === #
+
+    @api.depends("l10n_ar_voucher_print_mode", "l10n_ar_document_type_id.l10n_ar_letter")
+    def _compute_l10n_ar_cai_required(self):
+        for picking_type in self:
+            picking_type.l10n_ar_cai_required = (
+                picking_type.l10n_ar_voucher_print_mode == "autoprinted"
+                and picking_type.l10n_ar_document_type_id.l10n_ar_letter == "R"
+            )
 
     # === CONSTRAINT METHODS === #
 
@@ -32,12 +49,10 @@ class StockPickingType(models.Model):
         "l10n_ar_sequence_number_end",
     )
     def _constrains_l10n_ar_voucher_print_mode(self):
-        """El CAI y su rango son obligatorios en autoimpreso porque Odoo los imprime. La vista ya los
-        pide, pero el modo también puede setearse por import / data / ORM, donde el required de la
-        vista no aplica."""
-        for picking_type in self.filtered(
-            lambda x: x.l10n_ar_document_type_id and x.l10n_ar_voucher_print_mode == "autoprinted"
-        ):
+        """El CAI y su rango son obligatorios en el Remito R autoimpreso porque Odoo los imprime. La
+        vista ya los pide, pero el modo también puede setearse por import / data / ORM, donde el
+        required de la vista no aplica."""
+        for picking_type in self.filtered("l10n_ar_cai_required"):
             missing = [
                 name
                 for name, value in (
