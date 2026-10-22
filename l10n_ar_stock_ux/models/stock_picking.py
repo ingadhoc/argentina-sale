@@ -127,6 +127,7 @@ class StockPicking(models.Model):
                 rec.l10n_ar_delivery_guide_number
                 and rec.document_type_id
                 and rec.l10n_ar_cai_data
+                and rec.l10n_ar_cai_data.get("cai_authorization_code")
                 and rec.l10n_ar_cai_expiration_date
             ):
                 cae_due = rec.l10n_ar_cai_expiration_date.strftime("%Y%m%d")

@@ -30,8 +30,9 @@ El modo es una **decisión explícita** del tipo de operación, en el campo
 
 * **Autoimpreso** (default) — Odoo imprime el comprobante completo (encabezado,
   número y CAI) y numera con un único número por transferencia (comportamiento
-  estándar de ``l10n_ar_stock``). El CAI, su vencimiento y el rango autorizado
-  son obligatorios porque Odoo los imprime.
+  estándar de ``l10n_ar_stock``). En el Remito R el CAI, su vencimiento y el
+  rango autorizado son obligatorios porque Odoo los imprime; el Remito X no lleva
+  CAI.
 * **Preimpreso** — el papel de imprenta ya trae encabezado, numeración y CAI.
   Odoo solo imprime el contenido variable y numera según las hojas que se
   consumen. El CAI, su vencimiento y el rango se ocultan y dejan de pedirse.
@@ -41,7 +42,7 @@ Qué agrega
 
 * ``stock.picking.type.l10n_ar_voucher_print_mode`` (selección, almacenada):
   *Autoimpreso* / *Preimpreso*. Lo usan la vista, el reporte y la numeración.
-  Una restricción de servidor exige CAI, vencimiento y rango cuando el modo es
+  Una restricción de servidor exige CAI, vencimiento y rango en el Remito R
   autoimpreso (la vista sola no cubre imports ni escrituras por ORM).
 * Numeración: al generar la guía de remito en un tipo preimpreso, se renderiza el
   comprobante de entrega, se cuentan las **hojas (páginas) que se imprimen** y se

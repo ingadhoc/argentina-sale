@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- El Modo de Impresión del Remito gobierna el CAI: en autoimpreso (default) la vista
-         queda como la del core (CAI, vencimiento y rango visibles y obligatorios, porque
-         Odoo los imprime); al pasar a preimpreso esos campos se ocultan y dejan de pedirse
-         porque ya vienen impresos en el papel de la imprenta. El prefijo (punto de venta) y
-         el próximo número siguen visibles en los dos modos: en preimpreso la secuencia tiene
-         que arrancar en el número de la primera hoja del talonario. -->
+    <!-- El CAI, su vencimiento y el rango se muestran y son obligatorios solo en el Remito R
+         autoimpreso, porque Odoo los imprime: el X no lleva CAI y en preimpreso vienen
+         impresos en el papel de la imprenta. En un X autoimpreso, un campo que ya tiene valor
+         se sigue mostrando para poder limpiarlo, porque el core lo copia al remito igual. El
+         prefijo (punto de venta) y el próximo número siguen visibles en los dos modos: en
+         preimpreso la secuencia tiene que arrancar en el número de la primera hoja del
+         talonario. -->
     <record id="view_picking_type_form_preprinted" model="ir.ui.view">
         <field name="name">stock.picking.type.form.preprinted</field>
         <field name="model">stock.picking.type</field>
@@ -14,24 +15,25 @@
             <!-- Modo de impresión: solo relevante en tipos de operación con remito -->
             <field name="l10n_ar_document_type_id" position="after">
                 <field name="l10n_ar_voucher_print_mode" invisible="not l10n_ar_document_type_id"/>
+                <field name="l10n_ar_cai_required" invisible="1"/>
             </field>
-            <!-- CAI: visible y obligatorio solo en autoimpreso -->
+            <!-- CAI: visible y obligatorio en el Remito R autoimpreso; en el X, solo si tiene valor -->
             <field name="l10n_ar_cai_authorization_code" position="attributes">
-                <attribute name="required">l10n_ar_document_type_id and l10n_ar_voucher_print_mode == 'autoprinted'</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted'</attribute>
+                <attribute name="required">l10n_ar_cai_required</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted' or not (l10n_ar_cai_required or l10n_ar_cai_authorization_code)</attribute>
             </field>
             <!-- Vencimiento y rango del CAI: mismo criterio que el CAI -->
             <field name="l10n_ar_cai_expiration_date" position="attributes">
-                <attribute name="required">l10n_ar_document_type_id and l10n_ar_voucher_print_mode == 'autoprinted'</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted'</attribute>
+                <attribute name="required">l10n_ar_cai_required</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted' or not (l10n_ar_cai_required or l10n_ar_cai_expiration_date)</attribute>
             </field>
             <field name="l10n_ar_sequence_number_start" position="attributes">
-                <attribute name="required">l10n_ar_document_type_id and l10n_ar_voucher_print_mode == 'autoprinted'</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted'</attribute>
+                <attribute name="required">l10n_ar_cai_required</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted' or not (l10n_ar_cai_required or l10n_ar_sequence_number_start)</attribute>
             </field>
             <field name="l10n_ar_sequence_number_end" position="attributes">
-                <attribute name="required">l10n_ar_document_type_id and l10n_ar_voucher_print_mode == 'autoprinted'</attribute>
-                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted'</attribute>
+                <attribute name="required">l10n_ar_cai_required</attribute>
+                <attribute name="invisible">not l10n_ar_document_type_id or l10n_ar_voucher_print_mode == 'preprinted' or not (l10n_ar_cai_required or l10n_ar_sequence_number_end)</attribute>
             </field>
         </field>
     </record>
