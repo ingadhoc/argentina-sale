@@ -26,7 +26,7 @@ class StockPicking(models.Model):
         self.ensure_one()
         # ir.ui.view is readable only by base.group_system; we only need its key.
         custom_view = self.picking_type_id.sudo().l10n_ar_delivery_report_view_id
-        if custom_view and self.l10n_ar_voucher_print_mode == "preprinted":
+        if custom_view and self._l10n_ar_prints_on_preprinted_paper():
             return custom_view.key
         return super()._get_name_delivery_report(report_xml_id)
 
@@ -38,6 +38,14 @@ class StockPicking(models.Model):
         independientes a propósito — un talonario puede necesitar otra geometría y el comprobante
         estándar adentro, o una plantilla propia que entre en la hoja de siempre."""
         self.ensure_one()
-        if self.l10n_ar_voucher_print_mode == "preprinted":
+        if self._l10n_ar_prints_on_preprinted_paper():
             return self.picking_type_id.l10n_ar_delivery_paperformat_id
         return self.env["report.paperformat"]
+
+    def _l10n_ar_prints_on_preprinted_paper(self):
+        """Same condition as pre_printed_report in l10n_ar_stock_preprinted: without a number the
+        picking prints as the standard voucher, except while counting sheets before numbering."""
+        self.ensure_one()
+        return self.l10n_ar_voucher_print_mode == "preprinted" and bool(
+            self.l10n_ar_delivery_guide_number or self.env.context.get("l10n_ar_counting")
+        )
