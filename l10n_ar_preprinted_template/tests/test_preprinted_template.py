@@ -29,6 +29,7 @@ class TestPreprintedTemplate(TransactionCase):
                 "picking_type_id": cls.picking_type.id,
                 "location_id": cls.env.ref("stock.stock_location_stock").id,
                 "location_dest_id": cls.env.ref("stock.stock_location_customers").id,
+                "l10n_ar_delivery_guide_number": "00001-00000001",
             }
         )
         # plantilla desde cero: el caso "formato", dibujada para la grilla del papel
@@ -92,6 +93,28 @@ class TestPreprintedTemplate(TransactionCase):
         self.assertEqual(
             self.picking._get_name_delivery_report("stock.report_delivery_document"),
             "l10n_ar_stock_ux.report_delivery_document",
+        )
+
+    def test_custom_template_is_ignored_without_number(self):
+        """Sin número asignado el remito preimpreso sale como el comprobante estándar, igual que el
+        encabezado de l10n_ar_stock_preprinted: la plantilla propia no lo reemplaza."""
+        self.picking_type.l10n_ar_delivery_report_view_id = self.custom_view
+        self.picking.l10n_ar_delivery_guide_number = False
+        self.assertEqual(
+            self.picking._get_name_delivery_report("stock.report_delivery_document"),
+            "l10n_ar_stock_ux.report_delivery_document",
+        )
+
+    def test_custom_template_applies_while_counting_sheets(self):
+        """El conteo de hojas corre antes de numerar y tiene que paginar con la plantilla propia,
+        para que los números coincidan con las hojas que después se imprimen."""
+        self.picking_type.l10n_ar_delivery_report_view_id = self.custom_view
+        self.picking.l10n_ar_delivery_guide_number = False
+        self.assertEqual(
+            self.picking.with_context(l10n_ar_counting=True)._get_name_delivery_report(
+                "stock.report_delivery_document"
+            ),
+            self.custom_view.key,
         )
 
     def test_custom_template_is_ignored_in_autoprinted(self):
