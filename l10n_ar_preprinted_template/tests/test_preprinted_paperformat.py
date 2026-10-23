@@ -80,6 +80,7 @@ class TestPreprintedPaperformat(TransactionCase):
                 "picking_type_id": picking_type.id,
                 "location_id": cls.env.ref("stock.stock_location_stock").id,
                 "location_dest_id": cls.env.ref("stock.stock_location_customers").id,
+                "l10n_ar_delivery_guide_number": "00001-00000001",
             }
         )
 
@@ -113,6 +114,22 @@ class TestPreprintedPaperformat(TransactionCase):
         """Sin formato propio no cambia nada: manda el del reporte (o el de la compañía)."""
         self.picking_type.l10n_ar_delivery_paperformat_id = False
         self.assertEqual(self._resolved_paperformat(self.picking.ids), self.report.get_paperformat())
+
+    def test_without_number_keeps_the_report_one(self):
+        """Sin número asignado el remito sale como el comprobante estándar, así que tampoco se
+        aplica la geometría del talonario."""
+        self.picking.l10n_ar_delivery_guide_number = False
+        self.assertFalse(self.picking._l10n_ar_preprinted_paperformat())
+        self.assertEqual(self._resolved_paperformat(self.picking.ids), self.report.get_paperformat())
+
+    def test_counting_sheets_uses_own_paperformat(self):
+        """El conteo de hojas antes de numerar usa la geometría del talonario, o los números no
+        coincidirían con las hojas que se imprimen."""
+        self.picking.l10n_ar_delivery_guide_number = False
+        self.assertEqual(
+            self.picking.with_context(l10n_ar_counting=True)._l10n_ar_preprinted_paperformat(),
+            self.paperformat,
+        )
 
     def test_autoprinted_ignores_own_paperformat(self):
         """En autoimpreso el remito sale sobre papel en blanco: las medidas de la base son las
