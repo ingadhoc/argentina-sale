@@ -42,13 +42,12 @@ msgstr ""
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
-#: model_terms:ir.ui.view,arch_db:l10n_ar_sale.sale_order_portal_content
-msgid "<span>% VAT</span>"
+msgid "<span>SubTotal</span>"
 msgstr ""
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
-msgid "<span>SubTotal</span>"
+msgid "<span>Taxes</span>"
 msgstr ""
 
 #. module: l10n_ar_sale
