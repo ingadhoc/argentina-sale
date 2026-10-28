@@ -8,22 +8,17 @@
             <attribute name="t-field">line.report_price_subtotal</attribute>
         </xpath>
 
-        <xpath expr="//span[contains(@t-out, 'line.tax_ids')]" position="attributes">
-            <attribute name="t-out">', '.join(map(lambda x: (x.invoice_label or x.name), line.report_tax_id))</attribute>
+        <!-- the taxes column follows vat_discriminated, so rows keyed on display_taxes must too -->
+        <t t-set="display_taxes" position="after">
+            <t t-set="display_taxes" t-value="sale_order.vat_discriminated"/>
+        </t>
+
+        <xpath expr="//td[@name='td_product_taxes']/span" position="attributes">
+            <attribute name="t-out">', '.join(line.tax_ids.mapped('tax_label'))</attribute>
         </xpath>
-
-
-        <!-- use column vat instead of taxes and only if vat discriminated -->
-
-        <th t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}" position="replace">
-            <th id="taxes_header" t-if="sale_order.vat_discriminated" t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"><span>% VAT</span></th>
-        </th>
-        <!-- use column vat instead of taxes and only list vat taxes-->
-        <td t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}" position="replace">
-            <td id="taxes" t-if="sale_order.vat_discriminated" t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
-                <span t-out="', '.join(map(lambda x: (x.invoice_label or x.name), line.tax_ids.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)))"/>
-            </td>
-        </td>
+        <xpath expr="//td[@name='td_section_group_taxes']/span" position="attributes">
+            <attribute name="t-out">', '.join(section_line['tax_labels'])</attribute>
+        </xpath>
 
     </template>
 

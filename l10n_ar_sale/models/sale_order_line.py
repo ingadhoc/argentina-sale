@@ -175,3 +175,26 @@ class SaleOrderLine(models.Model):
             rec.tax_ids += rec.order_id.fiscal_position_id._l10n_ar_add_taxes(
                 rec.order_partner_id, rec.company_id, date, "perception"
             )
+
+    def _get_grouped_section_summary(self, display_taxes=True):
+        # use the report amounts, which include VAT when it is not discriminated
+        if self.company_id.country_code != "AR":
+            return super()._get_grouped_section_summary(display_taxes=display_taxes)
+        billable_lines = self.order_id.order_line.filtered(
+            lambda line: line.product_type != "combo" and self._is_line_in_section(line)
+        )
+        groups = billable_lines.grouped("tax_ids") if display_taxes else {self.env["account.tax"]: billable_lines}
+        return [
+            {
+                "tax_names": taxes.mapped("name"),
+                "tax_labels": taxes.mapped("tax_label"),
+                "price_subtotal": sum(lines.mapped("report_price_subtotal")),
+                "price_total": sum(lines.mapped("price_total")),
+            }
+            for taxes, lines in groups.items()
+        ]
+
+    def _get_section_totals(self, totals_field):
+        if totals_field == "price_subtotal" and self.company_id.country_code == "AR":
+            totals_field = "report_price_subtotal"
+        return super()._get_section_totals(totals_field)
