@@ -55,3 +55,16 @@ class TestArbaCotResponse(TransactionCase):
             with self.assertRaisesRegex(UserError, "1/7 El remito ya fue procesado con anterioridad"):
                 self.env["stock.picking"]._parse_arba_response(ARBA_ERROR_RESPONSE)
         self.assertIn("ya fue procesado con anterioridad", logs.output[0])
+
+    def test_cot_shared_down_the_fiscal_entity(self):
+        """A branch with the same CUIT and no COT key uses its parent's; one with another CUIT does not."""
+        cuit_type = self.env.ref("l10n_ar.it_cuit")
+        parent = self.env["res.company"].create({"name": "COT Parent", "arba_cot": "parent_cot"})
+        same_cuit = self.env["res.company"].create({"name": "COT Same CUIT", "parent_id": parent.id})
+        other_cuit = self.env["res.company"].create({"name": "COT Other CUIT", "parent_id": parent.id})
+        for company, cuit in ((parent, "30111111118"), (same_cuit, "30111111118"), (other_cuit, "30500010084")):
+            company.partner_id.write({"l10n_latam_identification_type_id": cuit_type.id, "vat": cuit})
+
+        self.assertEqual(same_cuit._get_arba_cot_request_data()["Password"], "parent_cot")
+        with self.assertRaisesRegex(UserError, "You must configure ARBA COT"):
+            other_cuit._get_arba_cot_request_data()

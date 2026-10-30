@@ -231,8 +231,10 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #: model:ir.model.fields,help:l10n_ar_stock_ux.field_res_company__arba_cot
 #: model:ir.model.fields,help:l10n_ar_stock_ux.field_res_config_settings__arba_cot
-msgid "Clave para generación de remito electŕonico"
+msgid ""
+"ARBA key to generate the electronic delivery slip (COT). A branch with the same CUIT that leaves it empty uses the one of its parent company."
 msgstr ""
+"Clave de ARBA para generar el remito electrónico (COT). Una sucursal con el mismo CUIT que la deja vacía usa la de su empresa padre."
 
 #. module: l10n_ar_stock_ux
 #: model:ir.model,name:l10n_ar_stock_ux.model_res_company
@@ -694,8 +696,9 @@ msgstr ""
 #. module: l10n_ar_stock_ux
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/res_company.py:0
-msgid "You must configure ARBA COT on company %s"
-msgstr "Tiene que configurar COT de ARBA en la empresa %s"
+msgid "You must configure ARBA COT on company %s or on a parent company with the same CUIT"
+msgstr ""
+"Tiene que configurar COT de ARBA en la empresa %s o en una empresa padre con el mismo CUIT"
 
 #. module: l10n_ar_stock_ux
 #. odoo-python
