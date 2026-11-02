@@ -289,6 +289,11 @@ msgid "Delivery Guide No."
 msgstr "Nro. Remito."
 
 #. module: l10n_ar_stock_ux
+#: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_stock_picking_type__l10n_ar_document_type_id
+msgid "Delivery Guide Type"
+msgstr "Tipo de remito"
+
+#. module: l10n_ar_stock_ux
 #: model:ir.model.fields,help:l10n_ar_stock_ux.field_arba_cot_wizard__datetime_out
 msgid ""
 "Departure date. Must not be earlier than yesterday or more than 30 days in "
@@ -638,6 +643,16 @@ msgid "The ARBA nomenclature code must be exactly 6 numeric digits"
 msgstr ""
 "El código según nomenclador de ARBA debe ser exactamente de 6 dígitos "
 "numéricos"
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/stock_picking_type.py:0
+msgid ""
+"The CAI of the operation type %(operation_type)s is not valid: %(cai)s. It "
+"must contain exactly 14 digits."
+msgstr ""
+"El CAI del tipo de operación %(operation_type)s no es válido: %(cai)s. Debe "
+"tener exactamente 14 dígitos."
 
 #. module: l10n_ar_stock_ux
 #. odoo-python

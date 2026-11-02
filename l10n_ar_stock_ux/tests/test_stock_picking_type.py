@@ -1,5 +1,6 @@
 from lxml import etree
 from odoo.addons.l10n_ar.tests.common import TestArCommon
+from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 
 
@@ -202,3 +203,41 @@ class TestL10nArStockUxSharedSequence(TestArCommon):
         result = internal._onchange_l10n_ar_warn_shared_sequence()
 
         self.assertIsNone(result)
+
+    def test_cai_must_have_14_digits(self):
+        outgoing = self._create_picking_type(self.company_ri, "outgoing", "OUT-CAI")
+        self._configure_delivery_guide(outgoing, self.document_type_remito, "00040")
+        for cai in ("123465798+132465", "1234567890", "1234567890123A", "123456789012345"):
+            with self.subTest(cai=cai), self.assertRaises(ValidationError):
+                outgoing.l10n_ar_cai_authorization_code = cai
+        outgoing.l10n_ar_cai_authorization_code = "12345678901234"
+        self.assertEqual(outgoing.l10n_ar_cai_authorization_code, "12345678901234")
+
+    def test_cai_is_checked_on_create(self):
+        with self.assertRaises(ValidationError):
+            self.env["stock.picking.type"].create(
+                {
+                    "name": "Test outgoing bad CAI",
+                    "code": "outgoing",
+                    "company_id": self.company_ri.id,
+                    "sequence_code": "OUT-CAI-NEW",
+                    "l10n_ar_document_type_id": self.document_type_remito.id,
+                    "l10n_ar_cai_authorization_code": "ABC",
+                }
+            )
+
+    def test_legacy_invalid_cai_blocks_any_change(self):
+        """A CAI loaded before the check does not fail until the type is edited: then no
+        change can be saved until the CAI is fixed."""
+        outgoing = self._create_picking_type(self.company_ri, "outgoing", "OUT-LEGACY")
+        self._configure_delivery_guide(outgoing, self.document_type_remito, "00041")
+        self.env.cr.execute(
+            "UPDATE stock_picking_type SET l10n_ar_cai_authorization_code = %s WHERE id = %s",
+            ("1234567890", outgoing.id),
+        )
+        outgoing.invalidate_recordset(["l10n_ar_cai_authorization_code"])
+
+        with self.assertRaises(ValidationError):
+            outgoing.name = "Renamed"
+        outgoing.write({"name": "Renamed", "l10n_ar_cai_authorization_code": "12345678901234"})
+        self.assertEqual(outgoing.name, "Renamed")
