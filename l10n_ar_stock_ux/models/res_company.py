@@ -15,7 +15,8 @@ class ResCompany(models.Model):
 
     arba_cot = fields.Char(
         "Clave COT",
-        help="Clave para generación de remito electŕonico",
+        help="ARBA key to generate the electronic delivery slip (COT). A branch with the same CUIT that leaves it "
+        "empty uses the one of its parent company.",
     )
 
     @api.model
@@ -31,10 +32,15 @@ class ResCompany(models.Model):
     def _get_arba_cot_request_data(self):
         self.ensure_one()
 
-        if not self.arba_cot:
-            raise UserError(self.env._("You must configure ARBA COT on company %s", self.name))
+        arba_cot = self._l10n_ar_get_same_cuit_company_with("arba_cot").arba_cot
+        if not arba_cot:
+            raise UserError(
+                self.env._(
+                    "You must configure ARBA COT on company %s or on a parent company with the same CUIT", self.name
+                )
+            )
         user = self.partner_id.ensure_vat()
         return {
             "Usuario": user,
-            "Password": self.arba_cot,
+            "Password": arba_cot,
         }
