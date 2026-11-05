@@ -25,7 +25,7 @@ class TestArbaCotCredentials(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.company
-        cls.company.arba_cot = "Test2017"
+        cls.company.arba_cot = "dummy-cot-key"
         cls.company.partner_id.write(
             {
                 "country_id": cls.env.ref("base.ar").id,
@@ -59,7 +59,7 @@ class TestArbaCotCredentials(TransactionCase):
             },
         )
         self.assertEqual(post.call_args.args[0], self.company._get_arba_cot_login_url(environment_type))
-        self.assertEqual(post.call_args.kwargs["data"], {"Usuario": "30714295698", "Password": "Test2017"})
+        self.assertEqual(post.call_args.kwargs["data"], {"Usuario": "30714295698", "Password": "dummy-cot-key"})
 
     def test_invalid_key(self):
         result, _post = self._check(ARBA_KEY_INVALID_RESPONSE)
