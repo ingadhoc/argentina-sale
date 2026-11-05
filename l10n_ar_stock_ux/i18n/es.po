@@ -726,7 +726,8 @@ msgstr "Las credenciales de %(company)s (CUIT %(vat)s) están OK."
 msgid ""
 "Check that the CUIT is the one of the COT key and that the key matches upper "
 "and lower case."
-msgstr "Revise que el CUIT sea el de la clave COT y que la clave respete mayúsculas "
+msgstr ""
+"Revise que el CUIT sea el de la clave COT y que la clave respete mayúsculas "
 "y minúsculas."
 
 #. module: l10n_ar_stock_ux
