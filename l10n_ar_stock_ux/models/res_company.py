@@ -46,7 +46,8 @@ class ResCompany(models.Model):
 
         ARBA validates user and key before the file, so an empty file with an
         invalid name answers error 10 when the key is right and error 02 when
-        it is wrong. Return the ARBA error code, the environment and the message.
+        it is wrong. Return a dict with the ARBA error code and message, the
+        environment and the CUIT that was sent.
         """
         self.ensure_one()
         environment_type = self._get_environment_type()
@@ -72,5 +73,9 @@ class ResCompany(models.Model):
                     msg=res.text[:500],
                 )
             )
-        message = root.findtext(".//mensajeError") or ""
-        return code, environment_type, f"{message} ({code})"
+        return {
+            "code": code,
+            "message": root.findtext(".//mensajeError") or "",
+            "environment_type": environment_type,
+            "vat": request_data["Usuario"],
+        }
