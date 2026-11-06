@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from lxml import etree
 from odoo.addons.l10n_ar.tests.common import TestArCommon
 from odoo.exceptions import ValidationError
@@ -208,13 +210,13 @@ class TestL10nArStockUxSharedSequence(TestArCommon):
         outgoing = self._create_picking_type(self.company_ri, "outgoing", "OUT-CAI")
         self._configure_delivery_guide(outgoing, self.document_type_remito, "00040")
         for cai in ("123465798+132465", "1234567890", "1234567890123A", "123456789012345"):
-            with self.subTest(cai=cai), self.assertRaises(ValidationError):
+            with self.subTest(cai=cai), self.assertRaisesRegex(ValidationError, "14 digits"):
                 outgoing.l10n_ar_cai_authorization_code = cai
         outgoing.l10n_ar_cai_authorization_code = "12345678901234"
         self.assertEqual(outgoing.l10n_ar_cai_authorization_code, "12345678901234")
 
     def test_cai_is_checked_on_create(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaisesRegex(ValidationError, "14 digits"):
             self.env["stock.picking.type"].create(
                 {
                     "name": "Test outgoing bad CAI",
@@ -237,7 +239,24 @@ class TestL10nArStockUxSharedSequence(TestArCommon):
         )
         outgoing.invalidate_recordset(["l10n_ar_cai_authorization_code"])
 
-        with self.assertRaises(ValidationError):
+        with self.assertRaisesRegex(ValidationError, "14 digits"):
             outgoing.name = "Renamed"
         outgoing.write({"name": "Renamed", "l10n_ar_cai_authorization_code": "12345678901234"})
         self.assertEqual(outgoing.name, "Renamed")
+
+    def test_legacy_invalid_cai_does_not_block_upgrade_writes(self):
+        """While modules are installed or upgraded, a legacy CAI does not abort writes on
+        other fields, but a new invalid CAI is still rejected."""
+        outgoing = self._create_picking_type(self.company_ri, "outgoing", "OUT-UPGRADE")
+        self._configure_delivery_guide(outgoing, self.document_type_remito, "00042")
+        self.env.cr.execute(
+            "UPDATE stock_picking_type SET l10n_ar_cai_authorization_code = %s WHERE id = %s",
+            ("1234567890", outgoing.id),
+        )
+        outgoing.invalidate_recordset(["l10n_ar_cai_authorization_code"])
+
+        with patch.object(self.env.registry, "ready", False):
+            outgoing.name = "Renamed during upgrade"
+            self.assertEqual(outgoing.name, "Renamed during upgrade")
+            with self.assertRaisesRegex(ValidationError, "14 digits"):
+                outgoing.l10n_ar_cai_authorization_code = "ABC"

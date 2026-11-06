@@ -92,8 +92,10 @@ class StockPickingType(models.Model):
     def write(self, vals):
         res = super().write(vals)
         # Checked on any write, not only when the CAI changes, so that a type with a legacy
-        # invalid CAI cannot be saved until it is fixed.
-        self._l10n_ar_check_cai_authorization_code()
+        # invalid CAI cannot be saved until it is fixed. Not while the registry is loading,
+        # so that install and upgrade writes do not abort on legacy data.
+        if self.pool.ready or not vals.keys().isdisjoint(self._l10n_ar_cai_check_fields()):
+            self._l10n_ar_check_cai_authorization_code()
         if self.env.context.get("l10n_ar_stock_ux_skip_shared_sequence_sync"):
             return res
         shared_vals = {field: vals[field] for field in self._L10N_AR_SHARED_SEQUENCE_FIELDS if field in vals}
@@ -104,6 +106,10 @@ class StockPickingType(models.Model):
             if others:
                 others.with_context(l10n_ar_stock_ux_skip_shared_sequence_sync=True).write(shared_vals)
         return res
+
+    def _l10n_ar_cai_check_fields(self):
+        """Fields whose write checks the CAI format, also while modules are installed or upgraded."""
+        return {"l10n_ar_cai_authorization_code", "l10n_ar_document_type_id"}
 
     def _l10n_ar_cai_format_applies(self):
         """Picking types whose CAI is printed on the delivery guide (class R)."""
