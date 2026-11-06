@@ -117,6 +117,17 @@ class TestVoucherPrintMode(TransactionCase):
         with self.assertRaises(ValidationError):
             self.picking_type.l10n_ar_cai_authorization_code = False
 
+    def test_cai_format_not_checked_on_preprinted(self):
+        """En preimpreso el CAI no se ve en el formulario: uno viejo que no cumple no puede
+        trabar la edición del tipo de operación."""
+        self.env.cr.execute(
+            "UPDATE stock_picking_type SET l10n_ar_cai_authorization_code = %s WHERE id = %s",
+            ("1234567890", self.picking_type.id),
+        )
+        self.picking_type.invalidate_recordset(["l10n_ar_cai_authorization_code"])
+        self.picking_type.name = "Remito test renamed"
+        self.assertEqual(self.picking_type.name, "Remito test renamed")
+
     def test_print_mode_default_is_autoprinted(self):
         """Los tipos de operación existentes y los nuevos siguen siendo autoimpresos."""
         picking_type = self.env["stock.picking.type"].create(
