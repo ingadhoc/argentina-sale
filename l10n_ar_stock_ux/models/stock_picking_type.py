@@ -1,4 +1,7 @@
+import re
+
 from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class StockPickingType(models.Model):
@@ -10,7 +13,13 @@ class StockPickingType(models.Model):
         "l10n_ar_sequence_number_start",
         "l10n_ar_sequence_number_end",
     )
+    _L10N_AR_PREFIX_CHECK_FIELDS = (
+        "l10n_ar_document_type_id",
+        "l10n_ar_delivery_sequence_prefix",
+        "l10n_ar_sequence_id",
+    )
 
+    l10n_ar_document_type_id = fields.Many2one(string="Delivery Guide Type")
     report_partner_id = fields.Many2one(
         "res.partner",
         string="Contacto para Encabezado",
@@ -79,8 +88,22 @@ class StockPickingType(models.Model):
                 }
             }
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records._l10n_ar_check_cai_authorization_code()
+        records._l10n_ar_check_delivery_sequence_prefix()
+        return records
+
     def write(self, vals):
         res = super().write(vals)
+        # Checked on any write, not only when these fields change, so that a type with a
+        # legacy invalid CAI or prefix cannot be saved until it is fixed. Not while the registry
+        # is loading, so that install and upgrade writes do not abort on legacy data.
+        if self.pool.ready or not vals.keys().isdisjoint(self._l10n_ar_cai_check_fields()):
+            self._l10n_ar_check_cai_authorization_code()
+        if self.pool.ready or not vals.keys().isdisjoint(self._L10N_AR_PREFIX_CHECK_FIELDS):
+            self._l10n_ar_check_delivery_sequence_prefix()
         if self.env.context.get("l10n_ar_stock_ux_skip_shared_sequence_sync"):
             return res
         shared_vals = {field: vals[field] for field in self._L10N_AR_SHARED_SEQUENCE_FIELDS if field in vals}
@@ -91,6 +114,48 @@ class StockPickingType(models.Model):
             if others:
                 others.with_context(l10n_ar_stock_ux_skip_shared_sequence_sync=True).write(shared_vals)
         return res
+
+    def _l10n_ar_cai_check_fields(self):
+        """Fields whose write checks the CAI format, also while modules are installed or upgraded."""
+        return {"l10n_ar_cai_authorization_code", "l10n_ar_document_type_id"}
+
+    def _l10n_ar_cai_format_applies(self):
+        """Picking types whose CAI is printed on the delivery guide (class R)."""
+        return self.filtered(lambda pt: pt.l10n_ar_document_type_id.l10n_ar_letter == "R")
+
+    def _l10n_ar_check_cai_authorization_code(self):
+        for picking_type in self._l10n_ar_cai_format_applies():
+            cai = picking_type.l10n_ar_cai_authorization_code
+            if cai and not re.fullmatch(r"[0-9]{14}", cai):
+                raise ValidationError(
+                    _(
+                        "The CAI of the operation type %(operation_type)s is not valid: %(cai)s. "
+                        "It must contain exactly 14 digits.",
+                        operation_type=picking_type.display_name,
+                        cai=cai,
+                    )
+                )
+
+    def _l10n_ar_check_delivery_sequence_prefix(self):
+        for picking_type in self.filtered("l10n_ar_document_type_id"):
+            # the prefix lives on the sequence: without one there is no prefix to number with
+            prefix = picking_type.l10n_ar_sequence_id and picking_type.l10n_ar_delivery_sequence_prefix
+            if not prefix:
+                raise ValidationError(
+                    _(
+                        "The operation type %(operation_type)s needs a delivery guide prefix.",
+                        operation_type=picking_type.display_name,
+                    )
+                )
+            if len(prefix) > 5:
+                raise ValidationError(
+                    _(
+                        "The delivery guide prefix of the operation type %(operation_type)s is not "
+                        "valid: %(prefix)s. It must have up to 5 characters.",
+                        operation_type=picking_type.display_name,
+                        prefix=prefix,
+                    )
+                )
 
     def _l10n_ar_stock_ux_shared_sequence_picking_types(self):
         """Otros picking types que comparten l10n_ar_sequence_id con este (mismo CAI/talonario)."""

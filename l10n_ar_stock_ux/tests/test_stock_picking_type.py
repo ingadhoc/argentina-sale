@@ -1,5 +1,8 @@
+from unittest.mock import patch
+
 from lxml import etree
 from odoo.addons.l10n_ar.tests.common import TestArCommon
+from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 
 
@@ -202,3 +205,61 @@ class TestL10nArStockUxSharedSequence(TestArCommon):
         result = internal._onchange_l10n_ar_warn_shared_sequence()
 
         self.assertIsNone(result)
+
+    def test_cai_must_have_14_digits(self):
+        outgoing = self._create_picking_type(self.company_ri, "outgoing", "OUT-CAI")
+        self._configure_delivery_guide(outgoing, self.document_type_remito, "00040")
+        for cai in ("123465798+132465", "1234567890", "1234567890123A", "123456789012345"):
+            with self.subTest(cai=cai), self.assertRaisesRegex(ValidationError, "14 digits"):
+                outgoing.l10n_ar_cai_authorization_code = cai
+        outgoing.l10n_ar_cai_authorization_code = "12345678901234"
+        self.assertEqual(outgoing.l10n_ar_cai_authorization_code, "12345678901234")
+
+    def test_cai_is_checked_on_create(self):
+        with self.assertRaisesRegex(ValidationError, "14 digits"):
+            self.env["stock.picking.type"].create(
+                {
+                    "name": "Test outgoing bad CAI",
+                    "code": "outgoing",
+                    "company_id": self.company_ri.id,
+                    "sequence_code": "OUT-CAI-NEW",
+                    "l10n_ar_document_type_id": self.document_type_remito.id,
+                    "l10n_ar_cai_authorization_code": "ABC",
+                    "l10n_ar_cai_expiration_date": "2030-12-31",
+                    "l10n_ar_sequence_number_start": "00000001",
+                    "l10n_ar_sequence_number_end": "99999999",
+                }
+            )
+
+    def test_legacy_invalid_cai_blocks_any_change(self):
+        """A CAI loaded before the check does not fail until the type is edited: then no
+        change can be saved until the CAI is fixed."""
+        outgoing = self._create_picking_type(self.company_ri, "outgoing", "OUT-LEGACY")
+        self._configure_delivery_guide(outgoing, self.document_type_remito, "00041")
+        self.env.cr.execute(
+            "UPDATE stock_picking_type SET l10n_ar_cai_authorization_code = %s WHERE id = %s",
+            ("1234567890", outgoing.id),
+        )
+        outgoing.invalidate_recordset(["l10n_ar_cai_authorization_code"])
+
+        with self.assertRaisesRegex(ValidationError, "14 digits"):
+            outgoing.name = "Renamed"
+        outgoing.write({"name": "Renamed", "l10n_ar_cai_authorization_code": "12345678901234"})
+        self.assertEqual(outgoing.name, "Renamed")
+
+    def test_legacy_invalid_cai_does_not_block_upgrade_writes(self):
+        """While modules are installed or upgraded, a legacy CAI does not abort writes on
+        other fields, but a new invalid CAI is still rejected."""
+        outgoing = self._create_picking_type(self.company_ri, "outgoing", "OUT-UPGRADE")
+        self._configure_delivery_guide(outgoing, self.document_type_remito, "00042")
+        self.env.cr.execute(
+            "UPDATE stock_picking_type SET l10n_ar_cai_authorization_code = %s WHERE id = %s",
+            ("1234567890", outgoing.id),
+        )
+        outgoing.invalidate_recordset(["l10n_ar_cai_authorization_code"])
+
+        with patch.object(self.env.registry, "ready", False):
+            outgoing.name = "Renamed during upgrade"
+            self.assertEqual(outgoing.name, "Renamed during upgrade")
+            with self.assertRaisesRegex(ValidationError, "14 digits"):
+                outgoing.l10n_ar_cai_authorization_code = "ABC"

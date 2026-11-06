@@ -1,7 +1,7 @@
 from io import BytesIO
 from unittest.mock import patch
 
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests.common import TransactionCase
 from odoo.tools.pdf import PdfFileWriter
 
@@ -116,6 +116,25 @@ class TestVoucherPrintMode(TransactionCase):
         self.assertTrue(self.picking_type.l10n_ar_cai_required, "el Remito R autoimpreso lleva CAI")
         with self.assertRaises(ValidationError):
             self.picking_type.l10n_ar_cai_authorization_code = False
+
+    def test_cai_format_not_checked_on_preprinted(self):
+        """En preimpreso el CAI no se ve en el formulario: uno viejo que no cumple no puede
+        trabar la edición del tipo de operación."""
+        self.env.cr.execute(
+            "UPDATE stock_picking_type SET l10n_ar_cai_authorization_code = %s WHERE id = %s",
+            ("1234567890", self.picking_type.id),
+        )
+        self.picking_type.invalidate_recordset(["l10n_ar_cai_authorization_code"])
+        self.picking_type.name = "Remito test renamed"
+        self.assertEqual(self.picking_type.name, "Remito test renamed")
+
+    def test_preprinted_without_prefix_raises_clear_error(self):
+        """Sin prefijo no se numera: error claro en vez de números sin punto de venta."""
+        self.picking_type.l10n_ar_sequence_id.prefix = False
+        self.picking_type.invalidate_recordset(["l10n_ar_delivery_sequence_prefix"])
+        with self.assertRaisesRegex(UserError, "has no delivery guide prefix"):
+            self.picking.l10n_ar_action_create_delivery_guide()
+        self.assertFalse(self.picking.l10n_ar_delivery_guide_number)
 
     def test_print_mode_default_is_autoprinted(self):
         """Los tipos de operación existentes y los nuevos siguen siendo autoimpresos."""
