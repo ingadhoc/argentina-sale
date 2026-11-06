@@ -290,6 +290,7 @@ msgstr "Nro. Remito."
 
 #. module: l10n_ar_stock_ux
 #: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_stock_picking_type__l10n_ar_document_type_id
+#: model_terms:ir.ui.view,arch_db:l10n_ar_stock_ux.view_picking_type_form_inherit_l10n_ar_stock
 msgid "Delivery Guide Type"
 msgstr "Tipo de remito"
 
