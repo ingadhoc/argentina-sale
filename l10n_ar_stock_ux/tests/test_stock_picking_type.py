@@ -225,6 +225,9 @@ class TestL10nArStockUxSharedSequence(TestArCommon):
                     "sequence_code": "OUT-CAI-NEW",
                     "l10n_ar_document_type_id": self.document_type_remito.id,
                     "l10n_ar_cai_authorization_code": "ABC",
+                    "l10n_ar_cai_expiration_date": "2030-12-31",
+                    "l10n_ar_sequence_number_start": "00000001",
+                    "l10n_ar_sequence_number_end": "99999999",
                 }
             )
 
