@@ -1,7 +1,7 @@
 from io import BytesIO
 from unittest.mock import patch
 
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests.common import TransactionCase
 from odoo.tools.pdf import PdfFileWriter
 
@@ -129,6 +129,14 @@ class TestVoucherPrintMode(TransactionCase):
         with patch.object(self.env.registry, "ready", True):
             self.picking_type.name = "Remito test renamed"
         self.assertEqual(self.picking_type.name, "Remito test renamed")
+
+    def test_preprinted_without_prefix_raises_clear_error(self):
+        """Sin prefijo no se numera: error claro en vez de números sin punto de venta."""
+        self.picking_type.l10n_ar_sequence_id.prefix = False
+        self.picking_type.invalidate_recordset(["l10n_ar_delivery_sequence_prefix"])
+        with self.assertRaisesRegex(UserError, "has no delivery guide prefix"):
+            self.picking.l10n_ar_action_create_delivery_guide()
+        self.assertFalse(self.picking.l10n_ar_delivery_guide_number)
 
     def test_print_mode_default_is_autoprinted(self):
         """Los tipos de operación existentes y los nuevos siguen siendo autoimpresos."""
