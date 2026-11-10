@@ -93,8 +93,10 @@ class StockPickingType(models.Model):
         res = super().write(vals)
         # Checked on any write, not only when the CAI changes, so that a type with a legacy
         # invalid CAI cannot be saved until it is fixed. Not while the registry is loading,
-        # so that install and upgrade writes do not abort on legacy data.
-        if self.pool.ready or not vals.keys().isdisjoint(self._l10n_ar_cai_check_fields()):
+        # so that install and upgrade writes do not abort on legacy data, nor when the
+        # warehouse rewrites its operation types.
+        check_legacy = self.pool.ready and not self.env.context.get("l10n_ar_skip_legacy_checks")
+        if check_legacy or not vals.keys().isdisjoint(self._l10n_ar_cai_check_fields()):
             self._l10n_ar_check_cai_authorization_code()
         if self.env.context.get("l10n_ar_stock_ux_skip_shared_sequence_sync"):
             return res
