@@ -45,7 +45,7 @@ class StockPickingType(models.Model):
 
     def _l10n_ar_cai_format_applies(self):
         # In preprinted mode the CAI is hidden in the form, so it could not be fixed there.
-        return self.filtered("l10n_ar_cai_required")
+        return super()._l10n_ar_cai_format_applies().filtered("l10n_ar_cai_required")
 
     @api.constrains(
         "l10n_ar_voucher_print_mode",

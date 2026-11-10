@@ -125,7 +125,9 @@ class TestVoucherPrintMode(TransactionCase):
             ("1234567890", self.picking_type.id),
         )
         self.picking_type.invalidate_recordset(["l10n_ar_cai_authorization_code"])
-        self.picking_type.name = "Remito test renamed"
+        # at_install tests run while the registry is loading, when the check is skipped
+        with patch.object(self.env.registry, "ready", True):
+            self.picking_type.name = "Remito test renamed"
         self.assertEqual(self.picking_type.name, "Remito test renamed")
 
     def test_print_mode_default_is_autoprinted(self):
