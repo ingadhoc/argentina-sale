@@ -14,14 +14,14 @@
                             <label for="arba_cot" class="col-lg-4 o_light_label" string="Clave COT ARBA"/>
                             <div class="col-lg-8">
                                 <field name="arba_cot" password="True"/>
-                                <span class="fa fa-lg fa-building-o ms-1" title="Values set here are company-specific." groups="base.group_multi_company"/>
+                                <span class="oi oi-lg ms-1" data-icon="business" title="Values set here are company-specific." groups="base.group_multi_company"/>
                             </div>
                         </div>
                         <div class="text-muted">
                             Indique la clave COT utilizada para generación de remito electrónico / COT.
                         </div>
                         <div class="mt8">
-                            <button name="action_arba_cot_check_credentials" type="object" class="btn-link" icon="oi-arrow-right" string="Check COT credentials" help="Checks the company CUIT and COT key against ARBA, on the testing or production environment according to this database."/>
+                            <button name="action_arba_cot_check_credentials" type="object" class="btn-link" icon="east" string="Check COT credentials" help="Checks the company CUIT and COT key against ARBA, on the testing or production environment according to this database."/>
                         </div>
                     </div>
                 </setting>
