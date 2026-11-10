@@ -8,6 +8,9 @@
                 <attribute name="invisible">country_code != 'AR' or code not in ('outgoing', 'internal')</attribute>
                 <attribute name="string">Delivery Guide Type</attribute>
             </field>
+            <field name="l10n_ar_delivery_sequence_prefix" position="attributes">
+                <attribute name="required">l10n_ar_document_type_id</attribute>
+            </field>
             <field name="l10n_ar_sequence_number_end" position="after">
                 <field name="l10n_ar_sequence_id" groups="base.group_no_one" invisible="not l10n_ar_document_type_id"/>
                 <field name="auto_assign_delivery_guide" invisible="not l10n_ar_document_type_id"/>

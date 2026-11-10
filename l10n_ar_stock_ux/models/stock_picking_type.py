@@ -13,6 +13,11 @@ class StockPickingType(models.Model):
         "l10n_ar_sequence_number_start",
         "l10n_ar_sequence_number_end",
     )
+    _L10N_AR_PREFIX_CHECK_FIELDS = (
+        "l10n_ar_document_type_id",
+        "l10n_ar_delivery_sequence_prefix",
+        "l10n_ar_sequence_id",
+    )
 
     l10n_ar_document_type_id = fields.Many2one(string="Delivery Guide Type")
     report_partner_id = fields.Many2one(
@@ -87,17 +92,20 @@ class StockPickingType(models.Model):
     def create(self, vals_list):
         records = super().create(vals_list)
         records._l10n_ar_check_cai_authorization_code()
+        records._l10n_ar_check_delivery_sequence_prefix()
         return records
 
     def write(self, vals):
         res = super().write(vals)
-        # Checked on any write, not only when the CAI changes, so that a type with a legacy
-        # invalid CAI cannot be saved until it is fixed. Not while the registry is loading,
-        # so that install and upgrade writes do not abort on legacy data, nor when the
-        # warehouse rewrites its operation types.
+        # Checked on any write, not only when these fields change, so that a type with a
+        # legacy invalid CAI or prefix cannot be saved until it is fixed. Not while the registry
+        # is loading, so that install and upgrade writes do not abort on legacy data, nor when
+        # the warehouse rewrites its operation types.
         check_legacy = self.pool.ready and not self.env.context.get("l10n_ar_skip_legacy_checks")
         if check_legacy or not vals.keys().isdisjoint(self._l10n_ar_cai_check_fields()):
             self._l10n_ar_check_cai_authorization_code()
+        if check_legacy or not vals.keys().isdisjoint(self._L10N_AR_PREFIX_CHECK_FIELDS):
+            self._l10n_ar_check_delivery_sequence_prefix()
         if self.env.context.get("l10n_ar_stock_ux_skip_shared_sequence_sync"):
             return res
         shared_vals = {field: vals[field] for field in self._L10N_AR_SHARED_SEQUENCE_FIELDS if field in vals}
@@ -127,6 +135,27 @@ class StockPickingType(models.Model):
                         "It must contain exactly 14 digits.",
                         operation_type=picking_type.display_name,
                         cai=cai,
+                    )
+                )
+
+    def _l10n_ar_check_delivery_sequence_prefix(self):
+        for picking_type in self.filtered("l10n_ar_document_type_id"):
+            # the prefix lives on the sequence: without one there is no prefix to number with
+            prefix = picking_type.l10n_ar_sequence_id and picking_type.l10n_ar_delivery_sequence_prefix
+            if not prefix:
+                raise ValidationError(
+                    _(
+                        "The operation type %(operation_type)s needs a delivery guide prefix.",
+                        operation_type=picking_type.display_name,
+                    )
+                )
+            if len(prefix) > 5:
+                raise ValidationError(
+                    _(
+                        "The delivery guide prefix of the operation type %(operation_type)s is not "
+                        "valid: %(prefix)s. It must have up to 5 characters.",
+                        operation_type=picking_type.display_name,
+                        prefix=prefix,
                     )
                 )
 

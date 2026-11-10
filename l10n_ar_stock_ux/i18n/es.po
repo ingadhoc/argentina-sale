@@ -213,6 +213,39 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
+msgid ""
+"Cannot create the delivery guide: the operation type %(operation_type)s has "
+"no delivery guide prefix. Set it in the operation type."
+msgstr ""
+"No se puede crear el remito: el tipo de operación %(operation_type)s no "
+"tiene prefijo de remito. Cárguelo en el tipo de operación."
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
+msgid ""
+"Cannot create the delivery guide: the prefix %(prefix)s of the operation type "
+"%(operation_type)s has letters or symbols, and the barcode of an autoprinted "
+"Remito R only accepts numbers. Fix the prefix in the operation type."
+msgstr ""
+"No se puede crear el remito: el prefijo %(prefix)s del tipo de operación "
+"%(operation_type)s tiene letras o símbolos, y el código de barras del Remito R "
+"autoimpreso solo acepta números. Corrija el prefijo en el tipo de operación."
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
+msgid ""
+"Cannot get the COT of delivery guide %(number)s: the prefix has letters or "
+"symbols, and ARBA only accepts numbers. Fix the prefix in the operation type."
+msgstr ""
+"No se puede obtener el COT del remito %(number)s: el prefijo tiene letras o "
+"símbolos, y ARBA solo acepta números. Corrija el prefijo en el tipo de "
+"operación."
+
+#. module: l10n_ar_stock_ux
 #: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_res_company__arba_cot
 #: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_res_config_settings__arba_cot
 msgid "Clave COT"
@@ -632,6 +665,24 @@ msgid ""
 msgstr ""
 "El CAI del tipo de operación %(operation_type)s no es válido: %(cai)s. Debe "
 "tener exactamente 14 dígitos."
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/stock_picking_type.py:0
+msgid ""
+"The delivery guide prefix of the operation type %(operation_type)s is not "
+"valid: %(prefix)s. It must have up to 5 characters."
+msgstr ""
+"El prefijo de remito del tipo de operación %(operation_type)s no es válido: "
+"%(prefix)s. Debe tener hasta 5 caracteres."
+
+#. module: l10n_ar_stock_ux
+#. odoo-python
+#: code:addons/l10n_ar_stock_ux/models/stock_picking_type.py:0
+msgid ""
+"The operation type %(operation_type)s needs a delivery guide prefix."
+msgstr ""
+"El tipo de operación %(operation_type)s necesita un prefijo de remito."
 
 #. module: l10n_ar_stock_ux
 #. odoo-python
