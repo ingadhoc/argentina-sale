@@ -29,7 +29,6 @@ class TestArbaCotCredentials(TransactionCase):
         cls.company.partner_id.write(
             {
                 "country_id": cls.env.ref("base.ar").id,
-                "l10n_latam_identification_type_id": cls.env.ref("l10n_ar.it_cuit").id,
                 "vat": "30714295698",
             }
         )

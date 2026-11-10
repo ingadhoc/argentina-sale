@@ -32,7 +32,7 @@
         "views/picking_templates.xml",
         "data/ir_sequence_data.xml",
         "data/product_uom_data.xml",
-        'security/ir.access.csv',
+        "security/ir.access.csv",
     ],
     "demo": [
         "demo/stock_picking_demo.xml",

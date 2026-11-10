@@ -53,7 +53,7 @@ class ResCompany(models.Model):
         environment_type = self._get_environment_type()
         login_url = self._get_arba_cot_login_url(environment_type)
         request_data = self._get_arba_cot_request_data()
-        timeout = int(self.env["ir.config_parameter"].sudo().get_param("l10n_ar_stock_ux.arba_cot_timeout", default=40))
+        timeout = self.env["ir.config_parameter"].sudo().get_int("l10n_ar_stock_ux.arba_cot_timeout", default=40)
         try:
             res = requests.post(
                 login_url,
