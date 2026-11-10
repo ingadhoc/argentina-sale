@@ -46,7 +46,7 @@
                             <div style="text-align: center;">
                                 <img t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.l10n_ar_afip_barcode, 400, 40)" alt="Barcode" style="height:40px; width:100%"/>
                                 <br/>
-                                <span t-esc="o.l10n_ar_afip_barcode" style="font-size: 14px;"/>
+                                <span t-out="o.l10n_ar_afip_barcode" style="font-size: 14px;"/>
                             </div>
                         </t>
                         <t t-if="o.picking_type_id.report_signature_section and not o.l10n_ar_afip_barcode">
@@ -140,12 +140,13 @@
                     <span t-field="partner.l10n_ar_afip_responsibility_type_id"/>
 
                     <!-- (17) CUIT -->
-                    <t t-if="partner.vat and partner.l10n_latam_identification_type_id.name and partner.l10n_latam_identification_type_id.name != 'Sigd'">
+                    <t t-if="partner.l10n_ar_afip_code and partner.l10n_ar_afip_code != '99'">
+                        <t t-set="ar_doc_vals" t-value="partner._get_preferred_legal_entity_identifier_vals()"/>
                         <br/>
                         <strong>
-                            <t t-out="partner.l10n_latam_identification_type_id.name or o.company_id.country_id.vat_label" id="inv_tax_id_label"/>
+                            <t t-out="partner._get_identifier_label(ar_doc_vals.get('key')) or o.company_id.country_id.vat_label" id="inv_tax_id_label"/>
     :</strong>
-                        <span t-out="partner.l10n_ar_formatted_vat or partner.vat"/>
+                        <span t-out="partner.l10n_ar_formatted_vat or ar_doc_vals.get('value', '')"/>
                     </t>
 
                 </div>

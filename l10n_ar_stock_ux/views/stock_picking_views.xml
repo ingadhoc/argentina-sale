@@ -43,7 +43,7 @@
                     help="Obtener Código de Operaciones de Traslado (ARBA / Santa Fe)"
                     context="{'default_importe': declared_value}"
                     type="action"
-                    invisible="not l10n_ar_allow_send_delivery_guide or picking_type_code == 'incoming' or state != 'done' or cot"
+                    invisible="not l10n_ar_delivery_guide_number or picking_type_code == 'incoming' or state != 'done' or cot"
                     groups="l10n_ar_stock_ux.arba_cot_enabled"/>
             </button>
             <group name="other_infos" position="after">
@@ -67,6 +67,26 @@
         <field name="context">{'active_ids': active_ids, 'active_model': 'stock.picking'}</field>
         <field name="binding_model_id" ref="stock.model_stock_picking"/>
         <field name="binding_view_types">list</field>
+    </record>
+
+    <!-- sending the delivery guide is hidden, as in 19.0: unbind the 20.0 list actions and hide the batch button -->
+    <record id="l10n_ar_stock.action_send_delivery_guide" model="ir.actions.server">
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+    <record id="l10n_ar_stock.action_send_delivery_guide_for_batch" model="ir.actions.server">
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+    <record id="stock_picking_batch_form" model="ir.ui.view">
+        <field name="name">stock.picking.batch.form.inherit.l10n_ar_stock_ux</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="inherit_id" ref="l10n_ar_stock.stock_picking_batch_form"/>
+        <field name="arch" type="xml">
+            <button name="l10n_ar_action_send_delivery_guide" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </button>
+        </field>
     </record>
 
 </odoo>
