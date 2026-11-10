@@ -247,6 +247,24 @@ class TestL10nArStockUxSharedSequence(TestArCommon):
         outgoing.write({"name": "Renamed", "l10n_ar_cai_authorization_code": "12345678901234"})
         self.assertEqual(outgoing.name, "Renamed")
 
+    def test_legacy_invalid_cai_does_not_block_warehouse_changes(self):
+        """Changing the warehouse code rewrites its operation types: a legacy invalid CAI does
+        not block it, but editing the operation type itself still does."""
+        warehouse = self.env["stock.warehouse"].create(
+            {"name": "Depósito CAI", "code": "WHCAI", "company_id": self.company_ri.id}
+        )
+        outgoing = self._configure_delivery_guide(warehouse.out_type_id, self.document_type_remito, "00043")
+        self.env.cr.execute(
+            "UPDATE stock_picking_type SET l10n_ar_cai_authorization_code = %s WHERE id = %s",
+            ("1234567890", outgoing.id),
+        )
+        outgoing.invalidate_recordset(["l10n_ar_cai_authorization_code"])
+
+        warehouse.code = "WHCA2"
+        self.assertEqual(warehouse.code, "WHCA2")
+        with self.assertRaisesRegex(ValidationError, "14 digits"):
+            outgoing.name = "Renamed"
+
     def test_legacy_invalid_cai_does_not_block_upgrade_writes(self):
         """While modules are installed or upgraded, a legacy CAI does not abort writes on
         other fields, but a new invalid CAI is still rejected."""
