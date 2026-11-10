@@ -57,6 +57,7 @@ class StockPicking(models.Model):
         self.ensure_one()
         if self.l10n_ar_voucher_print_mode == "preprinted":
             if not self.l10n_ar_delivery_guide_number:
+                self._l10n_ar_check_delivery_guide_prefix()
                 picking_type = self.picking_type_id
                 picking_type._ensure_l10n_ar_stock_sequence()
                 sheets = self._l10n_ar_count_preprinted_sheets()
