@@ -1,5 +1,6 @@
 import datetime
 import logging
+import re
 import xml.etree.ElementTree as ET
 
 import requests
@@ -163,6 +164,17 @@ class StockPicking(models.Model):
         los productos y ese dato no lo tenemos (solo sabemos cuantas hojas
         consume)
         """
+
+        for rec in self.filtered("l10n_ar_delivery_guide_number"):
+            first_number = rec.l10n_ar_delivery_guide_number.split(",")[0].strip()
+            if not re.fullmatch(r"[0-9]+", first_number.split("-")[0]):
+                raise UserError(
+                    self.env._(
+                        "Cannot get the COT of delivery guide %(number)s: the prefix has letters or "
+                        "symbols, and ARBA only accepts numbers. Fix the prefix in the operation type.",
+                        number=first_number,
+                    )
+                )
 
         FECHA_SALIDA_TRANSPORTE = datetime_out.strftime("%Y%m%d")
         HORA_SALIDA_TRANSPORTE = datetime_out.strftime("%H%M")
@@ -537,6 +549,36 @@ class StockPicking(models.Model):
                 )
 
             return True
+
+    def l10n_ar_action_create_delivery_guide(self):
+        self.ensure_one()
+        if not self.l10n_ar_delivery_guide_number:
+            self._l10n_ar_check_delivery_guide_prefix()
+        return super().l10n_ar_action_create_delivery_guide()
+
+    def _l10n_ar_check_delivery_guide_prefix(self):
+        """Fail with a clear message before taking a number from the sequence."""
+        picking_type = self.picking_type_id
+        prefix = picking_type.l10n_ar_sequence_id and picking_type.l10n_ar_delivery_sequence_prefix
+        if not prefix:
+            raise UserError(
+                self.env._(
+                    "Cannot create the delivery guide: the operation type %(operation_type)s has no "
+                    "delivery guide prefix. Set it in the operation type.",
+                    operation_type=picking_type.display_name,
+                )
+            )
+        # The ARCA barcode printed on an autoprinted Remito R only takes digits.
+        if picking_type._l10n_ar_cai_format_applies() and not re.fullmatch(r"[0-9]+", prefix):
+            raise UserError(
+                self.env._(
+                    "Cannot create the delivery guide: the prefix %(prefix)s of the operation type "
+                    "%(operation_type)s has letters or symbols, and the barcode of an autoprinted "
+                    "Remito R only accepts numbers. Fix the prefix in the operation type.",
+                    prefix=prefix,
+                    operation_type=picking_type.display_name,
+                )
+            )
 
     def _l10n_ar_assign_delivery_guide_numbers(self):
         for picking in self.filtered(
