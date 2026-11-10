@@ -5,9 +5,18 @@ import xml.etree.ElementTree as ET
 
 import requests
 from odoo import api, fields, models
+from odoo.addons.l10n_ar.tools.partner_identifiers import AR_CUIT_AFIP_CODE
 from odoo.exceptions import UserError
+from stdnum.ar import cuit
 
 _logger = logging.getLogger(__name__)
+
+
+def _l10n_ar_compact_cuit(partner):
+    # Same value as the removed res.partner.l10n_ar_vat: the compact CUIT, only when the partner is identified by it
+    if partner.vat and partner.l10n_ar_afip_code == AR_CUIT_AFIP_CODE:
+        return cuit.compact(partner.vat)
+    return False
 
 
 class StockPicking(models.Model):
@@ -137,7 +146,10 @@ class StockPicking(models.Model):
                 )["point_of_sale"]
                 barcode = "".join(
                     [
-                        str(rec.picking_type_id.report_partner_id.l10n_ar_vat or rec.company_id.partner_id.l10n_ar_vat),
+                        str(
+                            _l10n_ar_compact_cuit(rec.picking_type_id.report_partner_id)
+                            or _l10n_ar_compact_cuit(rec.company_id.partner_id)
+                        ),
                         "%03d" % int(rec.document_type_id.code),
                         "%05d" % pos_number,
                         rec.l10n_ar_cai_data.get("cai_authorization_code"),
@@ -256,17 +268,10 @@ class StockPicking(models.Model):
             PREFIJO = PREFIJO.rjust(5, "0")
             NUMERO = NUMERO.rjust(8, "0")
 
-            # si nro doc y tipo en ‘DNI’, ‘LC’, ‘LE’, ‘PAS’, ‘CI’ y doc
-            doc_categ_id = commercial_partner.l10n_latam_identification_type_id
-            if commercial_partner.vat and doc_categ_id.name in [
-                "DNI",
-                "LC",
-                "LE",
-                "PAS",
-                "CI",
-            ]:
-                dest_tipo_doc = doc_categ_id.l10n_ar_afip_code
-                dest_doc = commercial_partner.vat
+            # DNI (96), LE (89) and LC (90) go as document; everything else as CUIT
+            if commercial_partner.l10n_ar_afip_id_value and commercial_partner.l10n_ar_afip_code in ("96", "89", "90"):
+                dest_tipo_doc = commercial_partner.l10n_ar_afip_code
+                dest_doc = commercial_partner.l10n_ar_afip_id_value
                 dest_cuit = ""
             else:
                 dest_tipo_doc = ""
@@ -389,12 +394,12 @@ class StockPicking(models.Model):
                 # buscamos si hay unidad de medida de la cateogria que tenga
                 # codigo de arba y usamos esa, ademas convertimos la cantidad
                 product_qty = line.product_uom_qty
-                if line.product_uom.arba_code:
-                    uom_arba_with_code = line.product_uom
+                if line.uom_id.arba_code:
+                    uom_arba_with_code = line.uom_id
                 else:
-                    uom_arba_with_code = line.product_uom.search(
+                    uom_arba_with_code = line.uom_id.search(
                         [
-                            ("category_id", "=", line.product_uom.category_id.id),
+                            ("category_id", "=", line.uom_id.category_id.id),
                             ("arba_code", "!=", False),
                         ],
                         limit=1,
@@ -403,13 +408,13 @@ class StockPicking(models.Model):
                         raise UserError(
                             self.env._(
                                 'No arba code for uom "%(uom)s" (Id: %(id)s) or any uom in category "%(category)s"',
-                                uom=line.product_uom.name,
-                                id=line.product_uom.id,
-                                category=line.product_uom.category_id.name,
+                                uom=line.uom_id.name,
+                                id=line.uom_id.id,
+                                category=line.uom_id.category_id.name,
                             )
                         )
 
-                    product_qty = line.product_uom._compute_quantity(product_qty, uom_arba_with_code)
+                    product_qty = line.uom_id._compute_quantity(product_qty, uom_arba_with_code)
 
                 if not line.product_id.arba_code:
                     raise UserError(
@@ -503,8 +508,8 @@ class StockPicking(models.Model):
 
             login_url = rec.company_id._get_arba_cot_login_url()
             request_data = rec.company_id._get_arba_cot_request_data()
-            arba_cot_timeout = int(
-                self.env["ir.config_parameter"].sudo().get_param("l10n_ar_stock_ux.arba_cot_timeout", default=40)
+            arba_cot_timeout = (
+                self.env["ir.config_parameter"].sudo().get_int("l10n_ar_stock_ux.arba_cot_timeout", default=40)
             )
             res = requests.post(
                 login_url,
