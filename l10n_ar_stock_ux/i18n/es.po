@@ -238,12 +238,15 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
 msgid ""
-"Cannot get the COT of delivery guide %(number)s: the prefix has letters or "
-"symbols, and ARBA only accepts numbers. Fix the prefix in the operation type."
+"Cannot get the COT of delivery guide %(number)s: it has no prefix or the "
+"prefix has letters or symbols, and ARBA only accepts numbers. Fix the "
+"delivery guide number in the transfer, and the prefix in the operation type "
+"for the next ones."
 msgstr ""
-"No se puede obtener el COT del remito %(number)s: el prefijo tiene letras o "
-"símbolos, y ARBA solo acepta números. Corrija el prefijo en el tipo de "
-"operación."
+"No se puede obtener el COT del remito %(number)s: no tiene prefijo o el "
+"prefijo tiene letras o símbolos, y ARBA solo acepta números. Corrija el "
+"número del remito en la transferencia, y el prefijo en el tipo de operación "
+"para los próximos remitos."
 
 #. module: l10n_ar_stock_ux
 #: model:ir.model.fields,field_description:l10n_ar_stock_ux.field_res_company__arba_cot
