@@ -139,3 +139,13 @@ class TestDeliveryGuidePrefix(TestArCommon):
 
         with self.assertRaisesRegex(UserError, "000X-00000001"):
             picking._get_arba_file_data(fields.Datetime.now(), "U", self.partner_ri, False, False, "0", 0.0)
+
+    def test_cot_rejects_number_without_prefix(self):
+        """A number taken before the prefix was required has no prefix: the COT fails with the
+        clear error, not with the generic format one."""
+        picking_type = self._create_picking_type("PRE-COT2", self.env.ref("l10n_ar.dc_remito_x"), "00004")
+        picking = self._create_picking(picking_type)
+        picking.l10n_ar_delivery_guide_number = "00000002"
+
+        with self.assertRaisesRegex(UserError, "no prefix"):
+            picking._get_arba_file_data(fields.Datetime.now(), "U", self.partner_ri, False, False, "0", 0.0)
