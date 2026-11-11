@@ -229,3 +229,14 @@ class TestL10nArStockUxDeliveryReport(TransactionCase):
         picking = self._create_done_picking_with_lots([False])
         html = self.env["ir.actions.report"]._render_qweb_html("stock.action_report_delivery", picking.ids)[0]
         self.assertFalse(b"Despachos Involucrados" in html)
+
+    def test_partner_document_printed_with_dni(self):
+        """A customer identified by DNI prints the DNI, not only the CUIT ones."""
+        self.picking.partner_id.write(
+            {"country_id": self.env.ref("base.ar").id, "additional_identifiers": {"AR_DNI": "05536168"}}
+        )
+        self.assertFalse(b"05536168" not in self._render(), "the DNI has to be printed on the delivery slip")
+
+    def test_partner_document_printed_with_cuit(self):
+        self.picking.partner_id.write({"country_id": self.env.ref("base.ar").id, "vat": "20055361682"})
+        self.assertFalse(b"20-05536168-2" not in self._render(), "the CUIT has to be printed on the delivery slip")

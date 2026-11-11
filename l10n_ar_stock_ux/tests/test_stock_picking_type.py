@@ -33,7 +33,6 @@ class TestL10nArStockUxSharedSequence(TestArCommon):
         )
         company.partner_id.write(
             {
-                "l10n_latam_identification_type_id": self.env.ref("l10n_ar.it_cuit").id,
                 "vat": vat,
             }
         )
