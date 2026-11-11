@@ -17,6 +17,11 @@ Argentinian Sale Total Fields
 Este modulo agrega, en talonarios de ventas, la posibilidad de forzar la discriminación,
 o no, de los impuestos independientemente de la responsabilidad de IVA del partner
 
+También hace que el precio por unidad del producto que agrega ``sale_ux`` (la columna opcional
+de las líneas y el presupuesto impreso, en líneas vendidas por envase) siga el criterio de IVA
+de la localización: sin IVA cuando el cliente lo discrimina y con IVA cuando no, igual que el
+precio unitario del presupuesto impreso.
+
 Installation
 ============
 
