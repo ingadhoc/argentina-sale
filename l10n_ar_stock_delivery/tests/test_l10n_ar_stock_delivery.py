@@ -14,7 +14,6 @@ class TestL10nArStockDelivery(TransactionCase):
                 "name": "Transportes Test",
                 "is_company": True,
                 "country_id": cls.env.ref("base.ar").id,
-                "l10n_latam_identification_type_id": cls.env.ref("l10n_ar.it_cuit").id,
                 "vat": "30714295698",
                 "street": "Calle Transporte 123",
                 "city": "Rosario",
@@ -53,6 +52,7 @@ class TestL10nArStockDelivery(TransactionCase):
             ("tracking number", "TRACK-0001"),
             ("carrier name", "Carrier test"),
             ("carrier identification", "30714295698"),
+            ("carrier identification label", "(CUIT: "),
             ("carrier address", "Calle Transporte 123"),
         ):
             with self.subTest(label):
