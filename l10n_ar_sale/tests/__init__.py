@@ -5,4 +5,5 @@
 from . import test_create_invoices
 from . import test_perception_base_minimum_threshold
 from . import test_perception_recompute
+from . import test_price_unit_product_uom
 from . import test_section_summary
