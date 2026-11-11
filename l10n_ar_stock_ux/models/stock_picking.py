@@ -166,12 +166,14 @@ class StockPicking(models.Model):
         """
 
         for rec in self.filtered("l10n_ar_delivery_guide_number"):
+            # all the numbers of a delivery guide come from the same sequence and share the prefix
             first_number = rec.l10n_ar_delivery_guide_number.split(",")[0].strip()
-            if not re.fullmatch(r"[0-9]+", first_number.split("-")[0]):
+            if not re.fullmatch(r"[0-9]+-[0-9]+", first_number):
                 raise UserError(
                     self.env._(
-                        "Cannot get the COT of delivery guide %(number)s: the prefix has letters or "
-                        "symbols, and ARBA only accepts numbers. Fix the prefix in the operation type.",
+                        "Cannot get the COT of delivery guide %(number)s: it has no prefix or the prefix "
+                        "has letters or symbols, and ARBA only accepts numbers. Fix the delivery guide "
+                        "number in the transfer, and the prefix in the operation type for the next ones.",
                         number=first_number,
                     )
                 )
