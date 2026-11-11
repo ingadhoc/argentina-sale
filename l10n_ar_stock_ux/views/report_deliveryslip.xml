@@ -156,7 +156,7 @@
                         <strong>Order:</strong>
                         <span t-field="o.origin"/>
                     </t>
-                    <t position="after">
+                    <t>
                         <t t-if="o.cot">
                             <br/>
                             <strong>COT:</strong>
