@@ -90,6 +90,9 @@ class StockPickingType(models.Model):
         return records
 
     def write(self, vals):
+        if "l10n_ar_document_type_id" in vals and not vals["l10n_ar_document_type_id"]:
+            # the field is hidden without a document type: do not leave it on unseen
+            vals = dict(vals, auto_assign_delivery_guide=False)
         res = super().write(vals)
         # Checked on any write, not only when the CAI changes, so that a type with a legacy
         # invalid CAI cannot be saved until it is fixed. Not while the registry is loading,

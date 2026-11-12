@@ -35,12 +35,12 @@ class TestAutoAssignDeliveryGuide(TestArCommon):
             }
         )
 
-    def _create_picking(self):
+    def _create_picking(self, picking_type=None):
         picking = self.env["stock.picking"].create(
             {
                 "location_id": self.wh.lot_stock_id.id,
                 "location_dest_id": self.env.ref("stock.stock_location_customers").id,
-                "picking_type_id": self.picking_type.id,
+                "picking_type_id": (picking_type or self.picking_type).id,
                 "partner_id": self.partner_ri.id,
                 "move_ids": [Command.create({"product_id": self.product.id, "product_uom_qty": 1.0})],
             }
@@ -94,3 +94,24 @@ class TestAutoAssignDeliveryGuide(TestArCommon):
             [picking.l10n_ar_delivery_guide_number],
             "El nro ya debe estar asignado cuando se envía el mail de confirmación.",
         )
+
+    def test_without_document_type_validates_without_number(self):
+        """An operation type with the option on but without document type has no sequence:
+        validating does not try to number the delivery guide, as the manual button."""
+        picking_type = self.env["stock.picking.type"].create(
+            {
+                "name": "Outgoing without delivery guide",
+                "code": "outgoing",
+                "company_id": self.company_ri.id,
+                "sequence_code": "OUTNODOC",
+                "auto_assign_delivery_guide": True,
+            }
+        )
+        picking = self._create_picking(picking_type)
+        picking.button_validate()
+        self.assertEqual(picking.state, "done")
+        self.assertFalse(picking.l10n_ar_delivery_guide_number)
+
+    def test_emptying_document_type_turns_off_auto_assign(self):
+        self.picking_type.l10n_ar_document_type_id = False
+        self.assertFalse(self.picking_type.auto_assign_delivery_guide)

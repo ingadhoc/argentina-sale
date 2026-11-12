@@ -1,6 +1,12 @@
 {
     "name": "Remitos, COT y demas ajustes de stock para Argentina",
+<<<<<<< f241647b9ea0769c8c426b476e0d5cc11116f024
     "version": "19.0.1.12.0",
+||||||| acf13eccef1790e667a9c9b15959546572dbe8e6
+    "version": "19.0.1.17.0",
+=======
+    "version": "19.0.1.18.0",
+>>>>>>> 4db9a724bdce9336888a3f775083823f1cc14a2d
     "category": "Localization/Argentina",
     "sequence": 14,
     "author": "ADHOC SA",

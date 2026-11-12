@@ -539,8 +539,11 @@ class StockPicking(models.Model):
             return True
 
     def _l10n_ar_assign_delivery_guide_numbers(self):
+        # without a document type there is no delivery guide to number, as for the manual button
         for picking in self.filtered(
-            lambda p: p.picking_type_id.auto_assign_delivery_guide and not p.l10n_ar_delivery_guide_number
+            lambda p: p.picking_type_id.auto_assign_delivery_guide
+            and p.picking_type_id.l10n_ar_document_type_id
+            and not p.l10n_ar_delivery_guide_number
         ):
             picking.l10n_ar_action_create_delivery_guide()
 
