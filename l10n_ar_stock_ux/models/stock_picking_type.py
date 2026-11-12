@@ -1,4 +1,7 @@
+import re
+
 from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class StockPickingType(models.Model):
@@ -11,6 +14,7 @@ class StockPickingType(models.Model):
         "l10n_ar_sequence_number_end",
     )
 
+    l10n_ar_document_type_id = fields.Many2one(string="Delivery Guide Type")
     report_partner_id = fields.Many2one(
         "res.partner",
         string="Contacto para Encabezado",
@@ -79,8 +83,21 @@ class StockPickingType(models.Model):
                 }
             }
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records._l10n_ar_check_cai_authorization_code()
+        return records
+
     def write(self, vals):
         res = super().write(vals)
+        # Checked on any write, not only when the CAI changes, so that a type with a legacy
+        # invalid CAI cannot be saved until it is fixed. Not while the registry is loading,
+        # so that install and upgrade writes do not abort on legacy data, nor when the
+        # warehouse rewrites its operation types.
+        check_legacy = self.pool.ready and not self.env.context.get("l10n_ar_skip_legacy_checks")
+        if check_legacy or not vals.keys().isdisjoint(self._l10n_ar_cai_check_fields()):
+            self._l10n_ar_check_cai_authorization_code()
         if self.env.context.get("l10n_ar_stock_ux_skip_shared_sequence_sync"):
             return res
         shared_vals = {field: vals[field] for field in self._L10N_AR_SHARED_SEQUENCE_FIELDS if field in vals}
@@ -91,6 +108,27 @@ class StockPickingType(models.Model):
             if others:
                 others.with_context(l10n_ar_stock_ux_skip_shared_sequence_sync=True).write(shared_vals)
         return res
+
+    def _l10n_ar_cai_check_fields(self):
+        """Fields whose write checks the CAI format, also while modules are installed or upgraded."""
+        return {"l10n_ar_cai_authorization_code", "l10n_ar_document_type_id"}
+
+    def _l10n_ar_cai_format_applies(self):
+        """Picking types whose CAI is printed on the delivery guide (class R)."""
+        return self.filtered(lambda pt: pt.l10n_ar_document_type_id.l10n_ar_letter == "R")
+
+    def _l10n_ar_check_cai_authorization_code(self):
+        for picking_type in self._l10n_ar_cai_format_applies():
+            cai = picking_type.l10n_ar_cai_authorization_code
+            if cai and not re.fullmatch(r"[0-9]{14}", cai):
+                raise ValidationError(
+                    _(
+                        "The CAI of the operation type %(operation_type)s is not valid: %(cai)s. "
+                        "It must contain exactly 14 digits.",
+                        operation_type=picking_type.display_name,
+                        cai=cai,
+                    )
+                )
 
     def _l10n_ar_stock_ux_shared_sequence_picking_types(self):
         """Otros picking types que comparten l10n_ar_sequence_id con este (mismo CAI/talonario)."""
