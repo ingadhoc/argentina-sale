@@ -132,6 +132,20 @@ class TestDeliveryGuidePrefix(TestArCommon):
         sequence.invalidate_recordset(["number_next_actual"])
         self.assertEqual(sequence.number_next_actual, next_number)
 
+    def test_several_pickings_at_once(self):
+        """The list action and the batch button of 20.0 number several transfers in one call."""
+        picking_type = self._create_picking_type("PRE-MULTI", self.env.ref("l10n_ar.dc_remito_x"), "00005")
+        pickings = self._create_picking(picking_type, validate=True) | self._create_picking(picking_type, validate=True)
+        pickings.l10n_ar_action_create_delivery_guide()
+        self.assertEqual(sorted(pickings.mapped("l10n_ar_delivery_guide_number")), ["00005-00000001", "00005-00000002"])
+
+    def test_several_pickings_check_the_prefix_before_numbering(self):
+        picking_type = self._create_picking_type("PRE-MULTI-R", self.env.ref("l10n_ar.dc_r_r"), "000X")
+        pickings = self._create_picking(picking_type, validate=True) | self._create_picking(picking_type, validate=True)
+        with self.assertRaisesRegex(UserError, "only accepts numbers"):
+            pickings.l10n_ar_action_create_delivery_guide()
+        self.assertFalse(any(pickings.mapped("l10n_ar_delivery_guide_number")))
+
     def test_remito_x_accepts_letters_in_prefix(self):
         picking_type = self._create_picking_type("PRE-X-X", self.env.ref("l10n_ar.dc_remito_x"), "000X")
         picking = self._create_picking(picking_type, validate=True)

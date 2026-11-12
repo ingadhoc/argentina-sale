@@ -558,9 +558,8 @@ class StockPicking(models.Model):
             return True
 
     def l10n_ar_action_create_delivery_guide(self):
-        self.ensure_one()
-        if not self.l10n_ar_delivery_guide_number:
-            self._l10n_ar_check_delivery_guide_prefix()
+        for picking in self.filtered(lambda p: not p.l10n_ar_delivery_guide_number):
+            picking._l10n_ar_check_delivery_guide_prefix()
         return super().l10n_ar_action_create_delivery_guide()
 
     def _l10n_ar_check_delivery_guide_prefix(self):
