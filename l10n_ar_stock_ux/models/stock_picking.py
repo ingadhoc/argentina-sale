@@ -375,9 +375,9 @@ class StockPicking(models.Model):
                     # TODO implementar
                     "",
                     # PATENTE_VEHICULO: 3 letras y 3 números
-                    patente_vehiculo or "",
+                    (patente_vehiculo or "").upper(),
                     # PATENTE_ACOPLADO: 3 letras y 3 números
-                    patente_acoplado or "",
+                    (patente_acoplado or "").upper(),
                     # PRODUCTO_NO_TERM_DEV: 0=No, 1=Si (devoluciones)
                     str(prod_no_term_dev),
                     # IMPORTE: formato 8 enteros 2 decimales,
