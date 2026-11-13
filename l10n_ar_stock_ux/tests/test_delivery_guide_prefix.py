@@ -38,8 +38,8 @@ class TestDeliveryGuidePrefix(TestArCommon):
             )
         return self.env["stock.picking.type"].create(vals)
 
-    def _create_picking(self, picking_type):
-        return self.env["stock.picking"].create(
+    def _create_picking(self, picking_type, validate=False):
+        picking = self.env["stock.picking"].create(
             {
                 "picking_type_id": picking_type.id,
                 "partner_id": self.partner_ri.id,
@@ -48,6 +48,12 @@ class TestDeliveryGuidePrefix(TestArCommon):
                 "move_ids": [Command.create({"product_id": self.product.id, "product_uom_qty": 1.0})],
             }
         )
+        if validate:
+            # the delivery guide is generated only on validated transfers
+            self.company_ri.stock_move_email_validation = False
+            picking.action_confirm()
+            picking.button_validate()
+        return picking
 
     def test_prefix_is_required_and_up_to_5_characters(self):
         picking_type = self._create_picking_type("PRE-REQ", self.env.ref("l10n_ar.dc_r_r"), "00001")
@@ -79,7 +85,7 @@ class TestDeliveryGuidePrefix(TestArCommon):
         picking_type = self._create_picking_type("PRE-OLD", self.env.ref("l10n_ar.dc_r_r"), "00001")
         picking_type.l10n_ar_sequence_id.prefix = False
         picking_type.invalidate_recordset(["l10n_ar_delivery_sequence_prefix"])
-        picking = self._create_picking(picking_type)
+        picking = self._create_picking(picking_type, validate=True)
 
         with self.assertRaisesRegex(UserError, "has no delivery guide prefix"):
             picking.l10n_ar_action_create_delivery_guide()
@@ -118,7 +124,7 @@ class TestDeliveryGuidePrefix(TestArCommon):
         picking_type = self._create_picking_type("PRE-R-X", self.env.ref("l10n_ar.dc_r_r"), "000X")
         sequence = picking_type.l10n_ar_sequence_id
         next_number = sequence.number_next_actual
-        picking = self._create_picking(picking_type)
+        picking = self._create_picking(picking_type, validate=True)
 
         with self.assertRaisesRegex(UserError, "only accepts numbers"):
             picking.l10n_ar_action_create_delivery_guide()
@@ -126,15 +132,29 @@ class TestDeliveryGuidePrefix(TestArCommon):
         sequence.invalidate_recordset(["number_next_actual"])
         self.assertEqual(sequence.number_next_actual, next_number)
 
+    def test_several_pickings_at_once(self):
+        """The list action and the batch button of 20.0 number several transfers in one call."""
+        picking_type = self._create_picking_type("PRE-MULTI", self.env.ref("l10n_ar.dc_remito_x"), "00005")
+        pickings = self._create_picking(picking_type, validate=True) | self._create_picking(picking_type, validate=True)
+        pickings.l10n_ar_action_create_delivery_guide()
+        self.assertEqual(sorted(pickings.mapped("l10n_ar_delivery_guide_number")), ["00005-00000001", "00005-00000002"])
+
+    def test_several_pickings_check_the_prefix_before_numbering(self):
+        picking_type = self._create_picking_type("PRE-MULTI-R", self.env.ref("l10n_ar.dc_r_r"), "000X")
+        pickings = self._create_picking(picking_type, validate=True) | self._create_picking(picking_type, validate=True)
+        with self.assertRaisesRegex(UserError, "only accepts numbers"):
+            pickings.l10n_ar_action_create_delivery_guide()
+        self.assertFalse(any(pickings.mapped("l10n_ar_delivery_guide_number")))
+
     def test_remito_x_accepts_letters_in_prefix(self):
         picking_type = self._create_picking_type("PRE-X-X", self.env.ref("l10n_ar.dc_remito_x"), "000X")
-        picking = self._create_picking(picking_type)
+        picking = self._create_picking(picking_type, validate=True)
         picking.l10n_ar_action_create_delivery_guide()
         self.assertEqual(picking.l10n_ar_delivery_guide_number, "000X-00000001")
 
     def test_cot_rejects_prefix_with_letters(self):
         picking_type = self._create_picking_type("PRE-COT", self.env.ref("l10n_ar.dc_remito_x"), "000X")
-        picking = self._create_picking(picking_type)
+        picking = self._create_picking(picking_type, validate=True)
         picking.l10n_ar_action_create_delivery_guide()
 
         with self.assertRaisesRegex(UserError, "000X-00000001"):

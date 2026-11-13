@@ -1,0 +1,2 @@
+id,name,model_id,group_id/id,operation,domain
+access_arba_cot_wizard,access_arba_cot_wizard,arba.cot.wizard,base.group_user,cru,
