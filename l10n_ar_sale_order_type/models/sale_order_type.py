@@ -14,9 +14,6 @@ class SaleOrderType(models.Model):
             ("no", "No"),
         ],
     )
-    report_partner_id = fields.Many2one(
-        "res.partner",
-    )
     fiscal_country_codes = fields.Char(compute="_compute_fiscal_country_codes")
 
     @api.depends("company_id")
