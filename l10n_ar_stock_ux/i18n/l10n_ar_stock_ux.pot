@@ -414,8 +414,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
 msgid ""
-"No arba code for uom \"%(uom)s\" (Id: %(id)s) or any uom in category "
-"\"%(category)s\""
+"No arba code for uom \"%(uom)s\" (Id: %(id)s) or any uom related to "
+"\"%(reference)s\""
 msgstr ""
 
 #. module: l10n_ar_stock_ux
