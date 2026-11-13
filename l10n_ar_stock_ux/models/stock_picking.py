@@ -380,9 +380,9 @@ class StockPicking(models.Model):
                     # TODO implementar
                     "",
                     # PATENTE_VEHICULO: 3 letras y 3 números
-                    patente_vehiculo or "",
+                    (patente_vehiculo or "").upper(),
                     # PATENTE_ACOPLADO: 3 letras y 3 números
-                    patente_acoplado or "",
+                    (patente_acoplado or "").upper(),
                     # PRODUCTO_NO_TERM_DEV: 0=No, 1=Si (devoluciones)
                     str(prod_no_term_dev),
                     # IMPORTE: formato 8 enteros 2 decimales,
@@ -397,9 +397,23 @@ class StockPicking(models.Model):
                 if line.uom_id.arba_code:
                     uom_arba_with_code = line.uom_id
                 else:
+<<<<<<< a2bbafe8218e48ca1d29d22ff72eb89687e12f9f
                     uom_arba_with_code = line.uom_id.search(
+||||||| 13d3ee6602b92cdcfaf71b9fa2f65639ce31e848
+                    uom_arba_with_code = line.product_uom.search(
+=======
+                    # related uoms share the root of the relative_uom_id tree
+                    reference_uom = line.product_uom.browse(int(line.product_uom.parent_path.split("/")[0]))
+                    uom_arba_with_code = line.product_uom.search(
+>>>>>>> f56189965f8056fedefb586245887258e61d96e2
                         [
+<<<<<<< a2bbafe8218e48ca1d29d22ff72eb89687e12f9f
                             ("category_id", "=", line.uom_id.category_id.id),
+||||||| 13d3ee6602b92cdcfaf71b9fa2f65639ce31e848
+                            ("category_id", "=", line.product_uom.category_id.id),
+=======
+                            ("parent_path", "=like", f"{reference_uom.id}/%"),
+>>>>>>> f56189965f8056fedefb586245887258e61d96e2
                             ("arba_code", "!=", False),
                         ],
                         limit=1,
@@ -407,10 +421,22 @@ class StockPicking(models.Model):
                     if not uom_arba_with_code:
                         raise UserError(
                             self.env._(
+<<<<<<< a2bbafe8218e48ca1d29d22ff72eb89687e12f9f
                                 'No arba code for uom "%(uom)s" (Id: %(id)s) or any uom in category "%(category)s"',
                                 uom=line.uom_id.name,
                                 id=line.uom_id.id,
                                 category=line.uom_id.category_id.name,
+||||||| 13d3ee6602b92cdcfaf71b9fa2f65639ce31e848
+                                'No arba code for uom "%(uom)s" (Id: %(id)s) or any uom in category "%(category)s"',
+                                uom=line.product_uom.name,
+                                id=line.product_uom.id,
+                                category=line.product_uom.category_id.name,
+=======
+                                'No arba code for uom "%(uom)s" (Id: %(id)s) or any uom related to "%(reference)s"',
+                                uom=line.product_uom.name,
+                                id=line.product_uom.id,
+                                reference=reference_uom.name,
+>>>>>>> f56189965f8056fedefb586245887258e61d96e2
                             )
                         )
 
