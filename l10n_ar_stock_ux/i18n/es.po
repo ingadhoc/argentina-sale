@@ -487,11 +487,11 @@ msgstr "No existe código de ARBA para el producto \"%(product)s\" (Id: %(id)s)"
 #. odoo-python
 #: code:addons/l10n_ar_stock_ux/models/stock_picking.py:0
 msgid ""
-"No arba code for uom \"%(uom)s\" (Id: %(id)s) or any uom in category "
-"\"%(category)s\""
+"No arba code for uom \"%(uom)s\" (Id: %(id)s) or any uom related to "
+"\"%(reference)s\""
 msgstr ""
 "No existe código de ARBA para la unidad de medida \"%(uom)s\" (Id: %(id)s) u "
-"otra unidad de medida en la categoría \"%(category)s\""
+"otra unidad de medida relacionada con \"%(reference)s\""
 
 #. module: l10n_ar_stock_ux
 #. odoo-python

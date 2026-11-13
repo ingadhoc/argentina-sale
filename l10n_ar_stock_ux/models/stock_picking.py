@@ -375,9 +375,9 @@ class StockPicking(models.Model):
                     # TODO implementar
                     "",
                     # PATENTE_VEHICULO: 3 letras y 3 números
-                    patente_vehiculo or "",
+                    (patente_vehiculo or "").upper(),
                     # PATENTE_ACOPLADO: 3 letras y 3 números
-                    patente_acoplado or "",
+                    (patente_acoplado or "").upper(),
                     # PRODUCTO_NO_TERM_DEV: 0=No, 1=Si (devoluciones)
                     str(prod_no_term_dev),
                     # IMPORTE: formato 8 enteros 2 decimales,
@@ -392,9 +392,11 @@ class StockPicking(models.Model):
                 if line.product_uom.arba_code:
                     uom_arba_with_code = line.product_uom
                 else:
+                    # related uoms share the root of the relative_uom_id tree
+                    reference_uom = line.product_uom.browse(int(line.product_uom.parent_path.split("/")[0]))
                     uom_arba_with_code = line.product_uom.search(
                         [
-                            ("category_id", "=", line.product_uom.category_id.id),
+                            ("parent_path", "=like", f"{reference_uom.id}/%"),
                             ("arba_code", "!=", False),
                         ],
                         limit=1,
@@ -402,10 +404,10 @@ class StockPicking(models.Model):
                     if not uom_arba_with_code:
                         raise UserError(
                             self.env._(
-                                'No arba code for uom "%(uom)s" (Id: %(id)s) or any uom in category "%(category)s"',
+                                'No arba code for uom "%(uom)s" (Id: %(id)s) or any uom related to "%(reference)s"',
                                 uom=line.product_uom.name,
                                 id=line.product_uom.id,
-                                category=line.product_uom.category_id.name,
+                                reference=reference_uom.name,
                             )
                         )
 
