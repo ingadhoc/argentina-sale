@@ -44,29 +44,19 @@ class ArbaCotWizard(models.TransientModel):
     def _constrain_check_format_patente(self):
         formato_antiguo = r"^[A-Z]{2}\d{3}[A-Z]{2}$"  # LLNNNLL
         formato_nuevo = r"^[A-Z]{3}\d{3}$"  # LLLNNN
-        patente_vehiculo_valida = patente_acoplado_valida = False
-
-        if not self.patente_vehiculo and not self.patente_acoplado:
-            return True
-
-        if self.patente_vehiculo and (
-            re.match(formato_antiguo, self.patente_vehiculo.upper()) or re.match(formato_nuevo, self.patente_vehiculo)
-        ):
-            patente_vehiculo_valida = True
-
-        if self.patente_acoplado:
-            if bool(re.match(formato_antiguo, self.patente_acoplado.upper())) or bool(
-                re.match(formato_nuevo, self.patente_acoplado)
-            ):
-                patente_acoplado_valida = True
-
-        error = []
-        if not patente_acoplado_valida:
-            error.append("Patente Acoplado")
-        if not patente_vehiculo_valida:
-            error.append("Patente Vehiculo")
-        if error:
-            raise ValidationError(self.env._("Invalid license plate format (%s)", ", ".join(error)))
+        for rec in self:
+            # only the plates that were filled in are checked
+            error = [
+                label
+                for label, patente in (
+                    ("Patente Acoplado", rec.patente_acoplado),
+                    ("Patente Vehiculo", rec.patente_vehiculo),
+                )
+                if patente
+                and not (re.match(formato_antiguo, patente.upper()) or re.match(formato_nuevo, patente.upper()))
+            ]
+            if error:
+                raise ValidationError(self.env._("Invalid license plate format (%s)", ", ".join(error)))
 
     def confirm(self):
         self.ensure_one()
