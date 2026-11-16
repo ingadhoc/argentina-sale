@@ -9,7 +9,7 @@
     <record model='uom.uom' forcecreate="False" id='uom.product_uom_unit'>
         <field name='arba_code'>3</field>
     </record>
-    <record model='uom.uom' forcecreate="False" id='uom.uom_square_meter'>
+    <record model='uom.uom' forcecreate="False" id='uom.product_uom_square_meter'>
         <field name='arba_code'>4</field>
     </record>
     <record model='uom.uom' forcecreate="False" id='uom.product_uom_meter'>
