@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e\n"
+"Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-10 14:43+0000\n"
-"PO-Revision-Date: 2026-04-29 14:17+0000\n"
+"POT-Creation-Date: 2026-11-12 19:19+0000\n"
+"PO-Revision-Date: 2026-11-12 19:19+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: es\n"
@@ -15,6 +15,105 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.module.module,description:base.module_l10n_ar_stock_picking_batch
+msgid ""
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"=============================================\n"
+"Argentinean Delivery Guides on Batch Pickings\n"
+"=============================================\n"
+"\n"
+"Extends batch pickings to support Argentine delivery guides (remitos).\n"
+"\n"
+"The whole module is conditional on the batch having a partner\n"
+"(``batch_partner_id``, related to ``batch_id.partner_id``):\n"
+"\n"
+"* **Partner batches** (single-partner) → delivery guides are issued at the\n"
+"  batch level (one remito for the whole batch).\n"
+"* **Mixed-partner batches** (no partner on the batch) → delivery guides are\n"
+"  handled at picking level, as in a non-batched flow.\n"
+"\n"
+"Main features:\n"
+"\n"
+"* **Generate delivery guide from a batch**: a *Generate Delivery Guide* button appears on the batch form once it is validated (state ``done``), the batch has a partner and the operation type has an Argentine document type configured. It creates the guide on the first picking and propagates the number and CAI data to all other pickings in the batch. Odoo's *Generate Delivery Guides* button is hidden on these batches.\n"
+"* **Mixed-partner batches**: Odoo's *Generate Delivery Guides* button generates one delivery guide per picking.\n"
+"* **Generate from the batch list**: the *Generate Delivery Guide* action of the batch list applies the same rule to each selected batch (one guide for a partner batch, one per picking otherwise) and skips the batches that cannot generate it yet. It replaces Odoo's action for batches, which is unbound.\n"
+"* **Generate from the transfer list**: when Odoo's *Generate Delivery Guide* action of the transfer list gets transfers of a partner batch, they get the single delivery guide of their batch. The automatic assignment on validation still numbers transfer by transfer.\n"
+"* **Batch delivery slip**: for Argentine companies, the batch prints with the Argentine layout (custom header, CAI, AFIP barcode, customer identification, COT, declared value and number of packages), with or without a delivery guide number.\n"
+"* **Synchronisation**: the delivery guide number on the batch is computed from its pickings and kept in sync. Editing it on the batch writes back to all pickings (only those that differ are updated).\n"
+"* **Picking view, partner batches**:\n"
+"\n"
+"  - A warning banner is displayed on the picking explaining that the delivery\n"
+"    guide is managed from the batch.\n"
+"  - The picking-level *Generate Delivery Guide* button is hidden.\n"
+"  - ``l10n_ar_delivery_guide_number`` becomes read-only, preventing\n"
+"    out-of-sync manual edits.\n"
+"  - ``number_of_packages`` and ``declared_value`` are hidden (set at batch\n"
+"    level).\n"
+"\n"
+"* **Picking view, mixed-partner batches**: no UI changes — the picking keeps\n"
+"  its native delivery-guide flow.\n"
+"* **Declared value**: the batch aggregates the declared value from its pickings.\n"
+"\n"
+"Installation\n"
+"============\n"
+"\n"
+"To install this module, you need to:\n"
+"\n"
+"#. Only need to install the module\n"
+"\n"
+"Configuration\n"
+"=============\n"
+"\n"
+"To configure this module, you need to:\n"
+"\n"
+"#. Nothing to configure\n"
+"\n"
+"\n"
+".. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas\n"
+"   :alt: Try me on Runbot\n"
+"   :target: http://runbot.adhoc.com.ar/\n"
+"\n"
+"Bug Tracker\n"
+"===========\n"
+"\n"
+"Bugs are tracked on `GitHub Issues\n"
+"<https://github.com/ingadhoc/stock/issues>`_. In case of trouble, please\n"
+"check there if your issue has already been reported. If you spotted it first,\n"
+"help us smashing it by providing a detailed and welcomed feedback.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Images\n"
+"------\n"
+"\n"
+"* |company| |icon|\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"\n"
+"Maintainer\n"
+"----------\n"
+"\n"
+"|company_logo|\n"
+"\n"
+"This module is maintained by the |company|.\n"
+"\n"
+"To contribute to this module, please visit https://www.adhoc.com.ar.\n"
+msgstr ""
 
 #. module: l10n_ar_stock_picking_batch
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.report_batch_delivery_document
@@ -67,8 +166,8 @@ msgstr "<strong>Cond. IVA: </strong>"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.stock_picking_form_exception
 msgid ""
 "<strong>Warning:</strong> This transfer belongs to a batch with a defined "
-"contact. Delivery guide assignment is managed from the batch; to assign from "
-"this transfer, you must remove it from the batch."
+"contact. Delivery guide assignment is managed from the batch; to assign from"
+" this transfer, you must remove it from the batch."
 msgstr ""
 "<strong>Advertencia:</strong> Esta transferencia pertenece a un lote con "
 "contacto definido. La asignación de remitos se hace desde el lote; para "
@@ -85,6 +184,11 @@ msgid "Aclaración"
 msgstr ""
 
 #. module: l10n_ar_stock_picking_batch
+#: model:ir.module.module,shortdesc:base.module_l10n_ar_stock_picking_batch
+msgid "Argentinean Delivery Guides on Batch Pickings"
+msgstr "Remitos argentinos en lotes de traslados"
+
+#. module: l10n_ar_stock_picking_batch
 #: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__automatic_declare_value
 msgid "Automatic Declare Value"
 msgstr "Declarar Valor Automáticamente"
@@ -97,7 +201,7 @@ msgstr "Código de barras"
 #. module: l10n_ar_stock_picking_batch
 #: model:ir.model,name:l10n_ar_stock_picking_batch.model_stock_picking_batch
 msgid "Batch Transfer"
-msgstr "Lote de Traslados"
+msgstr "Traslado por lote"
 
 #. module: l10n_ar_stock_picking_batch
 #: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__l10n_ar_cai_data
@@ -145,9 +249,10 @@ msgid "Delivery Guide No."
 msgstr "Nro. Remito"
 
 #. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking__display_name
 #: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__display_name
 msgid "Display Name"
-msgstr "Nombre mostrado"
+msgstr "Mostrar nombre"
 
 #. module: l10n_ar_stock_picking_batch
 #: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__document_type_id
@@ -170,12 +275,12 @@ msgid "Firma"
 msgstr ""
 
 #. module: l10n_ar_stock_picking_batch
-#: model:ir.actions.server,name:l10n_ar_stock_picking_batch.action_batch_generate_delivery_guide
 #: model_terms:ir.ui.view,arch_db:l10n_ar_stock_picking_batch.stock_batch_picking_form
 msgid "Generate Delivery Guide"
 msgstr "Generar Remito"
 
 #. module: l10n_ar_stock_picking_batch
+#: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking__id
 #: model:ir.model.fields,field_description:l10n_ar_stock_picking_batch.field_stock_picking_batch__id
 msgid "ID"
 msgstr "ID"
@@ -201,6 +306,13 @@ msgid ""
 "The ISO country code in two chars. \n"
 "You can use this field for quick search."
 msgstr ""
+"El código ISO del país en dos caracteres.\n"
+"Puedes utilizar este campo para realizar una búsqueda rápida."
+
+#. module: l10n_ar_stock_picking_batch
+#: model:ir.model,name:l10n_ar_stock_picking_batch.model_stock_picking
+msgid "Transfer"
+msgstr "Transferir"
 
 #. module: l10n_ar_stock_picking_batch
 #: model:ir.model.fields,help:l10n_ar_stock_picking_batch.field_stock_picking_batch__automatic_declare_value
@@ -209,3 +321,7 @@ msgid ""
 "The value will be calculated in the company's currency. Define a pricelist "
 "for pickings not linked to a sale order."
 msgstr ""
+"Si se habilita, sugiere automáticamente el valor declarado en función de los "
+"precios de los productos. El valor se calculará en la moneda de la compañía. "
+"Si hay una orden de venta, tomará los precios de esta. Caso contrario, se "
+"debe definir una lista de precios."
