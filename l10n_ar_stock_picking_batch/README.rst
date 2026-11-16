@@ -26,7 +26,11 @@ The whole module is conditional on the batch having a partner
 
 Main features:
 
-* **Generate delivery guide from a batch**: a *Generate Delivery Guide* button appears on the batch form once it is validated (state ``done``) and the operation type has an Argentine document type configured. It creates the guide on the first picking and propagates the number and CAI data to all other pickings in the batch.
+* **Generate delivery guide from a batch**: a *Generate Delivery Guide* button appears on the batch form once it is validated (state ``done``), the batch has a partner and the operation type has an Argentine document type configured. It creates the guide on the first picking and propagates the number and CAI data to all other pickings in the batch. Odoo's *Generate Delivery Guides* button is hidden on these batches.
+* **Mixed-partner batches**: Odoo's *Generate Delivery Guides* button generates one delivery guide per picking.
+* **Generate from the batch list**: Odoo's *Generate Delivery Guides* action of the batch list calls the same method, so it applies the same rule to each selected batch (one guide for a partner batch, one per picking otherwise) and skips the batches that cannot generate it yet.
+* **Generate from the transfer list**: when Odoo's *Generate Delivery Guide* action of the transfer list gets transfers of a partner batch, they get the single delivery guide of their batch. The automatic assignment on validation also gives the transfers of a partner batch the same single delivery guide.
+* **Batch delivery slip**: for Argentine companies, the batch prints with the Argentine layout (custom header, CAI, AFIP barcode, customer identification, COT, declared value and number of packages), with or without a delivery guide number.
 * **Synchronisation**: the delivery guide number on the batch is computed from its pickings and kept in sync. Editing it on the batch writes back to all pickings (only those that differ are updated).
 * **Picking view, partner batches**:
 
