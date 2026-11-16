@@ -127,9 +127,16 @@ class StockPickingBatch(models.Model):
         """
         Assign delivery guide info to related pickings
         """
-        for batch in self:
+        # a batch without contact gets one delivery guide per picking, as in Odoo
+        batches_without_partner = self.filtered(lambda b: not b.partner_id)
+        if batches_without_partner:
+            super(StockPickingBatch, batches_without_partner).l10n_ar_action_create_delivery_guide()
+        # skip the batches that cannot generate it, as Odoo does with the pickings
+        for batch in (self - batches_without_partner).filtered("l10n_ar_allow_generate_delivery_guide"):
             if not batch.l10n_ar_delivery_guide_number and batch.picking_ids:
-                batch.picking_ids[:1].l10n_ar_action_create_delivery_guide()
+                batch.picking_ids[:1].with_context(
+                    l10n_ar_picking_delivery_guide=True
+                ).l10n_ar_action_create_delivery_guide()
                 first_picking = batch.picking_ids[0]
                 batch.picking_ids[1:].write(
                     {
