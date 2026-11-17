@@ -87,20 +87,26 @@ class TestPreprintedPaperformat(TransactionCase):
     def _resolved_paperformat(self, res_ids):
         """El paperformat que el motor usaría para imprimir esas transferencias.
 
-        Reproduce lo que hace el core en ``_run_wkhtmltopdf``, así el test recorre la cadena
-        real: el override de ``_render_qweb_pdf_prepare_streams`` deja el dato en el contexto y
-        ``get_paperformat`` lo lee de ahí."""
+        Reproduce lo que hace el core en ``_run_pdf_engine_without_processing``, así el test
+        recorre la cadena real: el override de ``_render_qweb_pdf_prepare_streams`` deja el dato
+        en el contexto y ``get_paperformat`` lo lee de ahí."""
         resolved = []
 
-        def capture(self_report, bodies, report_ref=False, **kwargs):
+        def capture(self_report, engine_name, bodies, report_ref=False, **kwargs):
             resolved.append(self_report._get_report(report_ref).get_paperformat())
             return b"%PDF-1.4 fake"
 
-        # force_report_rendering: sin eso, en tests Odoo devuelve el HTML y nunca llama a
-        # wkhtmltopdf, que es justo el paso donde se resuelve el paperformat.
-        with patch.object(type(self.env["ir.actions.report"]), "_run_wkhtmltopdf", capture):
+        # force_report_rendering: sin eso, en tests Odoo devuelve el HTML y nunca llama al
+        # motor de PDF, que es justo el paso donde se resuelve el paperformat.
+        # El estado del motor también se parchea: en el CI no hay wkhtmltopdf y el core
+        # corta antes de llegar al motor.
+        report_model = type(self.env["ir.actions.report"])
+        with (
+            patch.object(report_model, "get_pdf_engine_state", return_value="ok"),
+            patch.object(report_model, "_run_pdf_engine_without_processing", capture),
+        ):
             self.report.with_context(force_report_rendering=True)._render_qweb_pdf(self.report.report_name, res_ids)
-        self.assertEqual(len(resolved), 1, "el render tendría que haber llamado a wkhtmltopdf una vez")
+        self.assertEqual(len(resolved), 1, "el render tendría que haber llamado al motor de PDF una vez")
         return resolved[0]
 
     def test_own_paperformat_reaches_the_render(self):
