@@ -63,7 +63,7 @@ class AccountTax(models.Model):
         ]
         if not order_lines:
             return None
-        order = self.env["sale.order.line"].union(*order_lines).order_id
+        order = self.env["sale.order.line"].union(order_lines).order_id
         # Early payment discount lines carry the order itself as record.
         if len(order) != 1 or any(
             not isinstance(record, models.BaseModel) or (record._name != "sale.order.line" and record != order)

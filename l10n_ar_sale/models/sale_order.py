@@ -36,6 +36,7 @@ class SaleOrder(models.Model):
         self.env.add_to_compute(self._fields["amount_tax"], self)
         return super()._action_confirm()
 
+    @api.depends_context("commit_assetsbundle", "from_portal_view")
     def _compute_tax_totals(self):
         super()._compute_tax_totals()
         # discriminamos o no impuestos solo en pdf y portal. En backend siempre los mostramos. Para esto evaluamos:
@@ -50,10 +51,13 @@ class SaleOrder(models.Model):
             if not tax_groups:
                 continue
             to_remove_ids = tax_groups.filtered(lambda x: x.l10n_ar_vat_afip_code).ids
-            tax_group_vals = order.tax_totals["subtotals"][0]["tax_groups"]
+            # each read of a Json field returns a copy: edit it and assign it back
+            tax_totals = order.tax_totals
+            tax_group_vals = tax_totals["subtotals"][0]["tax_groups"]
             # TODO revisar si es discriminar / no discrminar
             updated_tax_group_vals = list(filter(lambda x: x.get("id") not in to_remove_ids, tax_group_vals))
-            order.tax_totals["subtotals"][0]["tax_groups"] = updated_tax_group_vals
+            tax_totals["subtotals"][0]["tax_groups"] = updated_tax_group_vals
+            order.tax_totals = tax_totals
 
     def _get_name_sale_report(self, report_xml_id):
         """Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document
