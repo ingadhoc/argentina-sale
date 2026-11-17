@@ -121,8 +121,10 @@
                     <strong>VAT Cond: </strong><span t-field="doc.partner_id.l10n_ar_afip_responsibility_type_id"/>
 
                     <!-- (17) CUIT -->
-                    <t t-if="doc.partner_id.vat and doc.partner_id.l10n_latam_identification_type_id.name and doc.partner_id.l10n_latam_identification_type_id.name != 'Sigd'">
-                        <br/><strong><t t-out="doc.partner_id.l10n_latam_identification_type_id.name or doc.company_id.country_id.vat_label" id="inv_tax_id_label"/>:</strong> <span t-out="doc.partner_id.l10n_ar_formatted_vat or doc.partner_id.vat"/>
+                    <t t-if="doc.partner_id.l10n_ar_afip_code and doc.partner_id.l10n_ar_afip_code != '99'">
+                        <t t-set="ar_doc_vals" t-value="doc.partner_id._get_preferred_legal_entity_identifier_vals()"/>
+                        <t t-set="ar_doc_label" t-value="ar_doc_vals.get('label') or doc.company_id.country_id.vat_label"/>
+                        <br/><strong><t t-out="ar_doc_label" id="inv_tax_id_label"/>:</strong> <span t-out="doc.partner_id.l10n_ar_formatted_vat or ar_doc_vals.get('value', '')"/>
                     </t>
 
                 </div>
@@ -168,7 +170,10 @@
     </template>
     <template id="sale_order_portal_content_discount" priority="20" inherit_id="sale.sale_order_portal_content">
 
-        <xpath expr="//t[@t-out='(1-line.discount / 100.0) * line.price_unit']" position="attributes">
+        <xpath expr="//div[hasclass('d-lg-none')]//span[@t-out='line._get_discounted_price()']" position="attributes">
+            <attribute name="t-out">(1-line.discount / 100.0) * line.report_price_unit</attribute>
+        </xpath>
+        <xpath expr="//td[@name='td_product_priceunit']//t[@t-out='line._get_discounted_price()']" position="attributes">
             <attribute name="t-out">(1-line.discount / 100.0) * line.report_price_unit</attribute>
         </xpath>
 
@@ -182,15 +187,10 @@
     </template>
 
     <template id="sale_order_portal_content_totals_table" inherit_id="sale.sale_order_portal_content_totals_table" priority="99">
-        <t t-set="tax_totals" position="attributes">
-            <!-- agregamos key para saber que estamos en la vista poral y queremos evaluar incluir o no los impuestos -->
-            <attribute name="t-value">sale_order.with_context(from_portal_view=True).tax_totals</attribute>
-        </t>
-        <!-- mandamos la variable doc para que nuestro custom "document_tax_totals" discrimine o no el subtotal. Tmb cambiamos para que la vista portal
-        llame a nuestro propio "l10n_ar_sale.document_tax_totals" (no importa filtrar por localizacion o pais porque vat_discriminated define el comportamiento) -->
-        <t t-set="tax_totals" position="after">
-            <t t-set="doc" t-value="sale_order"/>
-        </t>
+        <!-- agregamos key para saber que estamos en la vista poral y queremos evaluar incluir o no los impuestos -->
+        <xpath expr="//t[@t-call]" position="attributes">
+            <attribute name="tax_totals">sale_order.with_context(from_portal_view=True).tax_totals</attribute>
+        </xpath>
 
     </template>
 
