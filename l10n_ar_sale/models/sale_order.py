@@ -100,7 +100,7 @@ class SaleOrder(models.Model):
                 invoice_vals["journal_id"] = expo_journal.id
         return invoice_vals
 
-    def _create_invoices(self, grouped=False, final=False, date=None):
+    def _create_invoices(self, final=False, grouped=False):
         """Por alguna razon cuando voy a crear la factura a traves de una devolucion, no me esta permitiendo crearla
         y validarla porque resulta el campo tipo de documento esta quedando vacio. Este campo se llena y computa
         automaticamente al generar al modificar el diaro de una factura.
@@ -124,7 +124,7 @@ class SaleOrder(models.Model):
                     ", ".join(nothing_to_invoice.mapped("name")),
                 )
             )
-        invoices = super()._create_invoices(grouped=grouped, final=final, date=date)
+        invoices = super()._create_invoices(final=final, grouped=grouped)
 
         # Intentamos Completar el dato tipo de documento si no seteado
         to_fix = invoices.filtered(lambda x: x.l10n_latam_use_documents and not x.l10n_latam_document_type_id)

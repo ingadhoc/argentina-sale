@@ -132,8 +132,8 @@ class SaleOrderLine(models.Model):
         return super()._compute_price_unit_product_uom()
 
     @api.model_create_multi
-    def create(self, vals):
-        rec = super(SaleOrderLine, self).create(vals)
+    def create(self, vals_list):
+        rec = super(SaleOrderLine, self).create(vals_list)
         rec.check_vat_tax()
         return rec
 
