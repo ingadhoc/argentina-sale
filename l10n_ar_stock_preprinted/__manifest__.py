@@ -1,6 +1,6 @@
 {
     "name": "Remito Preimpreso para Argentina",
-    "version": "19.0.1.2.0",
+    "version": "20.0.1.0.0",
     "category": "Localization/Argentina",
     "sequence": 14,
     "author": "ADHOC SA",
@@ -14,6 +14,6 @@
         "views/stock_picking_type_views.xml",
         "views/report_deliveryslip.xml",
     ],
-    "installable": False,
+    "installable": True,
     "application": False,
 }

@@ -49,6 +49,12 @@ Qué agrega
   asignan tantos números consecutivos como hojas, separados por coma y sin datos
   de CAI. Si el tipo de operación está configurado con duplicado/triplicado, el conteo corre
   sobre una sola copia: el juego de copias consume un solo número por hoja.
+* El remito preimpreso se genera de a una entrega, porque el número ya viene
+  impreso en el papel. Si se intenta generar el de varias entregas juntas (desde
+  la lista o desde un lote sin contacto) se avisa y no se numera ninguna. Una
+  entrega sin validar tampoco se numera, para no gastar una hoja del talonario.
+  Con una sola entrega, desde la lista o desde el lote, el número se genera pero
+  no se abre la impresión: se imprime después desde la entrega.
 * Reporte: una vez generada la guía, el remito se imprime sin encabezado, sin
   número y sin CAI (ya vienen en el papel). Antes de generarla se imprime como el
   comprobante de entrega argentino normal.

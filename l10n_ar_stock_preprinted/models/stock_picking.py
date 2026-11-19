@@ -1,6 +1,7 @@
 from io import BytesIO
 
-from odoo import fields, models
+from odoo import _, fields, models
+from odoo.exceptions import UserError
 from odoo.tools.pdf import PdfReader
 
 
@@ -53,26 +54,49 @@ class StockPicking(models.Model):
         papel de imprenta ya los trae); solo se registran en el picking. Cuando el método
         corre desde ``_action_done`` (autoasignación) el retorno se ignora, así que no
         dispara impresiones automáticas. En autoimpresos se delega al flujo estándar de
-        Odoo (un número + datos de CAI)."""
-        self.ensure_one()
-        if self.l10n_ar_voucher_print_mode == "preprinted":
-            if not self.l10n_ar_delivery_guide_number:
-                self._l10n_ar_check_delivery_guide_prefix()
-                picking_type = self.picking_type_id
-                picking_type._ensure_l10n_ar_stock_sequence()
-                sheets = self._l10n_ar_count_preprinted_sheets()
-                numbers = [picking_type.l10n_ar_sequence_id.next_by_id() for __ in range(sheets)]
-                self.l10n_ar_delivery_guide_number = ",".join(numbers)
-                # El CAI, su vencimiento y el rango no aplican al preimpreso: vienen impresos
-                # en el papel de la imprenta. Igual escribimos las claves en False para
-                # respetar la forma del dict que arma el core (l10n_ar_stock), porque los
-                # reportes lo leen por subscript y un dict parcial los rompe con KeyError.
-                self.l10n_ar_cai_data = {
-                    "document_type_id": picking_type.l10n_ar_document_type_id.id,
-                    "cai_authorization_code": False,
-                    "cai_expiration_date": False,
-                    "sequence_number_start": False,
-                    "sequence_number_end": False,
-                }
-            return self.env.ref("stock.action_report_delivery").report_action(self)
-        return super().l10n_ar_action_create_delivery_guide()
+        Odoo (un número + datos de CAI). Los preimpresos se generan de a una entrega: con
+        varias juntas (lista o lote) avisamos en vez de numerar, porque el número ya viene
+        impreso en el papel y tendría que salir en el mismo orden."""
+        preprinted = self.filtered(lambda picking: picking.l10n_ar_voucher_print_mode == "preprinted")
+        if not preprinted:
+            return super().l10n_ar_action_create_delivery_guide()
+        if len(self) > 1:
+            raise UserError(
+                _(
+                    "Preprinted delivery guides are generated one picking at a time, because the number"
+                    " is already printed on the paper. Generate the delivery guide from the form of"
+                    " each picking: %(names)s.",
+                    names=", ".join(preprinted.mapped("name")),
+                )
+            )
+        if not self.l10n_ar_delivery_guide_number:
+            # the list action reaches here with any picking, and each number spent burns a sheet
+            if self.state != "done":
+                raise UserError(
+                    _("Validate the picking %(name)s before generating the delivery guide.", name=self.name)
+                )
+            if not self.picking_type_id.l10n_ar_document_type_id:
+                raise UserError(
+                    _(
+                        "The operation type of the picking %(name)s is not configured for delivery guides.",
+                        name=self.name,
+                    )
+                )
+            self._l10n_ar_check_delivery_guide_prefix()
+            picking_type = self.picking_type_id
+            picking_type._ensure_l10n_ar_stock_sequence()
+            sheets = self._l10n_ar_count_preprinted_sheets()
+            numbers = [picking_type.l10n_ar_sequence_id.next_by_id() for __ in range(sheets)]
+            self.l10n_ar_delivery_guide_number = ",".join(numbers)
+            # El CAI, su vencimiento y el rango no aplican al preimpreso: vienen impresos
+            # en el papel de la imprenta. Igual escribimos las claves en False para
+            # respetar la forma del dict que arma el core (l10n_ar_stock), porque los
+            # reportes lo leen por subscript y un dict parcial los rompe con KeyError.
+            self.l10n_ar_cai_data = {
+                "document_type_id": picking_type.l10n_ar_document_type_id.id,
+                "cai_authorization_code": False,
+                "cai_expiration_date": False,
+                "sequence_number_start": False,
+                "sequence_number_end": False,
+            }
+        return self.env.ref("stock.action_report_delivery").report_action(self)
