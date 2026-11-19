@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e\n"
+"Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 19:47+0000\n"
-"PO-Revision-Date: 2026-09-08 19:47+0000\n"
+"POT-Creation-Date: 2026-11-17 13:55+0000\n"
+"PO-Revision-Date: 2026-11-17 13:55+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,12 +16,102 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ar_stock_preprinted
+#: model:ir.module.module,description:base.module_l10n_ar_stock_preprinted
+msgid ""
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"==================================\n"
+"Remito Preimpreso para Argentina\n"
+"==================================\n"
+"\n"
+"Reincorpora el soporte de **remitos preimpresos de imprenta** sobre el flujo de\n"
+"remitos argentinos de ``l10n_ar_stock`` / ``l10n_ar_stock_ux``.\n"
+"\n"
+"Un remito preimpreso es papel provisto por una imprenta que ya trae impresos el\n"
+"encabezado, la numeración y el CAI. En ese caso Odoo solo imprime el contenido\n"
+"variable (productos, cliente) y numera la entrega según las hojas que realmente\n"
+"se imprimen.\n"
+"\n"
+"Cómo se distingue del autoimpreso\n"
+"=================================\n"
+"\n"
+"El modo es una **decisión explícita** del tipo de operación, en el campo\n"
+"*Modo de Impresión del Remito*:\n"
+"\n"
+"* **Autoimpreso** (default) — Odoo imprime el comprobante completo (encabezado,\n"
+"  número y CAI) y numera con un único número por transferencia (comportamiento\n"
+"  estándar de ``l10n_ar_stock``). En el Remito R el CAI, su vencimiento y el\n"
+"  rango autorizado son obligatorios porque Odoo los imprime; el Remito X no lleva\n"
+"  CAI.\n"
+"* **Preimpreso** — el papel de imprenta ya trae encabezado, numeración y CAI.\n"
+"  Odoo solo imprime el contenido variable y numera según las hojas que se\n"
+"  consumen. El CAI, su vencimiento y el rango se ocultan y dejan de pedirse.\n"
+"\n"
+"Qué agrega\n"
+"==========\n"
+"\n"
+"* ``stock.picking.type.l10n_ar_voucher_print_mode`` (selección, almacenada):\n"
+"  *Autoimpreso* / *Preimpreso*. Lo usan la vista, el reporte y la numeración.\n"
+"  Una restricción de servidor exige CAI, vencimiento y rango en el Remito R\n"
+"  autoimpreso (la vista sola no cubre imports ni escrituras por ORM).\n"
+"* Numeración: al generar la guía de remito en un tipo preimpreso, se renderiza el\n"
+"  comprobante de entrega, se cuentan las **hojas (páginas) que se imprimen** y se\n"
+"  asignan tantos números consecutivos como hojas, separados por coma y sin datos\n"
+"  de CAI. Si el tipo de operación está configurado con duplicado/triplicado, el conteo corre\n"
+"  sobre una sola copia: el juego de copias consume un solo número por hoja.\n"
+"* El remito preimpreso se genera de a una entrega, porque el número ya viene\n"
+"  impreso en el papel. Si se intenta generar el de varias entregas juntas (desde\n"
+"  la lista o desde un lote sin contacto) se avisa y no se numera ninguna. Una\n"
+"  entrega sin validar tampoco se numera, para no gastar una hoja del talonario.\n"
+"  Con una sola entrega, desde la lista o desde el lote, el número se genera pero\n"
+"  no se abre la impresión: se imprime después desde la entrega.\n"
+"* Reporte: una vez generada la guía, el remito se imprime sin encabezado, sin\n"
+"  número y sin CAI (ya vienen en el papel). Antes de generarla se imprime como el\n"
+"  comprobante de entrega argentino normal.\n"
+"\n"
+"Configuración\n"
+"=============\n"
+"\n"
+"En *Inventario > Configuración > Tipos de operación*, para un tipo de operación\n"
+"de salida:\n"
+"\n"
+"#. Definir el *Tipo de documento* de remito.\n"
+"#. Poner *Modo de Impresión del Remito* en **Preimpreso**.\n"
+"#. Ajustar el *Prefijo* (punto de venta) y el *Próximo número* para que coincidan\n"
+"   con la primera hoja del talonario de la imprenta. Estos dos campos se piden en\n"
+"   los dos modos.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"|company| |company_logo|\n"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
 #: model:ir.model.fields,help:l10n_ar_stock_preprinted.field_stock_picking__l10n_ar_voucher_print_mode
 #: model:ir.model.fields,help:l10n_ar_stock_preprinted.field_stock_picking_type__l10n_ar_voucher_print_mode
 msgid ""
 "Argentina: cómo se imprime el remito de este tipo de operación.\n"
-"* Autoimpreso: Odoo imprime el comprobante completo (encabezado, número y CAI), por lo que el CAI, su vencimiento y el rango autorizado son obligatorios.\n"
+"* Autoimpreso: Odoo imprime el comprobante completo (encabezado, número y CAI). En el Remito R el CAI, su vencimiento y el rango autorizado son obligatorios; el Remito X no lleva CAI.\n"
 "* Preimpreso: el papel de imprenta ya trae encabezado, numeración y CAI, así que Odoo solo imprime el contenido variable y numera según las hojas que se consumen. El CAI no se carga acá porque viene impreso en el papel."
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model.fields,help:l10n_ar_stock_preprinted.field_stock_picking_type__l10n_ar_cai_required
+msgid ""
+"Argentina: el CAI, su vencimiento y el rango son obligatorios. Solo en "
+"remitos clase R autoimpresos: el X no lleva CAI y en el preimpreso viene "
+"impreso en el papel."
 msgstr ""
 
 #. module: l10n_ar_stock_preprinted
@@ -39,6 +129,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_stock_preprinted/models/stock_picking_type.py:0
 msgid "CAI Expiration Date"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.model.fields,field_description:l10n_ar_stock_preprinted.field_stock_picking_type__l10n_ar_cai_required
+msgid "CAI Required"
 msgstr ""
 
 #. module: l10n_ar_stock_preprinted
@@ -79,6 +174,20 @@ msgstr ""
 
 #. module: l10n_ar_stock_preprinted
 #. odoo-python
+#: code:addons/l10n_ar_stock_preprinted/models/stock_picking.py:0
+msgid ""
+"Preprinted delivery guides are generated one picking at a time, because the "
+"number is already printed on the paper. Generate the delivery guide from the"
+" form of each picking: %(names)s."
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#: model:ir.module.module,shortdesc:base.module_l10n_ar_stock_preprinted
+msgid "Remito Preimpreso para Argentina"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#. odoo-python
 #: code:addons/l10n_ar_stock_preprinted/models/stock_picking_type.py:0
 msgid "Sequence From"
 msgstr ""
@@ -90,6 +199,27 @@ msgid "Sequence To"
 msgstr ""
 
 #. module: l10n_ar_stock_preprinted
+#: model:ir.module.module,summary:base.module_l10n_ar_stock_preprinted
+msgid ""
+"Soporte de remitos preimpresos de imprenta (con CAI y numeración en el "
+"papel)"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#. odoo-python
+#: code:addons/l10n_ar_stock_preprinted/models/stock_picking.py:0
+msgid ""
+"The operation type of the picking %(name)s is not configured for delivery "
+"guides."
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
 #: model:ir.model,name:l10n_ar_stock_preprinted.model_stock_picking
 msgid "Transfer"
+msgstr ""
+
+#. module: l10n_ar_stock_preprinted
+#. odoo-python
+#: code:addons/l10n_ar_stock_preprinted/models/stock_picking.py:0
+msgid "Validate the picking %(name)s before generating the delivery guide."
 msgstr ""
