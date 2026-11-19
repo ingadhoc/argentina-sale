@@ -45,6 +45,14 @@ class TestVoucherPrintMode(TransactionCase):
                 ],
             }
         )
+        cls._validate(cls.picking)
+
+    @classmethod
+    def _validate(cls, picking):
+        # the delivery guide is generated only on validated transfers
+        picking.company_id.stock_move_email_validation = False
+        picking.action_confirm()
+        picking.button_validate()
 
     def test_preprinted_allows_empty_cai(self):
         """En preimpreso el CAI y el rango no se cargan: vienen impresos en el papel."""
@@ -95,6 +103,7 @@ class TestVoucherPrintMode(TransactionCase):
                 "move_ids": [(0, 0, {"product_id": self.product.id, "product_uom_qty": 1.0})],
             }
         )
+        self._validate(picking)
         picking.l10n_ar_action_create_delivery_guide()
         self.assertEqual(picking.l10n_ar_delivery_guide_number, "00098-00000001")
         self.assertFalse(picking.l10n_ar_cai_data["cai_authorization_code"])
@@ -193,6 +202,60 @@ class TestVoucherPrintMode(TransactionCase):
             self.picking.l10n_ar_action_create_delivery_guide()
         self.assertEqual(self.picking.l10n_ar_delivery_guide_number, numbers)
 
+    def _new_picking(self, validate=True):
+        # stock_ux blocks copy() on a picking type with "Block Additional Quantity"
+        picking = self.env["stock.picking"].create(
+            {
+                "picking_type_id": self.picking_type.id,
+                "location_id": self.env.ref("stock.stock_location_stock").id,
+                "location_dest_id": self.env.ref("stock.stock_location_customers").id,
+                "move_ids": [(0, 0, {"product_id": self.product.id, "product_uom_qty": 1.0})],
+            }
+        )
+        if validate:
+            self._validate(picking)
+        return picking
+
+    def test_preprinted_several_pickings_warn_without_numbering(self):
+        """Con varias entregas juntas (lista o lote) no se numera ni se da un error técnico:
+        el número viene impreso en el papel y tendría que salir en el mismo orden."""
+        pickings = self.picking | self._new_picking()
+        with self.assertRaisesRegex(UserError, "one picking at a time"):
+            pickings.l10n_ar_action_create_delivery_guide()
+        self.assertFalse(any(pickings.mapped("l10n_ar_delivery_guide_number")))
+
+    def test_preprinted_not_validated_is_not_numbered(self):
+        """Desde la lista llega cualquier entrega: sin validar no se numera, porque cada
+        número gastado quema una hoja del talonario."""
+        picking = self._new_picking(validate=False)
+        with self.assertRaisesRegex(UserError, "Validate the picking"):
+            picking.l10n_ar_action_create_delivery_guide()
+        self.assertFalse(picking.l10n_ar_delivery_guide_number)
+
+    def test_preprinted_auto_assign_on_validation(self):
+        """Al validar, un tipo con autoasignación numera la entrega preimpresa por sus hojas."""
+        self.picking_type.auto_assign_delivery_guide = True
+        picking = self._new_picking(validate=False)
+        with patch.object(type(picking), "_l10n_ar_count_preprinted_sheets", return_value=2):
+            self._validate(picking)
+        self.assertEqual(len(picking.l10n_ar_delivery_guide_number.split(",")), 2)
+
+    def test_autoprinted_several_pickings_use_standard_flow(self):
+        """El aviso es solo del preimpreso: en autoimpreso varias entregas siguen yendo al
+        flujo estándar de Odoo."""
+        self.picking_type.write(
+            {
+                "l10n_ar_voucher_print_mode": "autoprinted",
+                "l10n_ar_cai_authorization_code": "12345678901234",
+                "l10n_ar_cai_expiration_date": "2030-12-31",
+                "l10n_ar_sequence_number_start": "00000001",
+                "l10n_ar_sequence_number_end": "00000999",
+            }
+        )
+        pickings = self.picking | self._new_picking()
+        pickings.l10n_ar_action_create_delivery_guide()
+        self.assertTrue(all(pickings.mapped("l10n_ar_delivery_guide_number")))
+
     def test_preprinted_uses_ar_delivery_report(self):
         """Toda transferencia de compañía AR se imprime con el comprobante argentino, tenga o
         no número de remito asignado (l10n_ar_stock_ux). El preimpreso lo necesita también
@@ -212,7 +275,7 @@ class TestVoucherPrintMode(TransactionCase):
         self.picking_type.l10n_ar_copies = "triplicado"
         rendered_bodies = []
 
-        def fake_wkhtmltopdf(self_report, bodies, *args, **kwargs):
+        def fake_pdf_engine(self_report, engine_name, bodies, *args, **kwargs):
             # one blank page per body: each copy of the voucher is its own body
             rendered_bodies.append(len(bodies))
             writer = PdfFileWriter()
@@ -222,9 +285,15 @@ class TestVoucherPrintMode(TransactionCase):
             writer.write(stream)
             return stream.getvalue()
 
-        # force_report_rendering: sin eso, en tests Odoo devuelve el HTML y nunca llama a
-        # wkhtmltopdf, que es el paso que arma las páginas que se cuentan.
-        with patch.object(type(self.env["ir.actions.report"]), "_run_wkhtmltopdf", fake_wkhtmltopdf):
+        # force_report_rendering: sin eso, en tests Odoo devuelve el HTML y nunca llama al
+        # motor de PDF, que es el paso que arma las páginas que se cuentan.
+        # El estado del motor también se parchea: en el CI no hay wkhtmltopdf y el core
+        # corta antes de llegar al motor falso.
+        report_model = type(self.env["ir.actions.report"])
+        with (
+            patch.object(report_model, "get_pdf_engine_state", return_value="ok"),
+            patch.object(report_model, "_run_pdf_engine_without_processing", fake_pdf_engine),
+        ):
             sheets = self.picking.with_context(force_report_rendering=True)._l10n_ar_count_preprinted_sheets()
         self.assertEqual(rendered_bodies, [3], "el comprobante tendría que salir tres veces")
         self.assertEqual(sheets, 1)
