@@ -36,6 +36,7 @@ class SaleOrder(models.Model):
         self.env.add_to_compute(self._fields["amount_tax"], self)
         return super()._action_confirm()
 
+    @api.depends_context("commit_assetsbundle", "from_portal_view")
     def _compute_tax_totals(self):
         super()._compute_tax_totals()
         # discriminamos o no impuestos solo en pdf y portal. En backend siempre los mostramos. Para esto evaluamos:
@@ -50,10 +51,13 @@ class SaleOrder(models.Model):
             if not tax_groups:
                 continue
             to_remove_ids = tax_groups.filtered(lambda x: x.l10n_ar_vat_afip_code).ids
-            tax_group_vals = order.tax_totals["subtotals"][0]["tax_groups"]
+            # each read of a Json field returns a copy: edit it and assign it back
+            tax_totals = order.tax_totals
+            tax_group_vals = tax_totals["subtotals"][0]["tax_groups"]
             # TODO revisar si es discriminar / no discrminar
             updated_tax_group_vals = list(filter(lambda x: x.get("id") not in to_remove_ids, tax_group_vals))
-            order.tax_totals["subtotals"][0]["tax_groups"] = updated_tax_group_vals
+            tax_totals["subtotals"][0]["tax_groups"] = updated_tax_group_vals
+            order.tax_totals = tax_totals
 
     def _get_name_sale_report(self, report_xml_id):
         """Method similar to the '_get_name_invoice_report' of l10n_latam_invoice_document
@@ -100,7 +104,7 @@ class SaleOrder(models.Model):
                 invoice_vals["journal_id"] = expo_journal.id
         return invoice_vals
 
-    def _create_invoices(self, grouped=False, final=False, date=None):
+    def _create_invoices(self, final=False, grouped=False):
         """Por alguna razon cuando voy a crear la factura a traves de una devolucion, no me esta permitiendo crearla
         y validarla porque resulta el campo tipo de documento esta quedando vacio. Este campo se llena y computa
         automaticamente al generar al modificar el diaro de una factura.
@@ -124,7 +128,7 @@ class SaleOrder(models.Model):
                     ", ".join(nothing_to_invoice.mapped("name")),
                 )
             )
-        invoices = super()._create_invoices(grouped=grouped, final=final, date=date)
+        invoices = super()._create_invoices(final=final, grouped=grouped)
 
         # Intentamos Completar el dato tipo de documento si no seteado
         to_fix = invoices.filtered(lambda x: x.l10n_latam_use_documents and not x.l10n_latam_document_type_id)
@@ -186,7 +190,7 @@ class SaleOrder(models.Model):
             date = fields.Date.to_date(fields.Datetime.context_timestamp(self, self.date_order))
             new_taxes = self.fiscal_position_id._l10n_ar_add_taxes(self.partner_id, self.company_id, date, "perception")
             if new_taxes:
-                line.tax_id = line.tax_id | new_taxes
+                line.tax_ids = line.tax_ids | new_taxes
         return line
 
     def copy(self, default=None):

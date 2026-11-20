@@ -7,18 +7,93 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e\n"
+"Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-29 20:56+0000\n"
-"PO-Revision-Date: 2025-11-19 14:19+0000\n"
+"POT-Creation-Date: 2026-11-17 15:21+0000\n"
+"PO-Revision-Date: 2026-11-17 15:21+0000\n"
 "Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
-"1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#. module: l10n_ar_sale
+#: model:ir.module.module,description:base.module_l10n_ar_sale
+msgid ""
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"=============================\n"
+"Argentinian Sale Total Fields\n"
+"=============================\n"
+"\n"
+"Este modulo agrega, en talonarios de ventas, la posibilidad de forzar la discriminación,\n"
+"o no, de los impuestos independientemente de la responsabilidad de IVA del partner\n"
+"\n"
+"Installation\n"
+"============\n"
+"\n"
+"To install this module, you need to:\n"
+"\n"
+"#. Activar \"Talonarios de venta\" en ajustes\n"
+"\n"
+"Configuration\n"
+"=============\n"
+"\n"
+"To configure this module, you need to:\n"
+"\n"
+"#. Nothing to configure\n"
+"\n"
+"Usage\n"
+"=====\n"
+"\n"
+"To use this module, you need to:\n"
+"\n"
+"#. Go to ...\n"
+"\n"
+".. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas\n"
+"   :alt: Try me on Runbot\n"
+"   :target: http://runbot.adhoc.com.ar/\n"
+"\n"
+"Bug Tracker\n"
+"===========\n"
+"\n"
+"Bugs are tracked on `GitHub Issues\n"
+"<https://github.com/ingadhoc/argentina-sale/issues>`_. In case of trouble, please\n"
+"check there if your issue has already been reported. If you spotted it first,\n"
+"help us smashing it by providing a detailed and welcomed feedback.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Images\n"
+"------\n"
+"\n"
+"* |company| |icon|\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"\n"
+"Maintainer\n"
+"----------\n"
+"\n"
+"|company_logo|\n"
+"\n"
+"This module is maintained by the |company|.\n"
+"\n"
+"To contribute to this module, please visit https://www.adhoc.com.ar.\n"
+msgstr ""
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -33,7 +108,7 @@ msgstr "<br/><strong>Vencimiento: </strong>"
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "<br/><strong>Incoterm:</strong>"
-msgstr ""
+msgstr "<br/><strong>Incoterm:</strong>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -48,7 +123,7 @@ msgstr "<br/><strong>Su referencia:</strong>"
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "<span>SubTotal</span>"
-msgstr ""
+msgstr "<span>Subtotal</span>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -58,7 +133,7 @@ msgstr "<span>Impuestos</span>"
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
 msgid "<span>Total</span>"
-msgstr ""
+msgstr "<span>Total</span>"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.report_saleorder_document
@@ -76,20 +151,27 @@ msgid "<strong>VAT Cond: </strong>"
 msgstr "<strong>Cond. IVA: </strong>"
 
 #. module: l10n_ar_sale
+#: model:ir.module.module,shortdesc:base.module_l10n_ar_sale
+msgid "Argentinian Sale Total Fields"
+msgstr "Campos de totales de ventas para Argentina"
+
+#. module: l10n_ar_sale
 #: model:ir.model,name:l10n_ar_sale.model_res_config_settings
 msgid "Config Settings"
 msgstr "Ajustes de configuración"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_account_tax__display_name
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__display_name
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order__display_name
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__display_name
 msgid "Display Name"
-msgstr "Nombre para mostrar"
+msgstr "Mostrar nombre"
 
 #. module: l10n_ar_sale
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_ar_sale.field_account_tax__id
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_res_config_settings__id
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order__id
 #: model:ir.model.fields,field_description:l10n_ar_sale.field_sale_order_line__id
@@ -104,7 +186,7 @@ msgstr "Doc. no válido como factura"
 #. module: l10n_ar_sale
 #: model:ir.model,name:l10n_ar_sale.model_account_move
 msgid "Journal Entry"
-msgstr ""
+msgstr "Asiento contable"
 
 #. module: l10n_ar_sale
 #. odoo-python
@@ -170,12 +252,12 @@ msgstr "Precio Unitario con Impuestos"
 #. module: l10n_ar_sale
 #: model:ir.model,name:l10n_ar_sale.model_sale_order
 msgid "Sales Order"
-msgstr "Pedido de venta"
+msgstr "Orden de venta"
 
 #. module: l10n_ar_sale
 #: model:ir.model,name:l10n_ar_sale.model_sale_order_line
 msgid "Sales Order Line"
-msgstr "Línea de pedido de venta"
+msgstr "Línea de la orden de venta"
 
 #. module: l10n_ar_sale
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sale.res_config_settings_view_form
@@ -190,6 +272,11 @@ msgstr ""
 "de venta."
 
 #. module: l10n_ar_sale
+#: model:ir.model,name:l10n_ar_sale.model_account_tax
+msgid "Tax"
+msgstr "Impuesto"
+
+#. module: l10n_ar_sale
 #. odoo-python
 #: code:addons/l10n_ar_sale/models/sale_order.py:0
 msgid ""
@@ -201,9 +288,9 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_sale/models/sale_order_line.py:0
 msgid ""
-"There must be exactly one tax from the \"VAT\" tax group per line, add it to "
-"\"%s\". If you already have one, check the tax configuration under advanced "
-"options in the \"Tax Group\" field."
+"There must be exactly one tax from the \"VAT\" tax group per line, add it to"
+" \"%s\". If you already have one, check the tax configuration under advanced"
+" options in the \"Tax Group\" field."
 msgstr ""
 "Debe haber un único impuesto del grupo de impuestos \"IVA\" por línea, "
 "agréguelo a \"%s\". En caso de tenerlo, revise la configuración del "

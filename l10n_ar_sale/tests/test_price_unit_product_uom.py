@@ -40,11 +40,12 @@ class TestPriceUnitProductUom(TestArCommon):
             }
         )
 
-    def _create_line(self, partner, price_unit=67.83):
+    def _create_line(self, partner, price_unit=67.83, document_tax_mode=None):
         order = self.env["sale.order"].create(
             {
                 "partner_id": partner.id,
                 "company_id": self.company_ri.id,
+                **({"document_tax_mode": document_tax_mode} if document_tax_mode else {}),
                 "order_line": [
                     Command.create(
                         {
@@ -135,3 +136,49 @@ class TestPriceUnitProductUom(TestArCommon):
                 line_form.price_unit_product_uom = 5.0
 
         self.assertAlmostEqual(line.price_unit, 75.0)
+
+    def _create_line_in_tax_mode(self, partner, company_mode, order_mode, price_unit):
+        """A line on an order whose tax mode differs from the one the company has by default."""
+        self.company_ri.account_price_include = company_mode
+        line = self._create_line(partner, price_unit=price_unit, document_tax_mode=order_mode)
+        self.assertEqual(line.document_tax_mode, order_mode)
+        return line
+
+    def test_price_follows_the_tax_mode_of_the_order_when_the_customer_does_not_discriminate_vat(self):
+        """A 1200 price with the VAT inside is 1200 for the customer, not 1452 as if it were a net price."""
+        line = self._create_line_in_tax_mode(self.partner_cf, "tax_excluded", "tax_included", 1200.0)
+
+        self.assertFalse(line.order_id.vat_discriminated)
+        self.assertAlmostEqual(line._get_report_price_unit(), 1200.0, places=4)
+        self.assertAlmostEqual(line.price_unit_product_uom, 1200.0 / 15.0, places=4)
+        # The inverse the onchange of the product unit price uses
+        self.assertAlmostEqual(line._get_price_unit_from_report_price(1200.0), 1200.0, places=4)
+
+        line = self._create_line_in_tax_mode(self.partner_cf, "tax_included", "tax_excluded", 1000.0)
+
+        self.assertAlmostEqual(line._get_report_price_unit(), 1210.0, places=4)
+        self.assertAlmostEqual(line.price_unit_product_uom, 1210.0 / 15.0, places=4)
+        self.assertAlmostEqual(line._get_price_unit_from_report_price(1210.0), 1000.0, places=4)
+
+    def test_price_follows_the_tax_mode_of_the_order_when_the_customer_discriminates_vat(self):
+        """A 1200 price with the VAT inside is 991.74 net for a customer that sees the VAT apart."""
+        line = self._create_line_in_tax_mode(self.res_partner_adhoc, "tax_excluded", "tax_included", 1200.0)
+
+        self.assertTrue(line.order_id.vat_discriminated)
+        self.assertAlmostEqual(line._get_report_price_unit(), 1200.0 / 1.21, places=4)
+        self.assertAlmostEqual(line.price_unit_product_uom, 1200.0 / 1.21 / 15.0, places=4)
+        self.assertAlmostEqual(line._get_price_unit_from_report_price(1200.0 / 1.21), 1200.0, places=4)
+
+        line = self._create_line_in_tax_mode(self.res_partner_adhoc, "tax_included", "tax_excluded", 1000.0)
+
+        self.assertAlmostEqual(line._get_report_price_unit(), 1000.0, places=4)
+        self.assertAlmostEqual(line.price_unit_product_uom, 1000.0 / 15.0, places=4)
+        self.assertAlmostEqual(line._get_price_unit_from_report_price(1000.0), 1000.0, places=4)
+
+    def test_changing_the_tax_mode_of_the_order_updates_the_price(self):
+        line = self._create_line_in_tax_mode(self.partner_cf, "tax_excluded", "tax_excluded", 1000.0)
+        self.assertAlmostEqual(line.price_unit_product_uom, 1210.0 / 15.0, places=4)
+
+        line.order_id.document_tax_mode = "tax_included"
+
+        self.assertAlmostEqual(line.price_unit_product_uom, 1000.0 / 15.0, places=4)

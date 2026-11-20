@@ -3,6 +3,7 @@
 # directory
 ##############################################################################
 import logging
+from functools import partial
 
 from odoo import Command, _, api, fields, models
 from odoo.exceptions import UserError
@@ -63,6 +64,7 @@ class SaleOrderLine(models.Model):
         "order_id.vat_discriminated",
         "order_id.currency_id",
         "order_id.partner_shipping_id",
+        "document_tax_mode",
     )
     def _compute_report_prices_and_taxes(self):
         for line in self:
@@ -71,7 +73,12 @@ class SaleOrderLine(models.Model):
             # Use round_base=False to preserve Product Price decimal precision without
             # currency rounding (avoids rounding to 2 decimals when more digits are configured)
             price_unit = line.tax_ids.with_context(round_base=False).compute_all(
-                line.price_unit, order.currency_id, 1.0, line.product_id, order.partner_shipping_id
+                line.price_unit,
+                order.currency_id,
+                1.0,
+                line.product_id,
+                order.partner_shipping_id,
+                document_tax_mode=line.document_tax_mode,
             )
             if not taxes_included:
                 report_price_unit = price_unit["total_excluded"]
@@ -81,7 +88,10 @@ class SaleOrderLine(models.Model):
             else:
                 included_taxes = line.tax_ids.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)
                 not_included_taxes = line.tax_ids - included_taxes
-                compute_all_included = included_taxes.with_context(round_base=False).compute_all
+                compute_all_included = partial(
+                    included_taxes.with_context(round_base=False).compute_all,
+                    document_tax_mode=line.document_tax_mode,
+                )
                 report_price_unit = compute_all_included(
                     line.price_unit,
                     order.currency_id,
@@ -114,7 +124,12 @@ class SaleOrderLine(models.Model):
         # The real quantity, so a fixed tax is applied once per unit and not once per line
         qty = self.product_uom_qty or 1.0
         res = taxes.with_context(round_base=False).compute_all(
-            price, order.currency_id, qty, self.product_id, order.partner_shipping_id
+            price,
+            order.currency_id,
+            qty,
+            self.product_id,
+            order.partner_shipping_id,
+            document_tax_mode=self.document_tax_mode,
         )
         return res[key] / qty
 
@@ -127,13 +142,14 @@ class SaleOrderLine(models.Model):
         "order_id.vat_discriminated",
         "order_id.currency_id",
         "order_id.partner_shipping_id",
+        "document_tax_mode",
     )
     def _compute_price_unit_product_uom(self):
         return super()._compute_price_unit_product_uom()
 
     @api.model_create_multi
-    def create(self, vals):
-        rec = super(SaleOrderLine, self).create(vals)
+    def create(self, vals_list):
+        rec = super(SaleOrderLine, self).create(vals_list)
         rec.check_vat_tax()
         return rec
 
@@ -211,7 +227,7 @@ class SaleOrderLine(models.Model):
         if self.company_id.country_code != "AR":
             return super()._get_grouped_section_summary(display_taxes=display_taxes)
         billable_lines = self.order_id.order_line.filtered(
-            lambda line: line.product_type != "combo" and self._is_line_in_section(line)
+            lambda line: not line.display_type and line.product_type != "combo" and self._is_line_in_section(line)
         )
         groups = billable_lines.grouped("tax_ids") if display_taxes else {self.env["account.tax"]: billable_lines}
         return [
