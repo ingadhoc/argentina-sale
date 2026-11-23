@@ -9,7 +9,7 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
-
+# Esto es la mejora del ejercicio 3 de git
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
