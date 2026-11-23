@@ -1,5 +1,5 @@
 {
-    "name": "Argentinian Sale Total Fields",
+    "name": "Argentinian Sale Total Fields PRUEBA INDUCCION",
     "version": "18.0.1.9.0",
     "category": "Localization/Argentina",
     "sequence": 14,
