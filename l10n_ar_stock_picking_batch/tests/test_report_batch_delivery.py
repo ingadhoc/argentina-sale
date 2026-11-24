@@ -129,3 +129,24 @@ class TestL10nArBatchDeliveryReport(TransactionCase):
         self.batch.invalidate_recordset()
         html = self._render()
         self.assertIn(b"12345678901234", html)
+
+    def _count_legends(self, html):
+        return [html.count(legend) for legend in (b"ORIGINAL", b"DUPLICADO", b"TRIPLICADO")]
+
+    def test_copies_from_operation_type(self):
+        """Un tipo en triplicado imprime el lote con las tres leyendas, como cada entrega
+        impresa de a una; en duplicado, con dos; sin copias, una sola y sin leyenda."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        self.assertEqual(self._count_legends(self._render()), [1, 1, 1])
+        self.picking_type.l10n_ar_copies = "duplicado"
+        self.assertEqual(self._count_legends(self._render()), [1, 1, 0])
+        self.picking_type.l10n_ar_copies = False
+        self.assertEqual(self._count_legends(self._render()), [0, 0, 0])
+        self.assertIn(self.batch.name.encode(), self._render())
+
+    def test_copies_not_printed_by_email(self):
+        """Al mandar el lote por email sale una sola copia, sin leyendas."""
+        self.picking_type.l10n_ar_copies = "triplicado"
+        self.assertEqual(self.batch.with_context(default_subject="Remito")._l10n_ar_get_copies_list(), [""])
+        self.assertEqual(self.batch.with_context(force_email=True)._l10n_ar_get_copies_list(), [""])
+        self.assertEqual(self.batch._l10n_ar_get_copies_list(), ["ORIGINAL", "DUPLICADO", "TRIPLICADO"])

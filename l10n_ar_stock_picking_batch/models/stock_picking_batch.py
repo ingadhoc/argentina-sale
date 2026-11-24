@@ -84,6 +84,21 @@ class StockPickingBatch(models.Model):
         for batch in self:
             batch.declared_value = sum(batch.picking_ids.mapped("declared_value"))
 
+    def _l10n_ar_get_copies_list(self):
+        """Analogous to StockPicking._l10n_ar_get_copies_list in l10n_ar_stock_ux: legends
+        of the copies the batch voucher is printed with, from its operation type. Without
+        copies, or when sent by email, it returns [""] so the report still prints the
+        original, without a legend.
+        """
+        self.ensure_one()
+        copies = self.picking_type_id.l10n_ar_copies
+        is_email = "force_email" in self.env.context or "default_subject" in self.env.context
+        if is_email or not copies:
+            return [""]
+        if copies == "triplicado":
+            return ["ORIGINAL", "DUPLICADO", "TRIPLICADO"]
+        return ["ORIGINAL", "DUPLICADO"]
+
     def _get_name_delivery_report(self, report_xml_id):
         """Analogous to StockPicking._get_name_delivery_report in l10n_ar_stock_ux.
         Returns the Argentine batch report for any AR company batch, with or without a

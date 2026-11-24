@@ -32,6 +32,12 @@
     -->
     <template id="report_batch_deliveryslip"
               inherit_id="stock_batch_picking_ux.report_batch_deliveryslip">
+        <!-- copies come from the batch's operation type, so they go inside the docs loop -->
+        <t t-call="stock_batch_picking_ux.report_batch_delivery_document" position="replace">
+            <t t-foreach="o._l10n_ar_get_copies_list()" t-as="copy_type">
+                <t>$0</t>
+            </t>
+        </t>
         <t t-call="stock_batch_picking_ux.report_batch_delivery_document" position="attributes">
             <attribute name="t-call">#{ o._get_name_delivery_report('stock_batch_picking_ux.report_batch_delivery_document') }</attribute>
         </t>
