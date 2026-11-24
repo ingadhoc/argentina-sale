@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Same as l10n_ar_stock_preprinted does for the delivery voucher: once the voucher has a
+         number (or while counting its sheets) the paper already has the header, the number and
+         the CAI, so the batch voucher prints only the variable content and an empty footer. -->
+    <template id="report_batch_delivery_document_preprinted"
+              inherit_id="l10n_ar_stock_picking_batch.report_batch_delivery_document">
+
+        <xpath expr="//t[@t-set='pre_printed_report']" position="attributes">
+            <attribute name="t-value">o.l10n_ar_voucher_print_mode == 'preprinted' and (o.l10n_ar_delivery_guide_number or o.env.context.get('l10n_ar_counting'))</attribute>
+        </xpath>
+
+        <xpath expr="//t[@t-set='custom_footer']" position="after">
+            <t t-if="pre_printed_report" t-set="custom_footer">
+                <span/>
+            </t>
+        </xpath>
+
+    </template>
+</odoo>
