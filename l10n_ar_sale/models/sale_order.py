@@ -36,14 +36,12 @@ class SaleOrder(models.Model):
         self.env.add_to_compute(self._fields["amount_tax"], self)
         return super()._action_confirm()
 
-    @api.depends_context("commit_assetsbundle", "from_portal_view")
+    @api.depends_context("from_portal_view")
     def _compute_tax_totals(self):
         super()._compute_tax_totals()
-        # discriminamos o no impuestos solo en pdf y portal. En backend siempre los mostramos. Para esto evaluamos:
-        # commit_assetsbundle viene cuando sacamos pdf
-        # portal_view lo mandamos cuando mostramos campo en portal
-        report_or_portal_view = "commit_assetsbundle" in self.env.context or "from_portal_view" in self.env.context
-        if not report_or_portal_view:
+        # discriminamos o no impuestos solo en portal. En backend siempre los mostramos. El pdf se resuelve en
+        # el template (vat_discriminated). portal_view lo mandamos cuando mostramos campo en portal
+        if not self.env.context.get("from_portal_view"):
             return
 
         for order in self.filtered(lambda x: not x.vat_discriminated):
