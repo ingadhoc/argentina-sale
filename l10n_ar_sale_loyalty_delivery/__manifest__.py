@@ -1,6 +1,6 @@
 {
     "name": "Integración entre envío gratis de fidelización y localización argentina",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Localization/Argentina",
     "sequence": 14,
     "author": "ADHOC SA",
@@ -14,7 +14,7 @@
     "external_dependencies": {},
     "data": [],
     "demo": [],
-    "installable": False,
+    "installable": True,
     "auto_install": True,
     "application": False,
 }
