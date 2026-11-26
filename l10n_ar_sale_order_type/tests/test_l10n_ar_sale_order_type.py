@@ -14,8 +14,9 @@ class TestL10nArSaleOrderType(TestArCommon):
     """What the sale order type adds for Argentinian companies.
 
     Covers: forcing VAT discrimination from the type, keeping the type journal
-    instead of the export one, printing the header contact of the type, and
-    offering both fields only for Argentinian companies.
+    instead of the export one, printing on the Argentinian report the header
+    contact that sale_order_type_report_partner adds to the type, and offering
+    the discrimination field only for Argentinian companies.
     """
 
     @classmethod
@@ -82,11 +83,11 @@ class TestL10nArSaleOrderType(TestArCommon):
         order.invalidate_recordset()
         self.assertIn(header_partner.name, self._render_sale_order(order))
 
-    def test_the_order_type_fields_are_only_offered_in_argentina(self):
-        with self.subTest("el tipo de una compañía argentina ofrece los campos"):
+    def test_discriminate_taxes_is_only_offered_in_argentina(self):
+        with self.subTest("el tipo de una compañía argentina ofrece el campo"):
             ar_type = self.env["sale.order.type"].create({"name": "AR type", "company_id": self.company_ri.id})
             self.assertIn("AR", ar_type.fiscal_country_codes)
-        with self.subTest("el tipo de una compañía de otro país no los ofrece"):
+        with self.subTest("el tipo de una compañía de otro país no lo ofrece"):
             spain = self.env.ref("base.es")
             foreign_company = self.env["res.company"].create(
                 {

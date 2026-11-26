@@ -7,7 +7,6 @@
         <field name="arch" type="xml">
             <field name="sequence_id" position="after">
                 <field name="discriminate_taxes" invisible="'AR'not in fiscal_country_codes"/>
-                <field name="report_partner_id" invisible="'AR'not in fiscal_country_codes"/>
             </field>
         </field>
     </record>
