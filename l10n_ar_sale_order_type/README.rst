@@ -17,7 +17,7 @@ Sale Order Type Extended for Argentinean Use Cases
 
 Extended functionalities for sale order types in Argentinean sales:
 #. Enable the option to force the inclusion or exclusion of VAT
-#. Allow the option to set a different partner, distinct from the company's, for the sale order report header
+#. Print on the Argentinean sale order report the header contact that ``sale_order_type_report_partner`` adds to the type, instead of the company
 #. Keep the journal of the sale order type when invoicing, instead of forcing the export journal
 
 Installation
@@ -41,7 +41,7 @@ To use this module, you need to:
 
 #. Go to Sales / Configuration / Sale Order Types and open a type of an Argentinean company
 #. Set *Discriminate Taxes* to force the sale order to show or hide the VAT, or leave it empty to follow the customer's AFIP responsibility
-#. Set *Report Partner* to print that contact in the sale order report header instead of the company
+#. Set *Report Partner* on the type to print that contact in the Argentinean sale order report header instead of the company
 #. Set a journal on the type to invoice with it, even when the customer requires export document types
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
