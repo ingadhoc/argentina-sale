@@ -23,8 +23,8 @@ Features
 
    * Package weight and weight unit of measure
    * Carrier tracking reference numbers
-   * Detailed carrier information (name, VAT number, and address)
-   * Integration with Argentinian identification document types
+   * Detailed carrier information (name, identification, and address)
+   * The carrier identification is the preferred identifier of the carrier partner (CUIT, or another identifier such as the DNI), with its label
 
 #. **ARBA COT Wizard Integration**: Extends the ARBA COT (Transport Operations Code) wizard to automatically pre-fill the carrier partner information when accessed from stock picking operations.
 
@@ -34,7 +34,7 @@ Installation
 To install this module, you need to:
 
 #. Install the module from the Apps menu
-#. The module will be automatically installed when both ``delivery_ux`` and ``l10n_ar_stock_extended`` modules are present
+#. The module will be automatically installed when both ``delivery_ux`` and ``l10n_ar_stock_ux`` modules are present
 
 Configuration
 =============
@@ -42,7 +42,7 @@ Configuration
 To configure this module, you need to:
 
 #. Configure your delivery carriers in Inventory > Configuration > Delivery > Delivery Methods
-#. Ensure your carriers have proper partner information including VAT numbers and addresses
+#. Ensure your carriers have proper partner information including their identification (CUIT or another identifier) and addresses
 #. The module will automatically enhance delivery reports with the configured information
 
 Usage
