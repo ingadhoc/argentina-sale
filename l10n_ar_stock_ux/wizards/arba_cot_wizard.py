@@ -74,7 +74,8 @@ class ArbaCotWizard(models.TransientModel):
 
         for pick in pickings:
             pick._arba_send_picking(
-                fields.Date.from_string(self.datetime_out),
+                # ARBA pide fecha y hora de salida; el campo está en UTC, se manda la hora local del usuario
+                fields.Datetime.context_timestamp(self, self.datetime_out),
                 self.tipo_recorrido,
                 self.partner_id,
                 self.patente_vehiculo,
